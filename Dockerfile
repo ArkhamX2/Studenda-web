@@ -1,10 +1,10 @@
 FROM node:16
 WORKDIR /app
 
-COPY Studenda.Web.Client/package*.json ./
+COPY ./package*.json ./
 RUN npm install
 
-COPY Studenda.Web.Client/. .
+COPY . .
 # RUN npm run build
 
 EXPOSE 8080
