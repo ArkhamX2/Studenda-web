@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
-import { useAppDispatch } from '../hook'
-import { aboba } from '../store/testSlice'
-import ModalAdmin from './UI/modalAdmin/ModalAdmin'
-import useModal from './UI/modalAdmin/useModalAdmin'
+import { useAppDispatch } from '../../../hook'
+import { aboba } from '../../../store/testSlice'
+import ModalAdmin from '../modalAdmin/ModalAdmin'
+import useModal from '../modalAdmin/useModalAdmin'
 
 interface inputProps {
     content: {subject: string, type: string, teacher: string, classroom: string}

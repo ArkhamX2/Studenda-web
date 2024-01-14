@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState } from 'react'
 import  './ScheduleTable.module.css'
 import classes from './ScheduleTable.module.css'
-import AdminScheduleItem from '../../AdminScheduleItem'
-import AdminScheduleItemRow from '../../AdminScheduleItemRow'
+import AdminScheduleItem from '../admincheduleitem/AdminScheduleItem'
+import AdminScheduleItemRow from '../admincheduleitemrow/AdminScheduleItemRow'
 
 export enum row {
   half='half',

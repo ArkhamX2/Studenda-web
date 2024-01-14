@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import AdminScheduleItem from './AdminScheduleItem';
+import AdminScheduleItem from '../admincheduleitem/AdminScheduleItem';
 
 interface inputProps {
     content: {red: {subject: string, type: string, teacher: string, classroom: string}, blue:{subject: string, type: string, teacher: string, classroom: string}}[];

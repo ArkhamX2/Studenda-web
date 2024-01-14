@@ -4,9 +4,9 @@ table {
         border-collapse: collapse;
 }
 td {
-        border: 2px solid Black;
-        margin: 5px;
-        padding: 5px;
+        border: 2px solid gray;
+        margin: 2px;
+        padding: 2px;
         width: 200px;
         height: 100px;
         

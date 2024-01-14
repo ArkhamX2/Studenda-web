@@ -3,16 +3,12 @@ import Selector from './UI/selector/Selector'
 import ScheduleTable from './UI/table/ScheduleTable'
 import LoginInput, { TextAlign } from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
-<<<<<<< Updated upstream
+import SearchBar from './UI/searchbar/SearchBar'
 import { useAppDispatch } from '../hook'
 import { aboba } from '../store/testSlice'
 
 const AdminForm: FC = () => {
     const dispatch = useAppDispatch()
-=======
-import SearchBar from './UI/searchbar/SearchBar'
-
-const AdminForm: FC = () => {
     const posts = [
         { id: '1', name: 'Предмет1' },
         { id: '2', name: 'Бибабоба' },
@@ -36,7 +32,6 @@ const AdminForm: FC = () => {
     const [searchQuery, setSearchQuery] = useState(query || '');
     const filteredPosts = filterPosts(posts, searchQuery);
     
->>>>>>> Stashed changes
 
     return (
         <main style={{display:'flex', backgroundColor:'white', maxHeight: '90svh'}}>
