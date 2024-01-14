@@ -3,11 +3,14 @@ import Selector from './UI/selector/Selector'
 import ScheduleTable from './UI/table/ScheduleTable'
 import LoginInput, { TextAlign } from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
+import { useAppDispatch } from '../hook'
+import { aboba } from '../store/testSlice'
 
 const AdminForm: FC = () => {
+    const dispatch = useAppDispatch()
 
     return (
-        <main style={{display:'flex', backgroundColor:'white'}}>
+        <main style={{display:'flex', backgroundColor:'white', maxHeight: '90svh'}}>
             <div style={{display:'flex', flexDirection:'column', border:'2px solid black', margin:'5px', padding:'10px'}}>
                 <div style={{display:'flex', flexDirection:'row', margin:'10px 0px 10px 0px'}}>
                     <LoginInput text='Введите группу' align={TextAlign.left}/>
@@ -22,6 +25,7 @@ const AdminForm: FC = () => {
 
                </ScheduleTable>
             </div>
+            <button onClick={()=>dispatch(aboba(String(prompt())))}>Тест кнопочка</button>
                 
         </main>
 

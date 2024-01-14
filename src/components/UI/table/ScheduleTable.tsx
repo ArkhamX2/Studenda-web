@@ -1,11 +1,22 @@
 import React, { FC, useEffect, useState } from 'react'
 import  './ScheduleTable.module.css'
 import classes from './ScheduleTable.module.css'
+import AdminScheduleItem from '../../AdminScheduleItem'
+import AdminScheduleItemRow from '../../AdminScheduleItemRow'
 
 export enum row {
   half='half',
   split='split'
 }
+
+const mon = [
+        {red: {subject: "zxbvvcb", type: "", teacher: "m", classroom: "432"}, blue: {subject: "", type: "", teacher: "", classroom: "11"}},
+        {red: {subject: "dghdfg", type: "", teacher: "", classroom: ""}, blue: {subject: "xvcb", type: "", teacher: "", classroom: "23"}},
+        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "543"}},
+        {red: {subject: "nnnn", type: "", teacher: "", classroom: "643"}, blue: {subject: "nnnn", type: "", teacher: "", classroom: "643"}},
+        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "123"}},
+        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "432"}},
+]
 
 const ScheduleTable: FC =
   () => {
@@ -43,37 +54,8 @@ const ScheduleTable: FC =
 
                 </tr>
 
-                <tr>
-                        <td className={classes.Column1}>
-                                1
-                        </td>
-                        <td>
-                                4
-                        </td>
-
-                        <td>
-                                5
-                        </td>
-
-                        <td>
-                                6
-                        </td>
-
-                        <td>
-                                4
-                        </td>
-
-                        <td>
-                                5
-                        </td>
-
-                        <td>
-                                6
-                        </td>
-
-                </tr>
-
-               
+                <AdminScheduleItemRow id='1' content={mon}/>
+                <AdminScheduleItemRow id='2' content={mon}/>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>
