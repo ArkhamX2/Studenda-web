@@ -19,8 +19,8 @@ const Subject: FC<subjectProps> = ({
                                 <p className={classes.text}>10.00{timestart}</p>
                                 <p className={classes.text}>11.00{timeend}</p>
                         </div>
-                        <div className={classes.subjectContainer}><p className={classes.text}>Дело1{subject}</p></div>
-                        <div className={classes.roomContainer}><p className={classes.text}>каб.123{room}</p></div>
+                        <div className={classes.subjectContainer}><div className={classes.text} style={{textAlign:'center'}}>Дело1{subject}</div></div>
+                        <div className={classes.roomContainer}><div className={classes.text}>каб.123{room}</div></div>
                 </div>
     )
 }

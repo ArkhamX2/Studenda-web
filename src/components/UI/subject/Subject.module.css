@@ -1,4 +1,6 @@
-.timeContainer, .subjectContainer, .roomContainer{
+@import url('/src/styles/colors.css');
+
+        .subjectContainer, .roomContainer{
         display: inline-flex;
         padding: 5px;
         border: 1px solid lightgray;
@@ -7,11 +9,14 @@
         .timeContainer {
                 flex-direction: column;
                 justify-content: flex-start;
+                border-right: 1px solid #371F76;
+                padding: 5px;
         }
         .subjectContainer{
                 margin-left: 10px;
-                width: 90%;
+                width: 80%;
                 align-items: center;
+                text-align: center;
         }
         .roomContainer{
                 margin-left: 10px;

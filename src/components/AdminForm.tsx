@@ -1,11 +1,11 @@
 import { FC, useState } from 'react'
 import Selector from './UI/selector/Selector'
 import ScheduleTable from './UI/table/ScheduleTable'
-import LoginInput, { TextAlign } from './UI/imput/LoginInput'
-import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import SearchBar from './UI/searchbar/SearchBar'
 import { useAppDispatch } from '../hook'
 import { aboba } from '../store/testSlice'
+import { COLORS } from '../styles/colors'
+import '../styles/admin.css'
 
 const AdminForm: FC = () => {
     const dispatch = useAppDispatch()
@@ -35,23 +35,34 @@ const AdminForm: FC = () => {
 
     return (
         <main style={{display:'flex', backgroundColor:'white', maxHeight: '90svh'}}>
-            <div style={{display:'flex', flexDirection:'column', border:'2px solid black', margin:'5px', padding:'10px'}}>
-                <div style={{display:'flex', flexDirection:'row', margin:'10px 0px 10px 0px'}}>
-                    <SearchBar text='Введите группу' align={TextAlign.left}         
+            <div style={{display:'flex', flexDirection:'column', border:'2px solid', margin:'5px', padding:'10px', backgroundColor:'#F7F3F3', borderRadius: '5px'}}>
+                <div style={{fontSize:'18px'}}>Редактор расписания</div>
+                <div style={{display:'flex', flexDirection:'row', margin:'10px 0px 5px 0px'}}>
+                    <SearchBar text='Введите группу'        
                     searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}/>
+                    setSearchQuery={setSearchQuery}
+                    label='Группа'/>
                 </div>
-                <ul>
+                <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 5px 0px'}}>
+                    <SearchBar text='Введите курс'        
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    label='Курс'/>
+                </div>
+                <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 10px 0px'}}>
+                    <SearchBar text='Введите факультет'        
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    label='Факультет'/>
+                </div>
+                <ul style={{visibility:'hidden'}}>
                 {filteredPosts.map(post => (
                     <li key={post.id}>{post.name}</li>
                 ))}
-            </ul>
-              <Selector name="faculty" id='faculty-select' text='Факультет'></Selector>
-              <Selector name="course" id='course-select' text='Курс'></Selector>
-              <Selector name="group" id='group-select' text='Группа'></Selector>
-              <LoginButton text='Допустим отправить' variant={ButtonVariant.primary}></LoginButton>
+                </ul>
             </div>
-            <div style={{width:'80%', border:'2px solid black', margin:'5px', overflowX:'auto', overflowY:'auto',whiteSpace:'nowrap'}}>
+            <div style={{width:'80%', border:'2px solid',margin:'5px', overflowX:'auto', overflowY:'auto',whiteSpace:'nowrap', 
+            backgroundColor:'#F7F3F3', borderRadius: '5px', scrollbarColor:COLORS.red3}}>
                <ScheduleTable>
 
                </ScheduleTable>

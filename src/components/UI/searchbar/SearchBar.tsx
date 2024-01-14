@@ -7,6 +7,7 @@ export enum TextAlign {
 
 interface searchProps {
         text?: string;
+        label?: string;
         align?: TextAlign;
         searchQuery: any;
         setSearchQuery: any;
@@ -16,14 +17,14 @@ interface searchProps {
 
 const SearchBar: FC<searchProps> =
   ({ searchQuery, setSearchQuery,
-    text
+    text, label
   }) => {
         
 
   return (
-        <form action="/" method="get" style={{display:'flex', flexDirection:'column'}}>
-        <label htmlFor="header-search">
-            <span className="visually-hidden">Search blog posts</span>
+        <form action="/" method="get" style={{display:'flex', flexDirection:'column', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px'}}>
+        <label >
+            <span className={classes.LabelText}>{label}</span>
         </label>
         <input placeholder={text} className={classes.LoginInput} type='text' value={searchQuery}
            onInput={(event: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(event.target.value) } ></input>

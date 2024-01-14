@@ -10,7 +10,7 @@ const AdminScheduleItemRow: FC<inputProps> =
   ({id, content}) => {
   return (
     <tr>
-        <td>
+        <td style={{width:'75px', textAlign:'center', fontSize:'28px', fontWeight:'500'}}>
           {id}
         </td>
         {content.map((item) => 

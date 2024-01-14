@@ -1,11 +1,9 @@
 main {
-        background-color: #e9e9e9;
-        color: darkblue;
-        font: sans-serif SegoiUI;
         width: 100%;
         height: 95vh;
         display: flex;
         justify-content: center;
+        
 }
 
 .LoginBox {
@@ -27,4 +25,9 @@ main {
 	margin: 20px 0 0 5px;
 	border: 1px solid gray;
 	border-radius: 18px;
+}
+* {
+        margin: 0px;
+        padding: 0px;
+        font-family: 'Inter', sans-serif;
 }
