@@ -4,7 +4,7 @@ import HomeworkSubject from './UI/homeworksubject/HomeworkSubject'
 const HomeworkForm: FC = () => {
 
     return (
-        <div style={{display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'10px', alignSelf: 'center'}}>
+        <div style={{display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'10px', alignSelf: 'center', color:'#371F76'}}>
             <div style={{display:'inline-flex',border:'2px solid lightgray',padding:'10px', borderRadius:'5px', margin:'5px'}}>
                 <p style={{fontSize:'18px'}}>Посещаемость</p>
                 <img></img>

@@ -5,7 +5,7 @@ import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 const F1: FC = () => {
 
     return (
-        <main>
+        <main style={{color:'#371F76'}}>
         <div className='LoginBox'>
                 <div className="Logo" style={{margin:'20px'}}></div>
                 <LoginButton variant={ButtonVariant.primary} text='Войти'></LoginButton>

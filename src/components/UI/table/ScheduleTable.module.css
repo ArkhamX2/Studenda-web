@@ -3,13 +3,13 @@ table {
        margin: 10px;
        border: 2px solid var(--ad-red3);
        padding: 0px;
+       border-collapse: collapse;
 }
 td {
         
         border: 2px solid var(--ad-border);
         width: 200px;
         height: 100px;
-        border-collapse: collapse;
         padding: 5px;
         
         

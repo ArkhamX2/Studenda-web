@@ -6,7 +6,7 @@ import  '../styles/schedule.css'
 const ScheduleForm: FC = () => {
 
     return (
-                <div style={{backgroundColor:'#F0F1F5', padding:'10px'}}>
+                <div style={{backgroundColor:'#F0F1F5', padding:'10px', color:'#371F76'}}>
                         <div style={{display: 'flex', flexDirection: 'column', marginLeft:'10px'}}>
                                 <div style={{display: 'flex', flexDirection: 'row'}}>
                                         <DayName text1='Понедельник, 1 января'>

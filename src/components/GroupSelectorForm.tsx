@@ -6,7 +6,7 @@ const GroupSelectorForm: FC = () => {
 
     return (
         
-        <div style={{position:'absolute', left:'40%', top:'30%', display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'50px'}}>
+        <div style={{position:'absolute', left:'40%', top:'30%', display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'50px', color:'#371F76'}}>
               <h1 style={{alignSelf:'center', fontSize:'20px', marginBottom:'8px'}}>Выбор группы</h1>
               <Selector name="faculty" id='faculty-select' text='Факультет'></Selector>
               <Selector name="course" id='course-select' text='Курс'></Selector>
