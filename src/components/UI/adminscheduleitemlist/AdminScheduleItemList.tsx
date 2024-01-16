@@ -1,6 +1,8 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
 import { isSubjectsEqual, subjectList, uniteSubject } from '../../../store/testSlice';
+import useModal from '../modalAdmin/useModalAdmin';
+import ModalAdmin from '../modalAdmin/ModalAdmin'
 
 const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
@@ -17,9 +19,6 @@ const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursub
 const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        console.log(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)].discipline)
-        console.log(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)].discipline)
-        console.log(isSubjectsEqual(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)],subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)]))
         return isSubjectsEqual(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)],subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)])
     }
     catch(e)
@@ -34,8 +33,16 @@ const test2 = (y:number,i:number) => {
 
 const AdminScheduleItemList: FC<subjectList> = (subjectList) => {    
     const dispatch = useAppDispatch()
+    const { isOpen, toggle } = useModal()
+    const [cords, setCords] = useState({i: 0, y: 0})
+    const bob = (i:number, y:number) => {
+        console.log("test")
+        setCords({i,y})
+        toggle()
+    }
     return (
         <>
+            <ModalAdmin isOpen={isOpen} toggle={toggle}>{cords.i} {cords.y}</ModalAdmin>
             {[...Array(6)].map((x, i) =>
             <tr>
                 <td>
@@ -49,22 +56,22 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i, 0)!==-1
                         ? 
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 0)].discipline}
                             </td> 
                         :
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                             
                             </td>)}                            
                         </tr>
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i, 1)!==-1
                         ? 
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 1)].discipline}
                             </td> 
                         :
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                                 
                             </td>)}
                         </tr>
@@ -74,11 +81,11 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     <tr>
                         {(tryGetSubjectId(subjectList,y,i, 0)!==-1
                         ? 
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 0)].discipline}
                             </td> 
                         :
-                            <td>
+                            <td onContextMenu={()=>bob(i,y)}>
                             
                             </td>)}                            
                     </tr>
