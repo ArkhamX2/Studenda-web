@@ -1,5 +1,11 @@
 import { FC } from 'react'
 import classes from './Subject.module.css'
+import { Style } from 'util';
+
+export enum BorderType {
+    firstElement='outlined',
+    otherElements='primary'
+  }
 
 interface subjectProps{
         col1?: string;
@@ -10,21 +16,22 @@ interface subjectProps{
         col6?: string;
         col7?: string;
         col8?: string;
+        first?: BorderType;
 
 }
 
 const AdminSubject: FC<subjectProps> = ({
-        col1,col2,col3,col4,col5,col6,col7,col8
+        col1,col2,col3,col4,col5,col6,col7,col8, first,
 }) => {
 
     return (
-        <div style={{display:'flex', flexDirection:'row', border:'2px solid gray'}}>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col1}</div>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col2}</div>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col3}</div>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col4}</div>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col5}</div>
-        <div style={{margin:'10px', border:'2px solid lightgray', padding:'5px'}}>{col6}</div>
+        <div style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col1}</div>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col2}</div>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col3}</div>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col4}</div>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col5}</div>
+        <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '24px' : '18px'}}>{col6}</div>
     </div>
     )
 }

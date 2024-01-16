@@ -30,3 +30,11 @@
                 display: flex;
                 margin: 5px;
         }
+        .Subject{
+                border: 1px solid var(--ad-border);
+                padding: 12px;
+                width: 100%;
+        }
+        .Font{
+                font-size: 32px;
+        }

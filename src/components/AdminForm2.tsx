@@ -7,7 +7,7 @@ import { COLORS } from '../styles/colors'
 import '../styles/admin.css'
 import LoginInput from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
-import AdminSubject from './UI/adminsubject/Subject'
+import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 
 const AdminForm2: FC = () => {
     const dispatch = useAppDispatch()
@@ -69,17 +69,18 @@ const AdminForm2: FC = () => {
                         setSearchQuery={setSearchQuery}/>
 
                     </div>
+                    <div style={{alignSelf:'center'}}>
+                        <LoginButton text='Добавить' variant={ButtonVariant.primary}/>
+                    </div>
+                    
                 </div>
-                <div style={{display:'flex', flexDirection:'column', border:'2px solid lightgray', padding:'5px'}}>
+                <div style={{display:'flex', flexDirection:'column', border:'1px solid lightgray', padding:'5px'}}>
+                   <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6' first={BorderType.firstElement}/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
-                   <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
-
-
-
 
 
                 </div>

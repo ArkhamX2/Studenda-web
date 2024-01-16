@@ -6,17 +6,19 @@ import LoginLabel from './UI/label/LoginLabel'
 const EmailForm: FC = () => {
 
     return (
-        <div style={{position:'absolute', left:'40%', top:'30%', display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'50px', color:'#371F76'}}>
-                <LoginLabel text='ваш.email@mail.com'></LoginLabel>
-                <div style={{display:'flex', flexDirection:'column', alignSelf:'center'}}>
-                    <LoginLabel text='На почту был отправлен код из N цифр.'></LoginLabel>
-                    <LoginLabel text='Введите в поле ниже код из письма:'></LoginLabel>
+        <main>
+            <div style={{alignSelf:'center', display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'50px', color:'#371F76'}}>
+                <p style={{textAlign:'center', display:'felx'}}>ваш.email@mail.com</p>
+                <div style={{textAlign:'center', display:'flex', flexDirection:'column', alignSelf:'center', justifySelf:'center'}}>
+                    <p>На почту был отправлен код<br/>Введите в поле ниже код из письма </p>
                 </div>
                 
                 <LoginInput text='КОД' align={TextAlign.center}></LoginInput>
                 <LoginButton variant={ButtonVariant.primary} text='Подтвердить'></LoginButton>
                 <LoginButton variant={ButtonVariant.outlined} text='Получить код повторно'></LoginButton>
         </div>
+        </main>
+        
     )
 }
 
