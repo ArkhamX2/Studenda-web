@@ -6,7 +6,7 @@ interface inputProps {
     id: string;
 }
 
-const AdminScheduleItemRow: FC<inputProps> =
+const AdminScheduleItemColumn: FC<inputProps> =
   ({id, content}) => {
   return (
     <tr>
@@ -39,4 +39,4 @@ const AdminScheduleItemRow: FC<inputProps> =
   )
 }
 
-export default AdminScheduleItemRow;
+export default AdminScheduleItemColumn;

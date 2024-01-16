@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { aboba } from '../../../store/testSlice'
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import useModal from '../modalAdmin/useModalAdmin'
 
@@ -10,7 +9,6 @@ interface inputProps {
 
 const AdminScheduleItem: FC<inputProps> =
   ({content}) => {
-  const dispatch = useAppDispatch()
   const { isOpen, toggle } = useModal()
   const [item, setItem] = useState({})
   const click = () => {

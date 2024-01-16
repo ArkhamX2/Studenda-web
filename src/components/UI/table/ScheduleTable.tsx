@@ -1,26 +1,18 @@
 import React, { FC, useEffect, useState } from 'react'
 import  './ScheduleTable.module.css'
 import classes from './ScheduleTable.module.css'
-import AdminScheduleItem from '../admincheduleitem/AdminScheduleItem'
-import AdminScheduleItemRow from '../admincheduleitemrow/AdminScheduleItemRow'
+import AdminScheduleItemList from '../adminscheduleitemlist/AdminScheduleItemList'
+import store from '../../../store'
 
 export enum row {
   half='half',
   split='split'
 }
 
-const mon = [
-        {red: {subject: "zxbvvcb", type: "", teacher: "m", classroom: "432"}, blue: {subject: "", type: "", teacher: "", classroom: "11"}},
-        {red: {subject: "dghdfg", type: "", teacher: "", classroom: ""}, blue: {subject: "xvcb", type: "", teacher: "", classroom: "23"}},
-        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "543"}},
-        {red: {subject: "nnnn", type: "", teacher: "", classroom: "643"}, blue: {subject: "nnnn", type: "", teacher: "", classroom: "643"}},
-        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "123"}},
-        {red: {subject: "", type: "", teacher: "", classroom: ""}, blue: {subject: "", type: "", teacher: "", classroom: "432"}},
-]
-
 const ScheduleTable: FC =
   () => {
-
+        const [ScheduleList, setScheduleList]=useState(store.getState().test.list)
+        store.subscribe(() => setScheduleList(store.getState().test.list))
   return (
         <table>
                 <tr>
@@ -54,8 +46,7 @@ const ScheduleTable: FC =
 
                 </tr>
 
-                <AdminScheduleItemRow id='1' content={mon}/>
-                <AdminScheduleItemRow id='2' content={mon}/>
+                <AdminScheduleItemList list={ScheduleList}/>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>

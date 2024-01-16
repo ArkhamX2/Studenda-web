@@ -1,14 +1,10 @@
 import { FC, useState } from 'react'
-import Selector from './UI/selector/Selector'
 import ScheduleTable from './UI/table/ScheduleTable'
 import SearchBar from './UI/searchbar/SearchBar'
-import { useAppDispatch } from '../hook'
-import { aboba } from '../store/testSlice'
 import { COLORS } from '../styles/colors'
 import '../styles/admin.css'
 
 const AdminForm: FC = () => {
-    const dispatch = useAppDispatch()
     const posts = [
         { id: '1', name: 'Предмет1' },
         { id: '2', name: 'Бибабоба' },
@@ -67,7 +63,6 @@ const AdminForm: FC = () => {
 
                </ScheduleTable>
             </div>
-            <button onClick={()=>dispatch(aboba(String(prompt())))}>Тест кнопочка</button>
                 
         </main>
 

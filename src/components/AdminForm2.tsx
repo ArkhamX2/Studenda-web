@@ -3,7 +3,6 @@ import Selector from './UI/selector/Selector'
 import ScheduleTable from './UI/table/ScheduleTable'
 import SearchBar from './UI/searchbar/SearchBar'
 import { useAppDispatch } from '../hook'
-import { aboba } from '../store/testSlice'
 import { COLORS } from '../styles/colors'
 import '../styles/admin.css'
 import LoginInput from './UI/imput/LoginInput'
@@ -87,7 +86,6 @@ const AdminForm2: FC = () => {
 
 
             </div>
-            <button onClick={()=>dispatch(aboba(String(prompt())))}>Тест кнопочка</button>
                 
         </main>
 
