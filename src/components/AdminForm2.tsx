@@ -8,6 +8,7 @@ import '../styles/admin.css'
 import LoginInput from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
+import MenuComponent from './UI/adminmenu/MenuComponent'
 
 const AdminForm2: FC = () => {
     const dispatch = useAppDispatch()
@@ -38,19 +39,19 @@ const AdminForm2: FC = () => {
             <div style={{display:'flex', flexDirection:'column', border:'2px solid #490514', margin:'5px', padding:'10px', backgroundColor:'#F7F3F3', borderRadius: '5px'}}>
                 <div style={{fontSize:'18px'}}>Редактор расписания</div>
                 <div style={{display:'flex', flexDirection:'row', margin:'10px 0px 5px 0px'}}>
-                    <LoginButton text='Группы' variant={ButtonVariant.outlined}></LoginButton>
+                    <MenuComponent text='Группы'></MenuComponent>
                 </div>
                 <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 5px 0px'}}>
-                    <LoginButton text='Дисциплины' variant={ButtonVariant.outlined}></LoginButton>
+                    <MenuComponent text='Дисциплины'></MenuComponent>
                 </div>
                 <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 10px 0px'}}>
-                    <LoginButton text='Преподаватели' variant={ButtonVariant.outlined}></LoginButton>
+                    <MenuComponent text='Преподаватели'></MenuComponent>
                 </div>
                 <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 10px 0px'}}>
-                    <LoginButton text='Пользователи' variant={ButtonVariant.outlined}></LoginButton>
+                    <MenuComponent text='Пользователи'></MenuComponent>
                 </div>
                 <div style={{display:'flex', flexDirection:'row', margin:'5px 0px 10px 0px'}}>
-                    <LoginButton text='Роли' variant={ButtonVariant.outlined}></LoginButton>
+                    <MenuComponent text='Роли'></MenuComponent>
                 </div>
                 <ul style={{visibility:'hidden'}}>
                 {filteredPosts.map(post => (
