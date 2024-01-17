@@ -84,35 +84,48 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
             </ModalAdmin>
             {[...Array(6)].map((x, i) =>
             <tr>
-                <td>
+                <td className={classes.TCol}>
                     {i+1}
                 </td>
-                {[...Array(6)].map((x, y) =>
-                <td onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:y,cursubjectPosition:i}))}>
+                {[...Array(6)].map((x, y) => /** пустые */
+                <td className={classes.TCol} onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:y,cursubjectPosition:i}))}>
                     {(tryIsSubjectsEqual(subjectList,y,i)===false)
                     ?
                     <>
+                    
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            <div  className={classes.subjectBox}>
+                                <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
+                            </div>
+                            
                         :
+                        <div  className={classes.subjectBox} >
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             
-                            </td>)}                            
+                            </td>
+                        </div>
+                            )}                            
                         </tr>
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i, 1)!==-1
                         ? 
+                        <div className={classes.subjectBox}>
                             <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,1)].discipline}
                             </td> 
+                        </div>
+                            
                         :
+                        <div className={classes.subjectBox}>
                             <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
-                                
-                            </td>)}
+                                                            
+                                                        </td>
+                        </div>
+                           )}
                         </tr>
                     </>
                     :
@@ -120,13 +133,19 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     <tr>
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
+                        <div className={classes.subjectBox} style={{height:'100px'}}>
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
-                            </td> 
+                            </td>
+                        </div>
+                             
                         :
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                        <div className={classes.subjectBox} >
+                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             
-                            </td>)}                            
+                            </td>
+                        </div>
+                           )}                            
                     </tr>
                     </>
                     }

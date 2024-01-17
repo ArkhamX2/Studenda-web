@@ -5,22 +5,24 @@ table {
        padding: 0px;
        border-collapse: collapse;
 }
-td {
+.TCol {
         
         border: 2px solid var(--ad-border);
         width: 200px;
-        height: 100px;
+        height: 50px;
         padding: 5px;
         
         
 }
-tr {
+.TRow {
+        border: 2px solid var(--ad-border);
         
 }
 .Row1 {
         height: 75px;
         font-size: 18px;
         text-align: center;
+        border: 2px solid var(--ad-border);
         
 
 }
@@ -29,4 +31,5 @@ tr {
         width: 75px;
         font-size: 24;
         text-align: center;
+        border: 2px solid var(--ad-border);
 }

@@ -37,7 +37,8 @@ const AdminForm2: FC = () => {
 
     return (
         <main style={{display:'flex', backgroundColor:'white', maxHeight: '90svh', color:'#1B0E17', boxSizing:'border-box'}}>
-            <div style={{display:'flex', flexDirection:'column', border:'2px solid #490514', margin:'5px', padding:'10px', backgroundColor:'#F7F3F3', borderRadius: '5px'}}>
+            <div style={{display:'flex', flexDirection:'column', border:'2px solid #490514', margin:'5px', padding:'10px', 
+                backgroundColor:'#F7F3F3', borderRadius: '5px'}}>
                 <div style={{fontSize:'18px'}}>Редактор расписания</div>
                 <div style={{display:'flex', flexDirection:'row', margin:'10px 0px 5px 0px'}}>
                     <MenuComponent text='Группы'></MenuComponent>

@@ -47,3 +47,33 @@ button{
         font-weight: 600;
         padding: 0px 5px;
 }
+table {
+        margin: 10px;
+        border: 2px solid var(--ad-red3);
+        padding: 0px;
+        border-collapse: collapse;
+ }
+ .TCol {
+         
+         border: 2px solid var(--ad-border);
+         width: 200px;
+         height: 100%;
+         padding: 5px;
+             
+ }
+ .subjectBox{
+        width: 200px;
+        height: 50px;
+        padding: 5px;
+        margin: 3px 0px;
+        border-radius: 2px;
+        border-top: 1px solid #490514;  
+        border-right: 1px solid #490514;
+        border-bottom: 2px solid #490514;
+        border-left: 1px solid #490514;
+        background: rgba(255, 255, 255, 0.60);
+ }
+ .TRow {
+         border: 2px solid var(--ad-border);
+         
+ }
