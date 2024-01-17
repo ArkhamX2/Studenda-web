@@ -15,9 +15,9 @@
   
   .modalbox {
     display: block;
-    background: white;
-    width: 70%;
-    height: 70%;
-    padding: 1rem;
+    background: #F8F5F5;
+    width: 500px;
+    height: 580px;
+    padding: 5px;
     border-radius: 1rem;
   }

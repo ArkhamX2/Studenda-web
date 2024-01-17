@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import classes from './SearchBar.module.css'
+import classes from './MenuComponents.module.css'
 export enum TextAlign {
   left='left',
   center='center'
@@ -17,11 +17,11 @@ const MenuComponent: FC<searchProps> =
         
 
   return (
-        <form action="/" method="get" onClick={onClick} style={{display:'flex', flexDirection:'column', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px', backgroundColor:'#F0EAE9', width:'100%'}}>
+        <div onClick={onClick} style={{display:'flex', flexDirection:'column', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px', backgroundColor:'#F0EAE9', width:'100%', height:'32px'}}>
         <label >
             <span className={classes.LabelText}>{text}</span>
         </label>
-    </form>
+    </div>
        
   )
 }

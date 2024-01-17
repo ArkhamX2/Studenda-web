@@ -3,6 +3,7 @@ import { useAppDispatch } from '../../../hook'
 import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
+import classes from './AdminScheduleitemList.module.css'
 
 const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
@@ -54,21 +55,30 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
     return (
         <>
             <ModalAdmin isOpen={isOpen} toggle={toggle}>
-            <div>
-                discipline:
-                <input onChange={e=>setSelectedSubject({...selectedSubject!, discipline:e.target.value})}defaultValue={selectedSubject?.discipline}></input>
+            <div style={{textAlign:'center', margin:'10px', fontSize:'20px', fontWeight:'600'}}>РЕДАКТИРОВАНИЕ</div>
+            <div className={classes.ElementBox}>
+                <p className={classes.p}>discipline:</p>
+                <div className={classes.InputBox}>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, discipline:e.target.value})}defaultValue={selectedSubject?.discipline}></input>
+                </div>
             </div>
-            <div>
-                subjectType:
-                <input onChange={e=>setSelectedSubject({...selectedSubject!, subjectType:e.target.value})}defaultValue={selectedSubject?.subjectType}></input>
+            <div className={classes.ElementBox}>
+                <p  className={classes.p}>subjectType:</p>
+                <div className={classes.InputBox}>
+                    <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, subjectType:e.target.value})}defaultValue={selectedSubject?.subjectType}></input>
+                </div>
             </div>
-            <div>
-                user:
-                <input onChange={e=>setSelectedSubject({...selectedSubject!, user:e.target.value})}defaultValue={selectedSubject?.user}></input>
+            <div className={classes.ElementBox}>
+                <p  className={classes.p}>user:</p>
+                <div className={classes.InputBox}>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, user:e.target.value})}defaultValue={selectedSubject?.user}></input>
+                </div>
             </div>
-            <div>
-                classroom:
-                <input onChange={e=>setSelectedSubject({...selectedSubject!, classroom:e.target.value})}defaultValue={selectedSubject?.classroom}></input>
+            <div className={classes.ElementBox}>
+                <p  className={classes.p}>classroom:</p>
+                <div className={classes.InputBox}>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, classroom:e.target.value})}defaultValue={selectedSubject?.classroom}></input>
+                </div>
             </div>
             <button onClick={()=>saveClick()}>Сохранить</button>
             </ModalAdmin>

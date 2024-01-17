@@ -9,6 +9,7 @@ import LoginInput from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
+import AdminButton from './UI/button/AdminButton'
 
 const AdminForm2: FC = () => {
     const dispatch = useAppDispatch()
@@ -58,20 +59,20 @@ const AdminForm2: FC = () => {
                     <li key={post.id}>{post.name}</li>
                 ))}
                 </ul>
-                <LoginButton text='Сохранить' variant={ButtonVariant.primary}></LoginButton>
+                <AdminButton text='СОХРАНИТЬ'/>
             </div>
             <div style={{width:'80%', border:'2px solid #490514',margin:'5px', overflowX:'auto', overflowY:'auto',whiteSpace:'nowrap', 
-            backgroundColor:'#F7F3F3', borderRadius: '5px', scrollbarColor:COLORS.red3}}>
+            backgroundColor:'#F7F3F3', borderRadius: '5px', scrollbarColor:COLORS.red3, flexDirection:'row'}}>
                 <div style={{display:'flex'}}>
-                    <div style={{display:'flex', flexDirection:'row', margin:'10px 10px 10px 10px'}}>
-                        <button style={{margin:'5px', fontSize:'12px'}}>Фильтр</button>
-                        <SearchBar text='Введите имя столбца'        
-                        searchQuery={searchQuery}
-                        setSearchQuery={setSearchQuery}/>
+                    <div style={{display:'flex', flexDirection:'row', margin:'10px 10px 10px 10px',width:'60%'}}>
+                        <button style={{margin:'5px', fontSize:'12px', width:'60px'}}>Фильтр</button>
+                        <input placeholder='Введите имя столбца' style={{borderRadius: '5px', border: '2px solid #490514', backgroundColor:'#FFF', height:'40px', width:'80%',
+                    display:'flex', alignSelf:'center', paddingLeft:'5px'}}></input>
+                        <button style={{margin:'5px', fontSize:'12px', width:'60px'}}>Поиск</button>
 
                     </div>
-                    <div style={{alignSelf:'center'}}>
-                        <LoginButton text='Добавить' variant={ButtonVariant.primary}/>
+                    <div style={{display: 'flex', width:'20%', alignSelf:'center', justifySelf:'flex-end'}}>
+                        <AdminButton text='Добавить'/>
                     </div>
                     
                 </div>

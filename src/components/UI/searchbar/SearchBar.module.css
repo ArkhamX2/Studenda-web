@@ -3,6 +3,7 @@
 	width: 200px;
 	padding: 8px;
 	font-size: 16;
+	border: 2px solid transparent;
 	border-bottom: 2px solid var(--ad-red1);
 	border-radius: 5px;
 	margin: 2px;
