@@ -7,6 +7,7 @@ interface ModalType {
     toggle: () => void;
 }
 
+//Закрывается если зажать внутри и отпустить снаружи
 const ModalAdmin: FC<ModalType> = (props) => {
     return (
         <>

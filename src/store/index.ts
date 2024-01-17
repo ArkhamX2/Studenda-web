@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import testReducer from './testSlice'
+import adminReducer from './adminSlice'
 
 const store = configureStore({
     reducer: {
-        test: testReducer
+        admin: adminReducer
     },
 })
 

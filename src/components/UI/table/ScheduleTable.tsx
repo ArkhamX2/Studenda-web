@@ -11,8 +11,8 @@ export enum row {
 
 const ScheduleTable: FC =
   () => {
-        const [ScheduleList, setScheduleList]=useState(store.getState().test.list)
-        store.subscribe(() => setScheduleList(store.getState().test.list))
+        const [ScheduleList, setScheduleList]=useState(store.getState().admin.list)
+        store.subscribe(() => setScheduleList(store.getState().admin.list))
   return (
         <table>
                 <tr>

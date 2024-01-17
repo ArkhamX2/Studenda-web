@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { isSubjectsEqual, subjectList, uniteSubject } from '../../../store/testSlice';
+import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 
@@ -27,22 +27,51 @@ const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursu
     }
 }
 
-const test2 = (y:number,i:number) => {
-    console.log("curdayPosition:" + y + "cursubjectPosition:" + i)
-}
-
 const AdminScheduleItemList: FC<subjectList> = (subjectList) => {    
     const dispatch = useAppDispatch()
     const { isOpen, toggle } = useModal()
-    const [cords, setCords] = useState({i: 0, y: 0})
-    const bob = (i:number, y:number) => {
-        console.log("test")
-        setCords({i,y})
+    const [selectedSubject, setSelectedSubject] = useState<subject>()
+    const openEditClick = (event:React.MouseEvent<HTMLTableDataCellElement, MouseEvent>,curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
+        event.preventDefault()
+        tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)>=0 
+        ?
+        setSelectedSubject(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
+        :
+        setSelectedSubject({discipline: "", classroom: "", subjectType:"", user:"", subjectPosition: cursubjectPosition, dayPosition: curdayPosition, weekType:curweekType})
         toggle()
+    }
+    const saveClick = () => {
+        if(selectedSubject!.discipline!==""&&selectedSubject!.classroom!==""&&selectedSubject!.subjectType!==""&&selectedSubject!.user!=="")
+        {
+            dispatch(addSubjectItem({subject:selectedSubject!}))
+            toggle()
+        }
+        else
+        {
+            //Незаполненные поля
+        }
     }
     return (
         <>
-            <ModalAdmin isOpen={isOpen} toggle={toggle}>{cords.i} {cords.y}</ModalAdmin>
+            <ModalAdmin isOpen={isOpen} toggle={toggle}>
+            <div>
+                discipline:
+                <input onChange={e=>setSelectedSubject({...selectedSubject!, discipline:e.target.value})}defaultValue={selectedSubject?.discipline}></input>
+            </div>
+            <div>
+                subjectType:
+                <input onChange={e=>setSelectedSubject({...selectedSubject!, subjectType:e.target.value})}defaultValue={selectedSubject?.subjectType}></input>
+            </div>
+            <div>
+                user:
+                <input onChange={e=>setSelectedSubject({...selectedSubject!, user:e.target.value})}defaultValue={selectedSubject?.user}></input>
+            </div>
+            <div>
+                classroom:
+                <input onChange={e=>setSelectedSubject({...selectedSubject!, classroom:e.target.value})}defaultValue={selectedSubject?.classroom}></input>
+            </div>
+            <button onClick={()=>saveClick()}>Сохранить</button>
+            </ModalAdmin>
             {[...Array(6)].map((x, i) =>
             <tr>
                 <td>
@@ -54,24 +83,24 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     ?
                     <>
                         <tr>
-                        {(tryGetSubjectId(subjectList,y,i, 0)!==-1
+                        {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
-                            <td onContextMenu={()=>bob(i,y)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 0)].discipline}
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
                         :
-                            <td onContextMenu={()=>bob(i,y)}>
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             
                             </td>)}                            
                         </tr>
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i, 1)!==-1
                         ? 
-                            <td onContextMenu={()=>bob(i,y)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 1)].discipline}
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
+                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,1)].discipline}
                             </td> 
                         :
-                            <td onContextMenu={()=>bob(i,y)}>
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
                                 
                             </td>)}
                         </tr>
@@ -79,13 +108,13 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     :
                     <>
                     <tr>
-                        {(tryGetSubjectId(subjectList,y,i, 0)!==-1
+                        {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
-                            <td onContextMenu={()=>bob(i,y)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i, 0)].discipline}
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
                         :
-                            <td onContextMenu={()=>bob(i,y)}>
+                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             
                             </td>)}                            
                     </tr>

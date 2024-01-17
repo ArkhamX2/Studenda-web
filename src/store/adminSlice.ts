@@ -26,9 +26,12 @@ const initialState:subjectList = {list:[
     {discipline: "bbbbbbbbb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 1, dayPosition: 1, weekType: 0},
     {discipline: "vvvvvvvvvvvvv", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 2, dayPosition: 1, weekType: 0},
     {discipline: "bvb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 3, dayPosition: 1, weekType: 0},
-    {discipline: "5555", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 4, dayPosition: 1, weekType: 0}
-        
-    ]
+    {discipline: "5555", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 4, dayPosition: 1, weekType: 0}        
+    ],
+    [],
+    [],
+    [],
+    []
 ]}
 
 function CopyPushSplice(state:subjectList, curdayPosition:number, copy:number, remove:number){
@@ -55,8 +58,8 @@ export function isSubjectsEqual(firstSubject:subject, secondSubject:subject){
     }
 }
 
-const testSlice = createSlice({
-    name: 'test',
+const adminSlice = createSlice({
+    name: 'adminSlice',
     initialState,
     reducers: {
         uniteSubject(state, action: PayloadAction<{curdayPosition:number,cursubjectPosition:number}>){
@@ -67,9 +70,6 @@ const testSlice = createSlice({
                 if ((tmptop>=0&&tmpbot>=0))
                 {
                     //Есть 2 элемента
-                    console.log(state.list[action.payload.curdayPosition][tmptop].discipline)
-
-                    console.log(state.list[action.payload.curdayPosition][tmpbot].discipline)
 
                     if(isSubjectsEqual(state.list[action.payload.curdayPosition][tmptop],state.list[action.payload.curdayPosition][tmpbot]))
                     {
@@ -86,13 +86,11 @@ const testSlice = createSlice({
                     if (tmptop>=0)
                     {
                         //Только верхний элемент
-                        console.log(tmptop)
                         CopyPushSplice(state,action.payload.curdayPosition,tmptop,tmpbot)
                     }
                     if (tmpbot>=0)
                     {
                         //Только нижний элемент
-                        console.log(tmpbot)
                         CopyPushSplice(state,action.payload.curdayPosition,tmpbot,tmptop)
                     }
                 }        
@@ -100,13 +98,73 @@ const testSlice = createSlice({
                 
             }
         },
-        addSubjectItem(state, action: PayloadAction)
+        addSubjectItem(state, action: PayloadAction<{subject:subject}>)
         {
-
+            //Тут полная муть все надо переписать, но оно каким то чудом работает
+            const tmptop:number = state.list[action.payload.subject.dayPosition].indexOf(state.list[action.payload.subject.dayPosition].find((obj) => {return obj.subjectPosition===action.payload.subject.subjectPosition && obj.weekType === 0})!)
+            const tmpbot:number = state.list[action.payload.subject.dayPosition].indexOf(state.list[action.payload.subject.dayPosition].find((obj) => {return obj.subjectPosition===action.payload.subject.subjectPosition && obj.weekType === 1})!)
+            if ((tmptop>=0&&tmpbot>=0))
+            {
+                if(isSubjectsEqual(state.list[action.payload.subject.dayPosition][tmptop],state.list[action.payload.subject.dayPosition][tmpbot]))
+                {
+                    state.list[action.payload.subject.dayPosition].splice((tmptop), 1)
+                    state.list[action.payload.subject.dayPosition].splice((state.list[action.payload.subject.dayPosition].indexOf(state.list[action.payload.subject.dayPosition].find((obj) => {return obj.subjectPosition===action.payload.subject.subjectPosition && obj.weekType === 1})!)), 1)
+                    state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    CopyPushSplice(state, action.payload.subject.dayPosition, state.list[action.payload.subject.dayPosition].length-1, -1)
+                }
+                else
+                {
+                    if(state.list[action.payload.subject.dayPosition][tmptop].weekType===action.payload.subject.weekType)
+                    {
+                        state.list[action.payload.subject.dayPosition].splice((tmptop), 1)
+                        state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    }
+                    else
+                    {
+                        state.list[action.payload.subject.dayPosition].splice((tmpbot), 1)
+                        state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    }
+                }
+            }
+            else
+            {
+                if (tmptop>=0)
+                {
+                    if(state.list[action.payload.subject.dayPosition][tmptop].weekType===action.payload.subject.weekType)
+                    {
+                        state.list[action.payload.subject.dayPosition].splice((tmptop), 1)
+                        state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    }
+                    else
+                    {
+                        state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    }
+                }
+                else
+                {
+                    if (tmpbot>=0)
+                    {
+                        if(state.list[action.payload.subject.dayPosition][tmpbot].weekType===action.payload.subject.weekType)
+                        {
+                            state.list[action.payload.subject.dayPosition].splice((tmpbot), 1)
+                            state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                        }
+                        else
+                        {
+                            state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                        }
+                    }
+                    else
+                    {
+                        state.list[action.payload.subject.dayPosition].push(action.payload.subject)
+                    }
+                }
+            }
+            
         }
     }
 })
 
-export const {uniteSubject} = testSlice.actions
+export const {uniteSubject,addSubjectItem} = adminSlice.actions
 
-export default testSlice.reducer
+export default adminSlice.reducer
