@@ -8,7 +8,7 @@ import classes from './AdminScheduleitemList.module.css'
 const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
     {
-        const subjectId:number = subjectList.list[curdayPosition].indexOf(subjectList.list[curdayPosition].find((obj) => {return obj.subjectPosition===cursubjectPosition && obj.weekType === curweekType})!)
+        const subjectId:number = subjectList.list.indexOf(subjectList.list.find((obj) => {return obj.dayPosition===curdayPosition && obj.subjectPosition===cursubjectPosition && obj.weekType === curweekType})!)
         return subjectId    
     }
     catch (e)
@@ -20,7 +20,7 @@ const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursub
 const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        return isSubjectsEqual(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)],subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)])
+        return isSubjectsEqual(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)],subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)])
     }
     catch(e)
     {
@@ -36,7 +36,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         event.preventDefault()
         tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)>=0 
         ?
-        setSelectedSubject(subjectList.list[curdayPosition][tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
+        setSelectedSubject(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
         :
         setSelectedSubject({discipline: "", classroom: "", subjectType:"", user:"", subjectPosition: cursubjectPosition, dayPosition: curdayPosition, weekType:curweekType})
         toggle()
@@ -96,7 +96,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
                         :
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
@@ -107,7 +107,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         {(tryGetSubjectId(subjectList,y,i, 1)!==-1
                         ? 
                             <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,1)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,1)].discipline}
                             </td> 
                         :
                             <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
@@ -121,7 +121,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                            {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
                         :
                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
