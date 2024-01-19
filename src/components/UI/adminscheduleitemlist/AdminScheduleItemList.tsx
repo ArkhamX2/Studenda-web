@@ -96,15 +96,15 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
-                            <div  className={classes.subjectBox}>
-                                <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            <div  className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                                <td >
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td> 
                             </div>
                             
                         :
-                        <div  className={classes.subjectBox} >
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                        <div  className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            <td >
                             
                             </td>
                         </div>
@@ -113,17 +113,17 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         <tr>
                         {(tryGetSubjectId(subjectList,y,i, 1)!==-1
                         ? 
-                        <div className={classes.subjectBox}>
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
+                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,1)}>
+                            <td >
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,1)].discipline}
                             </td> 
                         </div>
                             
                         :
-                        <div className={classes.subjectBox}>
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,1)}>
+                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,1)}>
+                            <td >
                                                             
-                                                        </td>
+                            </td>
                         </div>
                            )}
                         </tr>
@@ -133,15 +133,15 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     <tr>
                         {(tryGetSubjectId(subjectList,y,i,0)!==-1
                         ? 
-                        <div className={classes.subjectBox} style={{height:'100px'}}>
-                            <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                        <div className={classes.subjectBox} style={{height:'100px'}}  onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                            <td>
                             {subjectList.list[y][tryGetSubjectId(subjectList,y,i,0)].discipline}
                             </td>
                         </div>
                              
                         :
-                        <div className={classes.subjectBox} >
-                             <td onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
+                             <td >
                             
                             </td>
                         </div>
