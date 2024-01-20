@@ -89,12 +89,14 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                 <td className={classes.TCol}>
                     {cursubjectPosition}
                 </td>
+                
                 {[...Array(6)].map((x, y) => {const curdayPosition=y+1; return (
                 <td className={classes.TCol} onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:curdayPosition,cursubjectPosition:cursubjectPosition}))}>
                     {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
                     <>                    
                         <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
+                        <hr style={{height:'1px', backgroundColor:'#B5999F', border:'1px solid #B5999F', margin:'0px -5px 0px -5px'}}></hr>
                         <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
                     </>
                     :
