@@ -99,9 +99,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     </>
                     :
                     <>
-                    <tr>
                         <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
-                    </tr>
                     </>
                     }                    
                 </td>
