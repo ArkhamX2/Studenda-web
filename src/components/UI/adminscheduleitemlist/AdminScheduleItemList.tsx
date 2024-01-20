@@ -4,8 +4,9 @@ import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject } f
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import classes from './AdminScheduleitemList.module.css'
+import AdminScheduleItem from '../adminscheduleitem/AdminScheduleItem';
 
-const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
+export const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
     {
         const subjectId:number = subjectList.list.findLastIndex((obj) => {return obj.dayPositionId===curdayPosition && obj.subjectPositionId===cursubjectPosition && obj.weekTypeId === curweekType})!
@@ -20,7 +21,8 @@ const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursub
 const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        return isSubjectsEqual(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 0)],subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)])
+        console.log("smth")
+        return isSubjectsEqual(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)],subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 2)])
     }
     catch(e)
     {
@@ -42,18 +44,14 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         toggle()
     }
     const saveClick = () => {
-        if(selectedSubject!.disciplineId!==undefined&&selectedSubject!.classroom!==""&&selectedSubject!.subjectTypeId!==undefined&&selectedSubject!.userId!==undefined)
+        if(selectedSubject!.disciplineId===undefined&&selectedSubject!.classroom===""&&selectedSubject!.subjectTypeId===undefined&&selectedSubject!.userId===undefined)
         {
-            dispatch(addSubjectItem({subject:selectedSubject!}))
-            toggle()
+            //Пусто
         }
         else
         {
-            //Незаполненные поля
-            if(selectedSubject!.disciplineId===undefined&&selectedSubject!.classroom===""&&selectedSubject!.subjectTypeId===undefined&&selectedSubject!.userId===undefined)
-            {
-                //Пусто
-            }
+            dispatch(addSubjectItem({subject:selectedSubject!}))
+            toggle()
         }
     }
     return (
@@ -86,78 +84,31 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
             </div>
             <button onClick={()=>saveClick()}>Сохранить</button>
             </ModalAdmin>
-            {[...Array(6)].map((x, i) =>
+            {[...Array(6)].map((x, i) => {const cursubjectPosition=i+1; return (
             <tr>
                 <td className={classes.TCol}>
-                    {i+1}
+                    {cursubjectPosition}
                 </td>
-                {[...Array(6)].map((x, y) => /** пустые */
-                <td className={classes.TCol} onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:y,cursubjectPosition:i}))}>
-                    {(tryIsSubjectsEqual(subjectList,y,i)===false)
+                {[...Array(6)].map((x, y) => {const curdayPosition=y+1; return (
+                <td className={classes.TCol} onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:curdayPosition,cursubjectPosition:cursubjectPosition}))}>
+                    {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
-                    <>
-                    
-                        <tr>
-                        {(tryGetSubjectId(subjectList,y,i,0)!==-1
-                        ? 
-                            <div  className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                                <td >
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].disciplineId}
-                            </td> 
-                            </div>
-                            
-                        :
-                        <div  className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                            <td >
-                            
-                            </td>
-                        </div>
-                            )}                            
-                        </tr>
-                        <tr>
-                        {(tryGetSubjectId(subjectList,y,i, 1)!==-1
-                        ? 
-                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,1)}>
-                            <td >
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,1)].disciplineId}
-                            </td> 
-                        </div>
-                            
-                        :
-                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,1)}>
-                            <td >
-                                                            
-                            </td>
-                        </div>
-                           )}
-                        </tr>
+                    <>                    
+                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
                     </>
                     :
                     <>
                     <tr>
-                        {(tryGetSubjectId(subjectList,y,i,0)!==-1
-                        ? 
-                        <div className={classes.subjectBox} style={{height:'100px'}}  onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                            <td>
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].disciplineId}
-                            </td>
-                        </div>
-                             
-                        :
-                        <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
-                             <td >
-                            
-                            </td>
-                        </div>
-                           )}                            
+                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
                     </tr>
                     </>
-                    }
-                    
+                    }                    
                 </td>
                 )}
+                )}
             </tr>
-            
+            )}
             )}
         </>
     )

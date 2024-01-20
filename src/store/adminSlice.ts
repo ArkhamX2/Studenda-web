@@ -12,19 +12,20 @@ export interface subjectList {
 /// {"classroom": "Вц-315", ///получать "groupId":1, ///получать "subjectTypeId":1, "weekTypeId":1,"dayPositionId":3, "subjectPositionId":1, ///получать "disciplineId":3}
 
 const initialState:subjectList = {list:[
+    {classroom: "Вц-315", groupId:1, subjectTypeId:1, weekTypeId:1, dayPositionId:3, subjectPositionId:1, disciplineId:3}
 ]}
 
 export const fetchSubjectList = createAsyncThunk<subject[], undefined>(
     'admin/fetchSubjectList',
     async function (_) {
         try {
-            const response = await axios.get("http://88.210.3.137/api/subject") 
-            console.log("fetched") 
+            const response = await axios.get("http://88.210.3.137/api/schedule/subject") 
+            //console.log(response.data) 
             return response.data
-            } 
+        } 
         catch(error) {
             console.error(error);
-            }
+        }
     }
 )
 
@@ -32,7 +33,7 @@ function CopyPushSplice(state:subjectList, copy:number, remove:number){
     if (copy>=0)
     {
         const tmpcopy = Object.assign({},state.list[copy])      
-        tmpcopy.weekTypeId === 0 ? tmpcopy.weekTypeId=1 : tmpcopy.weekTypeId=0      
+        tmpcopy.weekTypeId === 1 ? tmpcopy.weekTypeId=2 : tmpcopy.weekTypeId=1      
         state.list.push(tmpcopy)     
     }   
     if (remove>=0)
@@ -59,8 +60,8 @@ const adminSlice = createSlice({
         uniteSubject(state, action: PayloadAction<{curdayPosition:number,cursubjectPosition:number}>){
             try {
                 //console.log(action.payload.curdayPosition + " " + action.payload.cursubjectPosition)
-                const tmptop:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 0})!)   
-                const tmpbot:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 1})!)
+                const tmptop:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 1})!
+                const tmpbot:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 2})!
                 if ((tmptop>=0&&tmpbot>=0))
                 {
                     //Есть 2 элемента
@@ -95,14 +96,14 @@ const adminSlice = createSlice({
         addSubjectItem(state, action: PayloadAction<{subject:subject}>)
         {
             //Тут полная муть все надо переписать, но оно каким то чудом работает
-            const tmptop:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 0})!   
-            const tmpbot:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 1})!
+            const tmptop:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 1})!   
+            const tmpbot:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 2})!
             if ((tmptop>=0&&tmpbot>=0))
             {
                 if(isSubjectsEqual(state.list[tmptop],state.list[tmpbot]))
                 {
                     state.list.splice((tmptop), 1)
-                    state.list.splice((state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.subjectPositionId && obj.weekTypeId === 1})!)), 1)
+                    state.list.splice((state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.subjectPositionId && obj.weekTypeId === 2})!), 1)
                     state.list.push(action.payload.subject)
                     CopyPushSplice(state, state.list.length-1, -1)
                 }
