@@ -21,7 +21,7 @@ const AdminScheduleItem: FC<AdminScheduleItemProps> = (AdminScheduleItemProps) =
         </td> 
     </div>
     :
-    <div className={classes.subjectBox} onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
+    <div className={classes.subjectBox} style={{border:'0px solid transparent', backgroundColor:'transparent'}}  onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
         <td>
         </td> 
     </div>
