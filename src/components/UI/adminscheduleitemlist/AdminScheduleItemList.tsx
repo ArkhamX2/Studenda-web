@@ -8,7 +8,7 @@ import classes from './AdminScheduleitemList.module.css'
 const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
     {
-        const subjectId:number = subjectList.list.indexOf(subjectList.list.find((obj) => {return obj.dayPosition===curdayPosition && obj.subjectPosition===cursubjectPosition && obj.weekType === curweekType})!)
+        const subjectId:number = subjectList.list.findLastIndex((obj) => {return obj.dayPositionId===curdayPosition && obj.subjectPositionId===cursubjectPosition && obj.weekTypeId === curweekType})!
         return subjectId    
     }
     catch (e)
@@ -32,17 +32,17 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
     const dispatch = useAppDispatch()
     const { isOpen, toggle } = useModal()
     const [selectedSubject, setSelectedSubject] = useState<subject>()
-    const openEditClick = (event:React.MouseEvent<HTMLTableDataCellElement, MouseEvent>,curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
+    const openEditClick = (event:React.MouseEvent<HTMLDivElement, MouseEvent>, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
         event.preventDefault()
         tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)>=0 
         ?
         setSelectedSubject(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
         :
-        setSelectedSubject({discipline: "", classroom: "", subjectType:"", user:"", subjectPosition: cursubjectPosition, dayPosition: curdayPosition, weekType:curweekType})
+        setSelectedSubject({disciplineId: undefined, classroom: "", subjectTypeId:undefined, userId:undefined, subjectPositionId: cursubjectPosition, dayPositionId: curdayPosition, weekTypeId:curweekType, groupId:undefined, description:undefined})
         toggle()
     }
     const saveClick = () => {
-        if(selectedSubject!.discipline!==""&&selectedSubject!.classroom!==""&&selectedSubject!.subjectType!==""&&selectedSubject!.user!=="")
+        if(selectedSubject!.disciplineId!==undefined&&selectedSubject!.classroom!==""&&selectedSubject!.subjectTypeId!==undefined&&selectedSubject!.userId!==undefined)
         {
             dispatch(addSubjectItem({subject:selectedSubject!}))
             toggle()
@@ -50,6 +50,10 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         else
         {
             //Незаполненные поля
+            if(selectedSubject!.disciplineId===undefined&&selectedSubject!.classroom===""&&selectedSubject!.subjectTypeId===undefined&&selectedSubject!.userId===undefined)
+            {
+                //Пусто
+            }
         }
     }
     return (
@@ -57,25 +61,25 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
             <ModalAdmin isOpen={isOpen} toggle={toggle}>
             <div style={{textAlign:'center', margin:'10px', fontSize:'20px', fontWeight:'600'}}>РЕДАКТИРОВАНИЕ</div>
             <div className={classes.ElementBox}>
-                <p className={classes.p}>discipline:</p>
+                <p className={classes.p}>DisciplineId:</p>
                 <div className={classes.InputBox}>
-                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, discipline:e.target.value})}defaultValue={selectedSubject?.discipline}></input>
+                <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, disciplineId:Number(e.target.value)})}defaultValue={selectedSubject?.disciplineId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
-                <p  className={classes.p}>subjectType:</p>
+                <p  className={classes.p}>SubjectTypeId:</p>
                 <div className={classes.InputBox}>
-                    <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, subjectType:e.target.value})}defaultValue={selectedSubject?.subjectType}></input>
+                    <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, subjectTypeId:Number(e.target.value)})}defaultValue={selectedSubject?.subjectTypeId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
-                <p  className={classes.p}>user:</p>
+                <p  className={classes.p}>UserId:</p>
                 <div className={classes.InputBox}>
-                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, user:e.target.value})}defaultValue={selectedSubject?.user}></input>
+                <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, userId:Number(e.target.value)})}defaultValue={selectedSubject?.userId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
-                <p  className={classes.p}>classroom:</p>
+                <p  className={classes.p}>Classroom:</p>
                 <div className={classes.InputBox}>
                 <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, classroom:e.target.value})}defaultValue={selectedSubject?.classroom}></input>
                 </div>
@@ -98,7 +102,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         ? 
                             <div  className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                                 <td >
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].disciplineId}
                             </td> 
                             </div>
                             
@@ -115,7 +119,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         ? 
                         <div className={classes.subjectBox} onContextMenu={(e)=>openEditClick(e,y,i,1)}>
                             <td >
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,1)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,1)].disciplineId}
                             </td> 
                         </div>
                             
@@ -135,7 +139,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                         ? 
                         <div className={classes.subjectBox} style={{height:'100px'}}  onContextMenu={(e)=>openEditClick(e,y,i,0)}>
                             <td>
-                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].discipline}
+                            {subjectList.list[tryGetSubjectId(subjectList,y,i,0)].disciplineId}
                             </td>
                         </div>
                              

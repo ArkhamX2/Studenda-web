@@ -1,38 +1,38 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 export type subject = {
-    discipline: string, classroom: string, subjectType:string, user:string, subjectPosition: number, dayPosition: number, weekType:number
+    disciplineId?: number, classroom?: string, subjectTypeId?:number, userId?:number, subjectPositionId?: number, dayPositionId?: number, weekTypeId?:number, groupId?:number, description?:string
 }
 
 export interface subjectList {
     list: subject[]
 }
 
-/// {"classroom": "Вц-315", ///получать "groupID":1, ///получать "subjectTypeId":1, "weekTypeId":1,"dayPositionId":3, "subjectPositionId":1, ///получать "disciplineId":3}
+/// {"classroom": "Вц-315", ///получать "groupId":1, ///получать "subjectTypeId":1, "weekTypeId":1,"dayPositionId":3, "subjectPositionId":1, ///получать "disciplineId":3}
 
 const initialState:subjectList = {list:[
-    {discipline: "aboba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 0, dayPosition: 0, weekType: 1},
-    {discipline: "aboba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 0, dayPosition: 0, weekType: 0},
-    {discipline: "aboba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 1, dayPosition: 0, weekType: 1},
-    {discipline: "aboba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 2, dayPosition: 0, weekType: 1},
-    {discipline: "bvb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 3, dayPosition: 0, weekType: 1},
-    {discipline: "5555", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 4, dayPosition: 0, weekType: 1},
-    {discipline: "cvbvcb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 1, dayPosition: 1, weekType: 1},
-    {discipline: "vcx", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 0, dayPosition: 1, weekType: 1},
-    {discipline: "abdfoba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 3, dayPosition: 1, weekType: 1},
-    {discipline: "abogdfgfdba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 5, dayPosition: 1, weekType: 1},
-    {discipline: "aboba", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 0, dayPosition: 1, weekType: 0},
-    {discipline: "bbbbbbbbb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 1, dayPosition: 1, weekType: 0},
-    {discipline: "vvvvvvvvvvvvv", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 2, dayPosition: 1, weekType: 0},
-    {discipline: "bvb", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 3, dayPosition: 1, weekType: 0},
-    {discipline: "5555", classroom: "z123", subjectType: "l", user: "Masloy",subjectPosition: 4, dayPosition: 1, weekType: 0}
 ]}
+
+export const fetchSubjectList = createAsyncThunk<subject[], undefined>(
+    'admin/fetchSubjectList',
+    async function (_) {
+        try {
+            const response = await axios.get("http://88.210.3.137/api/subject") 
+            console.log("fetched") 
+            return response.data
+            } 
+        catch(error) {
+            console.error(error);
+            }
+    }
+)
 
 function CopyPushSplice(state:subjectList, copy:number, remove:number){
     if (copy>=0)
     {
         const tmpcopy = Object.assign({},state.list[copy])      
-        tmpcopy.weekType === 0 ? tmpcopy.weekType=1 : tmpcopy.weekType=0      
+        tmpcopy.weekTypeId === 0 ? tmpcopy.weekTypeId=1 : tmpcopy.weekTypeId=0      
         state.list.push(tmpcopy)     
     }   
     if (remove>=0)
@@ -42,7 +42,7 @@ function CopyPushSplice(state:subjectList, copy:number, remove:number){
 }
 
 export function isSubjectsEqual(firstSubject:subject, secondSubject:subject){
-    if (firstSubject.discipline===secondSubject.discipline&&firstSubject.classroom===secondSubject.classroom&&firstSubject.subjectType===secondSubject.subjectType&&firstSubject.user===secondSubject.user)
+    if (firstSubject.disciplineId===secondSubject.disciplineId&&firstSubject.classroom===secondSubject.classroom&&firstSubject.subjectTypeId===secondSubject.subjectTypeId&&firstSubject.userId===secondSubject.userId)
     {
         return true
     }
@@ -59,8 +59,8 @@ const adminSlice = createSlice({
         uniteSubject(state, action: PayloadAction<{curdayPosition:number,cursubjectPosition:number}>){
             try {
                 //console.log(action.payload.curdayPosition + " " + action.payload.cursubjectPosition)
-                const tmptop:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPosition===action.payload.curdayPosition && obj.subjectPosition===action.payload.cursubjectPosition && obj.weekType === 0})!)   
-                const tmpbot:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPosition===action.payload.curdayPosition && obj.subjectPosition===action.payload.cursubjectPosition && obj.weekType === 1})!)
+                const tmptop:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 0})!)   
+                const tmpbot:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 1})!)
                 if ((tmptop>=0&&tmpbot>=0))
                 {
                     //Есть 2 элемента
@@ -95,20 +95,20 @@ const adminSlice = createSlice({
         addSubjectItem(state, action: PayloadAction<{subject:subject}>)
         {
             //Тут полная муть все надо переписать, но оно каким то чудом работает
-            const tmptop:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPosition===action.payload.subject.dayPosition && obj.subjectPosition===action.payload.subject.dayPosition && obj.weekType === 0})!)   
-            const tmpbot:number = state.list.indexOf(state.list.find((obj) => {return obj.dayPosition===action.payload.subject.dayPosition && obj.subjectPosition===action.payload.subject.dayPosition && obj.weekType === 1})!)
+            const tmptop:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 0})!   
+            const tmpbot:number = state.list.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 1})!
             if ((tmptop>=0&&tmpbot>=0))
             {
                 if(isSubjectsEqual(state.list[tmptop],state.list[tmpbot]))
                 {
                     state.list.splice((tmptop), 1)
-                    state.list.splice((state.list.indexOf(state.list.find((obj) => {return obj.dayPosition===action.payload.subject.dayPosition && obj.subjectPosition===action.payload.subject.subjectPosition && obj.weekType === 1})!)), 1)
+                    state.list.splice((state.list.indexOf(state.list.find((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.subjectPositionId && obj.weekTypeId === 1})!)), 1)
                     state.list.push(action.payload.subject)
                     CopyPushSplice(state, state.list.length-1, -1)
                 }
                 else
                 {
-                    if(state.list[tmptop].weekType===action.payload.subject.weekType)
+                    if(state.list[tmptop].weekTypeId===action.payload.subject.weekTypeId)
                     {
                         state.list.splice((tmptop), 1)
                         state.list.push(action.payload.subject)
@@ -124,7 +124,7 @@ const adminSlice = createSlice({
             {
                 if (tmptop>=0)
                 {
-                    if(state.list[tmptop].weekType===action.payload.subject.weekType)
+                    if(state.list[tmptop].weekTypeId===action.payload.subject.weekTypeId)
                     {
                         state.list.splice((tmptop), 1)
                         state.list.push(action.payload.subject)
@@ -138,7 +138,7 @@ const adminSlice = createSlice({
                 {
                     if (tmpbot>=0)
                     {
-                        if(state.list[tmpbot].weekType===action.payload.subject.weekType)
+                        if(state.list[tmpbot].weekTypeId===action.payload.subject.weekTypeId)
                         {
                             state.list.splice((tmpbot), 1)
                             state.list.push(action.payload.subject)
@@ -153,9 +153,19 @@ const adminSlice = createSlice({
                         state.list.push(action.payload.subject)
                     }
                 }
-            }
-            
+            }            
         }
+    },    
+    extraReducers: (builder) => {
+        builder
+        .addCase(fetchSubjectList.pending, ()=>{
+
+        })
+        .addCase(fetchSubjectList.fulfilled, (state, action)=>{
+            state.list.splice(0,state.list.length) //Очистка листа перед фетчем
+            action.payload.map((obj,i)=>{state.list.push({disciplineId:obj.disciplineId, classroom:obj.classroom, subjectTypeId:obj.subjectTypeId, userId:obj.userId, subjectPositionId:obj.subjectPositionId, dayPositionId:obj.dayPositionId, weekTypeId:obj.weekTypeId, groupId:obj.groupId, description:obj.description})})
+            //action.payload.map((obj,i)=>{state.list.push(obj)}) //full subject
+        })
     }
 })
 

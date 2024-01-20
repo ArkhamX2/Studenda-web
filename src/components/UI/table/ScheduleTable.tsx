@@ -4,6 +4,8 @@ import classes from './ScheduleTable.module.css'
 import AdminScheduleItemList from '../adminscheduleitemlist/AdminScheduleItemList'
 import store from '../../../store'
 import axios from "axios"
+import { fetchSubjectList } from '../../../store/adminSlice'
+import { useAppDispatch } from '../../../hook'
 
 export enum row {
   half='half',
@@ -23,6 +25,7 @@ const ScheduleTable: FC =
   () => {
         const [ScheduleList, setScheduleList]=useState(store.getState().admin.list)
         store.subscribe(() => setScheduleList(store.getState().admin.list))
+        const dispatch = useAppDispatch()
   return (
         <table>
                 <tr>
@@ -58,7 +61,7 @@ const ScheduleTable: FC =
 
                 <AdminScheduleItemList list={ScheduleList}/>
                 
-                <button onClick={abobus}>Тест кнопочка вернулась</button>
+                <button onClick={()=>dispatch(fetchSubjectList())}>Тест кнопочка вернулась</button>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>
