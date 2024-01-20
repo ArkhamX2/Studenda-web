@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 import { subjectList } from '../../../store/adminSlice'
-import classes from '../adminscheduleitemlist/AdminScheduleitemList.module.css'
 import { tryGetSubjectId } from '../adminscheduleitemlist/AdminScheduleItemList'
 
 interface AdminScheduleItemProps {
+    className?: string 
     subjectList: subjectList
     curdayPosition: number
     cursubjectPosition: number
@@ -15,13 +15,13 @@ const AdminScheduleItem: FC<AdminScheduleItemProps> = (AdminScheduleItemProps) =
     <>
     {(tryGetSubjectId(AdminScheduleItemProps.subjectList,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)!==-1
     ?
-    <div className={classes.subjectBox} onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
+    <div className={AdminScheduleItemProps.className} onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
         <td>
             {AdminScheduleItemProps.subjectList.list[tryGetSubjectId(AdminScheduleItemProps.subjectList,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)].disciplineId}
         </td> 
     </div>
     :
-    <div className={classes.subjectBox} style={{border:'0px solid transparent', backgroundColor:'transparent'}}  onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
+    <div className={AdminScheduleItemProps.className} style={{border:'0px solid transparent', backgroundColor:'transparent'}}  onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
         <td>
         </td> 
     </div>

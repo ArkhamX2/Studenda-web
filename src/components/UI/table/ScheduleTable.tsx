@@ -51,7 +51,7 @@ const ScheduleTable: FC =
 
                 <AdminScheduleItemList list={ScheduleList}/>
                 
-                <button onClick={()=>dispatch(fetchSubjectList())}>Тест кнопочка вернулась</button>
+                <button onClick={()=>dispatch(fetchSubjectList())}>Тест</button>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>

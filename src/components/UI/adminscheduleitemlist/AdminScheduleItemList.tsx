@@ -94,12 +94,12 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                     {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
                     <>                    
-                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
-                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
                     </>
                     :
                     <>
-                        <AdminScheduleItem subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
+                        <AdminScheduleItem className={classes.subjectBoxBoth} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
                     </>
                     }                    
                 </td>
