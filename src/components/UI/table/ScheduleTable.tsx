@@ -3,22 +3,12 @@ import  './ScheduleTable.module.css'
 import classes from './ScheduleTable.module.css'
 import AdminScheduleItemList from '../adminscheduleitemlist/AdminScheduleItemList'
 import store from '../../../store'
-import axios from "axios"
 import { fetchSubjectList } from '../../../store/adminSlice'
 import { useAppDispatch } from '../../../hook'
 
 export enum row {
   half='half',
   split='split'
-}
-
-async function abobus() {
-        try {
-        const response = await axios.get("http://88.210.3.137/api/subject")
-        console.log(response.data)
-        } catch(error) {
-        console.error(error);
-        }
 }
 
 const ScheduleTable: FC =
