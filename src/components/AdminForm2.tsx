@@ -78,7 +78,7 @@ const AdminForm2: FC = () => {
                     
                 </div>
                 <div style={{display:'flex', flexDirection:'column', border:'1px solid lightgray', padding:'5px'}}>
-                   <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6' first={BorderType.firstElement}/>
+                   <AdminSubject col1='COLUMN1' col2='COLUMN2' col3='COLUMN3' col4='COLUMN4' col5='COLUMN5' col6='COLUMN6' first={BorderType.firstElement}/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
                    <AdminSubject col1='colum1' col2='column2' col3='column3' col4='column4' col5='column5' col6='column6'/>
