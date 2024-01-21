@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject } from '../../../store/adminSlice';
+import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import classes from './AdminScheduleitemList.module.css'
@@ -21,7 +21,6 @@ export const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number,
 const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        console.log("smth")
         return isSubjectsEqual(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)],subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 2)])
     }
     catch(e)
@@ -40,10 +39,10 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         ?
         setSelectedSubject(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
         :
-        setSelectedSubject({disciplineId: undefined, classroom: "", subjectTypeId:undefined, userId:undefined, subjectPositionId: cursubjectPosition, dayPositionId: curdayPosition, weekTypeId:curweekType, groupId:undefined, description:undefined})
+        setSelectedSubject({academicYear: 0,disciplineId: 0, classroom: "", subjectTypeId:undefined, userId:undefined, subjectPositionId: cursubjectPosition, dayPositionId: curdayPosition, weekTypeId:curweekType, groupId:1, description:undefined})
         toggle()
     }
-    const saveClick = () => {
+    const saveClick = async () => {
         if(selectedSubject!.disciplineId===undefined&&selectedSubject!.classroom===""&&selectedSubject!.subjectTypeId===undefined&&selectedSubject!.userId===undefined)
         {
             //Пусто
@@ -52,28 +51,52 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         {
             dispatch(addSubjectItem({subject:selectedSubject!}))
             toggle()
+            await dispatch(postSubject(selectedSubject!))
+            await dispatch(getSubjectList())
         }
+    }
+    const deleteClick = async () => {
+        if(selectedSubject!.id===undefined)
+        {
+            //Пусто
+        }
+        else
+        {
+            toggle()
+            await dispatch(deleteSubject(selectedSubject!.id))
+            await dispatch(getSubjectList())
+        }
+    }
+    const uniteDoubleClick = async (curdayPosition:number, cursubjectPosition:number) => {
+        dispatch(uniteSubject({curdayPosition:curdayPosition,cursubjectPosition:cursubjectPosition}))
+        //await dispatch(getSubjectList())
     }
     return (
         <>
             <ModalAdmin isOpen={isOpen} toggle={toggle}>
             <div style={{textAlign:'center', margin:'10px', fontSize:'20px', fontWeight:'600'}}>РЕДАКТИРОВАНИЕ</div>
             <div className={classes.ElementBox}>
+                <p className={classes.p}>academicYear:</p>
+                <div className={classes.InputBox}>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, academicYear:Number(e.target.value)})}defaultValue={selectedSubject?.academicYear}></input>
+                </div>
+            </div>
+            <div className={classes.ElementBox}>
                 <p className={classes.p}>DisciplineId:</p>
                 <div className={classes.InputBox}>
-                <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, disciplineId:Number(e.target.value)})}defaultValue={selectedSubject?.disciplineId}></input>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, disciplineId:Number(e.target.value)})}defaultValue={selectedSubject?.disciplineId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
                 <p  className={classes.p}>SubjectTypeId:</p>
                 <div className={classes.InputBox}>
-                    <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, subjectTypeId:Number(e.target.value)})}defaultValue={selectedSubject?.subjectTypeId}></input>
+                    <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, subjectTypeId:Number(e.target.value)})}defaultValue={selectedSubject?.subjectTypeId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
                 <p  className={classes.p}>UserId:</p>
                 <div className={classes.InputBox}>
-                <input className={classes.Input} onKeyDown={(event)=>{if(!/[0-9]/.test(event.key)) {event.preventDefault();}}} onChange={e=>setSelectedSubject({...selectedSubject!, userId:Number(e.target.value)})}defaultValue={selectedSubject?.userId}></input>
+                <input className={classes.Input} onChange={e=>setSelectedSubject({...selectedSubject!, userId:Number(e.target.value)})}defaultValue={selectedSubject?.userId}></input>
                 </div>
             </div>
             <div className={classes.ElementBox}>
@@ -83,6 +106,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                 </div>
             </div>
             <button onClick={()=>saveClick()}>Сохранить</button>
+            <button onClick={()=>deleteClick()}>Удалить</button>
             </ModalAdmin>
             {[...Array(6)].map((x, i) => {const cursubjectPosition=i+1; return (
             <tr>
@@ -91,7 +115,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
                 </td>
                 
                 {[...Array(6)].map((x, y) => {const curdayPosition=y+1; return (
-                <td className={classes.TCol} onDoubleClick={()=>dispatch(uniteSubject({curdayPosition:curdayPosition,cursubjectPosition:cursubjectPosition}))}>
+                <td className={classes.TCol} onDoubleClick={()=>uniteDoubleClick(curdayPosition,cursubjectPosition)}>
                     {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
                     <>                    

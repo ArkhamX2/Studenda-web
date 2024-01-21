@@ -2,25 +2,58 @@ import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export type subject = {
-    disciplineId?: number, classroom?: string, subjectTypeId?:number, userId?:number, subjectPositionId?: number, dayPositionId?: number, weekTypeId?:number, groupId?:number, description?:string
+    id?:number, academicYear:number, disciplineId: number, classroom?: string, subjectTypeId?:number, userId?:number, subjectPositionId: number, dayPositionId: number, weekTypeId:number, groupId:number, description?:string
 }
 
 export interface subjectList {
     list: subject[]
 }
 
-/// {"classroom": "Вц-315", ///получать "groupId":1, ///получать "subjectTypeId":1, "weekTypeId":1,"dayPositionId":3, "subjectPositionId":1, ///получать "disciplineId":3}
-
 const initialState:subjectList = {list:[
-    {classroom: "Вц-315", groupId:1, subjectTypeId:1, weekTypeId:1, dayPositionId:3, subjectPositionId:1, disciplineId:3}
+    //{academicYear:2023, classroom: "Вц-315", groupId:1, subjectTypeId:1, weekTypeId:1, dayPositionId:3, subjectPositionId:1, disciplineId:3}
 ]}
 
-export const fetchSubjectList = createAsyncThunk<subject[], undefined>(
-    'admin/fetchSubjectList',
+export const deleteSubject = createAsyncThunk(
+    'admin/deleteSubject',
+    async function (id:number) {
+        try {
+            const response = await axios.delete("http://88.210.3.137/api/schedule/subject", {data:[id]})
+        } 
+        catch(error) {
+            console.error(error);
+        }
+    }
+)
+
+export const postSubject = createAsyncThunk(
+    'admin/postSubject',
+    async function (subject:subject) {
+        try {
+            const response = await axios.post("http://88.210.3.137/api/schedule/subject", [{id:subject.id, 
+            disciplineId: subject.disciplineId, 
+            subjectPositionId: subject.subjectPositionId, 
+            dayPositionId: subject.dayPositionId, 
+            weekTypeId: subject.weekTypeId, 
+            subjectTypeId: subject.subjectTypeId, 
+            userId: subject.userId, 
+            groupId: subject.groupId, 
+            classroom: subject.classroom, 
+            description: subject.description, 
+            academicYear: subject.academicYear}]) 
+            //console.log(response.data)
+        } 
+        catch(error) {
+            console.error(error);
+        }
+    }
+)
+
+export const getSubjectList = createAsyncThunk<subject[], undefined>(
+    'admin/getSubjectList',
     async function (_) {
         try {
-            const response = await axios.get("http://88.210.3.137/api/schedule/subject") 
-            //console.log(response.data) 
+            const response = await axios.get("http://88.210.3.137/api/schedule/subject", {params:[]})
+            console.log(response.data) 
             return response.data
         } 
         catch(error) {
@@ -34,11 +67,13 @@ function CopyPushSplice(state:subjectList, copy:number, remove:number){
     {
         const tmpcopy = Object.assign({},state.list[copy])      
         tmpcopy.weekTypeId === 1 ? tmpcopy.weekTypeId=2 : tmpcopy.weekTypeId=1      
-        state.list.push(tmpcopy)     
+        state.list.push(tmpcopy)
+        postSubject(tmpcopy)
     }   
     if (remove>=0)
     {
         state.list.splice((remove), 1)
+        deleteSubject(state.list[remove].id!)
     }
 }
 
@@ -65,7 +100,6 @@ const adminSlice = createSlice({
                 if ((tmptop>=0&&tmpbot>=0))
                 {
                     //Есть 2 элемента
-
                     if(isSubjectsEqual(state.list[tmptop],state.list[tmpbot]))
                     {
                         CopyPushSplice(state,-1,tmpbot)
@@ -80,7 +114,7 @@ const adminSlice = createSlice({
                 {
                     if (tmptop>=0)
                     {
-                        //Только верхний элемент
+                        //Только верхний элемент           
                         CopyPushSplice(state,tmptop,tmpbot)
                     }
                     if (tmpbot>=0)
@@ -90,7 +124,7 @@ const adminSlice = createSlice({
                     }
                 }        
             } catch (e) {
-                
+                console.log(e)
             }
         },
         addSubjectItem(state, action: PayloadAction<{subject:subject}>)
@@ -159,12 +193,9 @@ const adminSlice = createSlice({
     },    
     extraReducers: (builder) => {
         builder
-        .addCase(fetchSubjectList.pending, ()=>{
-
-        })
-        .addCase(fetchSubjectList.fulfilled, (state, action)=>{
+        .addCase(getSubjectList.fulfilled, (state, action)=>{
             state.list.splice(0,state.list.length) //Очистка листа перед фетчем
-            action.payload.map((obj,i)=>{state.list.push({disciplineId:obj.disciplineId, classroom:obj.classroom, subjectTypeId:obj.subjectTypeId, userId:obj.userId, subjectPositionId:obj.subjectPositionId, dayPositionId:obj.dayPositionId, weekTypeId:obj.weekTypeId, groupId:obj.groupId, description:obj.description})})
+            action.payload.map((obj,i)=>{state.list.push({id:obj.id, academicYear:obj.disciplineId, disciplineId:obj.disciplineId, classroom:obj.classroom, subjectTypeId:obj.subjectTypeId, userId:obj.userId, subjectPositionId:obj.subjectPositionId, dayPositionId:obj.dayPositionId, weekTypeId:obj.weekTypeId, groupId:obj.groupId, description:obj.description})})
             //action.payload.map((obj,i)=>{state.list.push(obj)}) //full subject
         })
     }

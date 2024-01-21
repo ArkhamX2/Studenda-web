@@ -3,7 +3,7 @@ import  './ScheduleTable.module.css'
 import classes from './ScheduleTable.module.css'
 import AdminScheduleItemList from '../adminscheduleitemlist/AdminScheduleItemList'
 import store from '../../../store'
-import { fetchSubjectList } from '../../../store/adminSlice'
+import { getSubjectList } from '../../../store/adminSlice'
 import { useAppDispatch } from '../../../hook'
 
 export enum row {
@@ -51,7 +51,7 @@ const ScheduleTable: FC =
 
                 <AdminScheduleItemList list={ScheduleList}/>
                 
-                <button onClick={()=>dispatch(fetchSubjectList())}>Тест</button>
+                <button onClick={()=>dispatch(getSubjectList())}>Тест кнопочка вернулась</button>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>
