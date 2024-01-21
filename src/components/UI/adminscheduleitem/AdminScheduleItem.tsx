@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
-import { subjectList } from '../../../store/adminSlice'
+import { adminLists } from '../../../store/adminSlice'
 import { tryGetSubjectId } from '../adminscheduleitemlist/AdminScheduleItemList'
 
 interface AdminScheduleItemProps {
     className?: string 
-    subjectList: subjectList
+    adminLists: adminLists
     curdayPosition: number
     cursubjectPosition: number
     curweekType: number
@@ -13,11 +13,11 @@ interface AdminScheduleItemProps {
 
 const AdminScheduleItem: FC<AdminScheduleItemProps> = (AdminScheduleItemProps) => { return(
     <>
-    {(tryGetSubjectId(AdminScheduleItemProps.subjectList,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)!==-1
+    {(tryGetSubjectId(AdminScheduleItemProps.adminLists,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)!==-1
     ?
     <div className={AdminScheduleItemProps.className} onContextMenu={(e)=>AdminScheduleItemProps.openEditClick(e,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)}>
         <td>
-            {AdminScheduleItemProps.subjectList.list[tryGetSubjectId(AdminScheduleItemProps.subjectList,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)].disciplineId}
+            {AdminScheduleItemProps.adminLists.subjectlist![tryGetSubjectId(AdminScheduleItemProps.adminLists,AdminScheduleItemProps.curdayPosition,AdminScheduleItemProps.cursubjectPosition,AdminScheduleItemProps.curweekType)].disciplineId}
         </td> 
     </div>
     :

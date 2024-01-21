@@ -119,13 +119,13 @@ const AdminScheduleItemList: FC<adminLists> = (subjectList) => {
                     {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
                     <>                    
-                        <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
                         <hr style={{height:'1px', backgroundColor:'#B5999F', border:'1px solid #B5999F', margin:'0px -5px 0px -5px'}}></hr>
-                        <AdminScheduleItem className={classes.subjectBox} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
                     </>
                     :
                     <>
-                        <AdminScheduleItem className={classes.subjectBoxBoth} subjectList={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
+                        <AdminScheduleItem className={classes.subjectBoxBoth} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
                     </>
                     }                    
                 </td>

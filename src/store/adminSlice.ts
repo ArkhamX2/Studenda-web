@@ -115,6 +115,7 @@ export const postSubject = createAsyncThunk(
     'admin/postSubject',
     async function (subject:subject) {
         try {
+            //TODO: просто сабджект без :
             const response = await axios.post("http://88.210.3.137/api/schedule/subject", [{id:subject.id, 
             disciplineId: subject.disciplineId, 
             subjectPositionId: subject.subjectPositionId, 
