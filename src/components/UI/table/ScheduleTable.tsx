@@ -13,8 +13,8 @@ export enum row {
 
 const ScheduleTable: FC =
   () => {
-        const [ScheduleList, setScheduleList]=useState(store.getState().admin.list)
-        store.subscribe(() => setScheduleList(store.getState().admin.list))
+        const [ScheduleList, setScheduleList]=useState(store.getState().admin.subjectlist)
+        store.subscribe(() => setScheduleList(store.getState().admin.subjectlist))
         const dispatch = useAppDispatch()
   return (
         <table>
@@ -49,7 +49,7 @@ const ScheduleTable: FC =
 
                 </tr>
 
-                <AdminScheduleItemList list={ScheduleList}/>
+                <AdminScheduleItemList subjectlist={ScheduleList}/>
                 
                 <button onClick={()=>dispatch(getSubjectList())}>Тест кнопочка вернулась</button>
 

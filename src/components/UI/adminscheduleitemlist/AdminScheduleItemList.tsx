@@ -1,15 +1,15 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { isSubjectsEqual, subjectList, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList } from '../../../store/adminSlice';
+import { isSubjectsEqual, adminLists, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import classes from './AdminScheduleitemList.module.css'
 import AdminScheduleItem from '../adminscheduleitem/AdminScheduleItem';
 
-export const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
+export const tryGetSubjectId = (subjectList: adminLists, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
     {
-        const subjectId:number = subjectList.list.findLastIndex((obj) => {return obj.dayPositionId===curdayPosition && obj.subjectPositionId===cursubjectPosition && obj.weekTypeId === curweekType})!
+        const subjectId:number = subjectList.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===curdayPosition && obj.subjectPositionId===cursubjectPosition && obj.weekTypeId === curweekType})!
         return subjectId    
     }
     catch (e)
@@ -18,10 +18,10 @@ export const tryGetSubjectId = (subjectList: subjectList, curdayPosition:number,
     }    
 }
 
-const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursubjectPosition:number)=>{
+const tryIsSubjectsEqual=(subjectList: adminLists, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        return isSubjectsEqual(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)],subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 2)])
+        return isSubjectsEqual(subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)],subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 2)])
     }
     catch(e)
     {
@@ -29,7 +29,7 @@ const tryIsSubjectsEqual=(subjectList: subjectList, curdayPosition:number, cursu
     }
 }
 
-const AdminScheduleItemList: FC<subjectList> = (subjectList) => {    
+const AdminScheduleItemList: FC<adminLists> = (subjectList) => {    
     const dispatch = useAppDispatch()
     const { isOpen, toggle } = useModal()
     const [selectedSubject, setSelectedSubject] = useState<subject>()
@@ -37,7 +37,7 @@ const AdminScheduleItemList: FC<subjectList> = (subjectList) => {
         event.preventDefault()
         tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)>=0 
         ?
-        setSelectedSubject(subjectList.list[tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
+        setSelectedSubject(subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition,curweekType)]) 
         :
         setSelectedSubject({academicYear: 0,disciplineId: 0, classroom: "", subjectTypeId:undefined, userId:undefined, subjectPositionId: cursubjectPosition, dayPositionId: curdayPosition, weekTypeId:curweekType, groupId:1, description:undefined})
         toggle()
