@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { isSubjectsEqual, adminLists, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList } from '../../../store/adminSlice';
+import { isSubjectsEqual, adminLists, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList, weekType, weekTypes } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import classes from './AdminScheduleitemList.module.css'
@@ -21,7 +21,7 @@ export const tryGetSubjectId = (subjectList: adminLists, curdayPosition:number, 
 const tryIsSubjectsEqual=(subjectList: adminLists, curdayPosition:number, cursubjectPosition:number)=>{
     try
     {
-        return isSubjectsEqual(subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 1)],subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, 2)])
+        return isSubjectsEqual(subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, weekTypes.red)],subjectList.subjectlist![tryGetSubjectId(subjectList,curdayPosition,cursubjectPosition, weekTypes.blue)])
     }
     catch(e)
     {
@@ -119,13 +119,13 @@ const AdminScheduleItemList: FC<adminLists> = (subjectList) => {
                     {(tryIsSubjectsEqual(subjectList,curdayPosition,cursubjectPosition)===false)
                     ?
                     <>                    
-                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={weekTypes.red}openEditClick={openEditClick}/>  
                         <hr style={{height:'1px', backgroundColor:'#B5999F', border:'1px solid #B5999F', margin:'0px -5px 0px -5px'}}></hr>
-                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={2}openEditClick={openEditClick}/>  
+                        <AdminScheduleItem className={classes.subjectBox} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={weekTypes.blue}openEditClick={openEditClick}/>  
                     </>
                     :
                     <>
-                        <AdminScheduleItem className={classes.subjectBoxBoth} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={1}openEditClick={openEditClick}/>                             
+                        <AdminScheduleItem className={classes.subjectBoxBoth} adminLists={subjectList}curdayPosition={curdayPosition}cursubjectPosition={cursubjectPosition}curweekType={weekTypes.red}openEditClick={openEditClick}/>                             
                     </>
                     }                    
                 </td>

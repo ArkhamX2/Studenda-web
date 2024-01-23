@@ -18,10 +18,10 @@ const MenuComponent: FC<searchProps> =
 
   return (
         <div onClick={onClick} style={{display:'flex', flexDirection:'column', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px', backgroundColor:'#F0EAE9', width:'100%', height:'32px'}}>
-        <label >
-            <span className={classes.LabelText}>{text}</span>
-        </label>
-    </div>
+          <label >
+              <span className={classes.LabelText}>{text}</span>
+          </label>
+        </div>
        
   )
 }

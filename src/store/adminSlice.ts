@@ -44,7 +44,7 @@ export type weekType = {
 
 export type subjectType = {
     id?: number, 
-    index: number,
+    name: string,
     IsScorable: boolean
 }
 
@@ -97,7 +97,22 @@ export interface adminLists {
 
 const initialState:adminLists = {subjectlist:[
     //{academicYear:2023, classroom: "Вц-315", groupId:1, subjectTypeId:1, weekTypeId:1, dayPositionId:3, subjectPositionId:1, disciplineId:3}
-]}
+],
+disciplineList:[],
+subjectPositionList:[],
+dayPositionList:[],
+weekTypeList:[],
+subjectTypeList:[],
+userList:[],
+roleList:[],
+groupList:[],
+courseList:[],
+departmentList:[]}
+
+export enum weekTypes {
+    red = 5,
+    blue = 3
+}
 
 export const deleteSubject = createAsyncThunk(
     'admin/deleteSubject',
@@ -115,7 +130,6 @@ export const postSubject = createAsyncThunk(
     'admin/postSubject',
     async function (subject:subject) {
         try {
-            //TODO: просто сабджект без :
             const response = await axios.post("http://88.210.3.137/api/schedule/subject", [{id:subject.id, 
             disciplineId: subject.disciplineId, 
             subjectPositionId: subject.subjectPositionId, 
@@ -149,14 +163,31 @@ export const getSubjectList = createAsyncThunk<subject[], undefined>(
     }
 )
 
+export const getweekTypeList = createAsyncThunk<weekType[], undefined>(
+    'admin/getweekTypeList',
+    async function (_) {
+        try {
+            const response = await axios.get("http://88.210.3.137/api/schedule/week-type", {params:[]})
+            console.log(response.data) 
+            return response.data
+        } 
+        catch(error) {
+            console.error(error);
+        }
+    }
+)
+
 function subjectCopyPushSplice(state:adminLists, copy:number, remove:number){
     if (copy>=0)
     {
-        const tmpcopy = Object.assign({},state.subjectlist![copy])      
-        tmpcopy.weekTypeId === 1 ? tmpcopy.weekTypeId=2 : tmpcopy.weekTypeId=1      
+        const tmpcopy = Object.assign({},state.subjectlist![copy])    
+        tmpcopy.id=0  
+        tmpcopy.weekTypeId === weekTypes.red ? tmpcopy.weekTypeId=weekTypes.blue : tmpcopy.weekTypeId=weekTypes.red      
         state.subjectlist!.push(tmpcopy)
         //не понятно работает или нет, нужны типы недель
-        postSubject(tmpcopy)
+        console.log("bim")
+        postSubject(state.subjectlist![state.subjectlist!.length])
+        console.log("bam")
     }   
     if (remove>=0)
     {
@@ -183,8 +214,8 @@ const adminSlice = createSlice({
         uniteSubject(state, action: PayloadAction<{curdayPosition:number,cursubjectPosition:number}>){
             try {
                 //console.log(action.payload.curdayPosition + " " + action.payload.cursubjectPosition)
-                const tmptop:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 1})!
-                const tmpbot:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === 2})!
+                const tmptop:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === weekTypes.red})!
+                const tmpbot:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.curdayPosition && obj.subjectPositionId===action.payload.cursubjectPosition && obj.weekTypeId === weekTypes.blue})!
                 if ((tmptop>=0&&tmpbot>=0))
                 {
                     //Есть 2 элемента
@@ -212,20 +243,20 @@ const adminSlice = createSlice({
                     }
                 }        
             } catch (e) {
-                console.log(e)
+                console.error(e)
             }
         },
         addSubjectItem(state, action: PayloadAction<{subject:subject}>)
         {
             //Тут полная муть все надо переписать, но оно каким то чудом работает
-            const tmptop:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 1})!   
-            const tmpbot:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === 2})!
+            const tmptop:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === weekTypes.red})!   
+            const tmpbot:number = state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.dayPositionId && obj.weekTypeId === weekTypes.blue})!
             if ((tmptop>=0&&tmpbot>=0))
             {
                 if(isSubjectsEqual(state.subjectlist![tmptop],state.subjectlist![tmpbot]))
                 {
                     state.subjectlist!.splice((tmptop), 1)
-                    state.subjectlist!.splice((state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.subjectPositionId && obj.weekTypeId === 2})!), 1)
+                    state.subjectlist!.splice((state.subjectlist!.findLastIndex((obj) => {return obj.dayPositionId===action.payload.subject.dayPositionId && obj.subjectPositionId===action.payload.subject.subjectPositionId && obj.weekTypeId === weekTypes.blue})!), 1)
                     state.subjectlist!.push(action.payload.subject)
                     subjectCopyPushSplice(state, state.subjectlist!.length-1, -1)
                 }
@@ -283,7 +314,11 @@ const adminSlice = createSlice({
         builder
         .addCase(getSubjectList.fulfilled, (state, action)=>{
             state.subjectlist!.splice(0,state.subjectlist!.length) //Очистка листа перед фетчем
-            action.payload.map((obj,i)=>{state.subjectlist!.push({id:obj.id, academicYear:obj.disciplineId, disciplineId:obj.disciplineId, classroom:obj.classroom, subjectTypeId:obj.subjectTypeId, userId:obj.userId, subjectPositionId:obj.subjectPositionId, dayPositionId:obj.dayPositionId, weekTypeId:obj.weekTypeId, groupId:obj.groupId, description:obj.description})})
+            action.payload.map((obj,i)=>{state.subjectlist!.push({id:obj.id, academicYear:obj.academicYear, disciplineId:obj.disciplineId, classroom:obj.classroom, subjectTypeId:obj.subjectTypeId, userId:obj.userId, subjectPositionId:obj.subjectPositionId, dayPositionId:obj.dayPositionId, weekTypeId:obj.weekTypeId, groupId:obj.groupId, description:obj.description})})
+            //action.payload.map((obj,i)=>{state.subjectlist!.push(obj)}) //full subject
+        })
+        .addCase(getweekTypeList.fulfilled, (state, action)=>{
+            action.payload.map((obj,i)=>{state.weekTypeList!.push({id:obj.id, index:obj.index, name:obj.name})})
             //action.payload.map((obj,i)=>{state.subjectlist!.push(obj)}) //full subject
         })
     }
