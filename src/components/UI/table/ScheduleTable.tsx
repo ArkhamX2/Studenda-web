@@ -66,10 +66,6 @@ const ScheduleTable: FC =
                 </tr>
 
                 <AdminScheduleItemList subjectlist={ScheduleList}/>
-                
-                <button onClick={()=>getInfo()}>Тест кнопочка вернулась</button>
-
-                <button onClick={()=>test()}>bvcb</button>
 
         </table>
        //<input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlign.right  ? 'right' : 'center'}}></input>

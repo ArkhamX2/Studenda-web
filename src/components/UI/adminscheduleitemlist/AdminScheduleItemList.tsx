@@ -1,10 +1,11 @@
 import React, { FC, useState } from 'react'
 import { useAppDispatch } from '../../../hook'
-import { isSubjectsEqual, adminLists, uniteSubject, addSubjectItem, subject, postSubject, deleteSubject, getSubjectList, weekType, weekTypes } from '../../../store/adminSlice';
+import { isSubjectsEqual, adminLists, uniteSubject, addSubjectItem, postSubject, deleteSubject, getSubjectList, weekTypes } from '../../../store/adminSlice';
 import useModal from '../modalAdmin/useModalAdmin';
 import ModalAdmin from '../modalAdmin/ModalAdmin'
 import classes from './AdminScheduleitemList.module.css'
 import AdminScheduleItem from '../adminscheduleitem/AdminScheduleItem';
+import { subject } from '../../../types/AdminType';
 
 export const tryGetSubjectId = (subjectList: adminLists, curdayPosition:number, cursubjectPosition:number, curweekType: number) => {
     try
