@@ -9,8 +9,9 @@ const LoginForm: FC = () => {
         <main>
             <div style={{alignSelf:'center',display:'flex',flexDirection:'column',border:'2px solid lightgray',padding:'50px', color:'#371F76'}}>
                 <LoginLabel text='Введите ваш email'></LoginLabel>
-                <LoginInput></LoginInput>
-                <LoginButton variant={ButtonVariant.primary} text='Получить код'></LoginButton>
+                <LoginInput text='Логин'></LoginInput>
+                <LoginInput text='Пароль'></LoginInput>
+                <LoginButton variant={ButtonVariant.primary} text='Войти'></LoginButton>
                 
         </div>
         </main>

@@ -8,6 +8,7 @@ import { RequestValue, request } from '../request'
 import axios from 'axios'
 import ModalAdmin from './UI/modalAdmin/ModalAdmin';
 import useModal from './UI/modalAdmin/useModalAdmin'
+import classes from './UI/table/ScheduleTable.module.css'
 
 type options = {
     value: number
@@ -181,12 +182,12 @@ const AdminForm: FC = () => {
                 
             {currentGroupId!==undefined?
                <table>
-               <tr>
-                    <td style={{width:'75px'}}>
+               <tr className={classes.TRow}>
+                    <td className={classes.TCol} style={{width:'75px'}}>
                     </td>
-                    {dayPositions?.map((obj,i)=><td>{obj.name}</td>)}
+                    {dayPositions?.map((obj,i)=><td className={classes.TCol}>{obj.name}</td>)}
                 </tr>
-                {subjectPositions?.map((subjectPosition)=><tr>{subjectPosition.startLabel}-{subjectPosition.endLabel}{dayPositions?.map((dayPosition)=><td>{weekTypes?.map((weekType)=>{const subject:subject|undefined=findSubject(subjectPosition,dayPosition,weekType); if (subject!==undefined) return(<tr onContextMenu={(e)=>subjectClick(e,subjectPosition,dayPosition,weekType)}>{findDiscipline(subject.disciplineId)?.name} {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom}</tr>); else return(<tr onContextMenu={(e)=>subjectClick(e,subjectPosition,dayPosition,weekType)}>-1</tr>)})}</td>)}</tr>)}
+                {subjectPositions?.map((subjectPosition)=><tr>{subjectPosition.startLabel}-{subjectPosition.endLabel}{dayPositions?.map((dayPosition)=><td className={classes.TCol}>{weekTypes?.map((weekType)=>{const subject:subject|undefined=findSubject(subjectPosition,dayPosition,weekType); if (subject!==undefined) return(<tr onContextMenu={(e)=>subjectClick(e,subjectPosition,dayPosition,weekType)}>{findDiscipline(subject.disciplineId)?.name} {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom}</tr>); else return(<tr onContextMenu={(e)=>subjectClick(e,subjectPosition,dayPosition,weekType)}>-1</tr>)})}</td>)}</tr>)}
                </table>
             :<></>}
             
