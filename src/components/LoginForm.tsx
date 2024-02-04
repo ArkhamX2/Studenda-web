@@ -18,7 +18,6 @@ const LoginForm: FC = () => {
             url: url,
             data: { email: loginInfo.login, password: loginInfo.password, rolename: "admin" }
         })
-        console.log(response.data.Token)
         dispatch(updateToken(response.data.Token))
     }
     return (
