@@ -3,7 +3,7 @@ import Selector from './UI/selector/Selector'
 import SearchBar from './UI/searchbar/SearchBar'
 import { useAppDispatch } from '../hook'
 import { COLORS } from '../styles/colors'
-import '../styles/admin.css'
+import '../styles/admin.module.css'
 import LoginInput from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
@@ -234,7 +234,7 @@ const AdminForm2: FC = () => {
                     display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px',
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
-                    <div style={{ fontSize: '18px' }}>Редактор расписания</div>
+                    <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
                     {[...Array(RequestValue.value.length - 2)].map((x, i) => {
                         const selectedButtonId = i + 1; return (
                             <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>

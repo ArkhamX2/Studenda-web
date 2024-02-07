@@ -1,0 +1,30 @@
+* {
+        color: #1B0E17;
+        border-color: #490514;
+}
+.AdminTable{
+        border: 2px solid #490514;
+        border-collapse: collapse;
+        border-radius: 5px;
+        margin: 5px;
+        padding: 5px;
+}
+.TableRow{
+
+}
+.TableColumn{
+        border: 2px solid #B5999F;
+        padding: 2px;
+}
+.SubjectBox{
+        border: 1px solid #490514;
+        border-bottom: 2px solid #490514;
+        margin:5px;
+        padding: 5px;
+        border-radius: 5px;
+        height: 50px;
+        background-color: #f4f4f5;;
+        width: 300px;
+        text-wrap: wrap;
+
+}

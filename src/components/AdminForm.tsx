@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
-import '../styles/admin.css'
+import classes from '../styles/admin.module.css'
 import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, user, subject } from '../types/AdminType';
 import { RequestValue, request } from '../request'
 import axios from 'axios'
@@ -9,6 +9,8 @@ import ModalAdmin from './UI/modalAdmin/ModalAdmin';
 import useModal from './UI/modalAdmin/useModalAdmin'
 import { useAppDispatch } from '../hook'
 import store from '../store'
+import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
+import AdminButton from './UI/button/AdminButton';
 
 type options = {
     value: number
@@ -170,7 +172,7 @@ const AdminForm: FC = () => {
         }
     }
 
-    const subjectClick = (e: React.MouseEvent<HTMLTableRowElement, MouseEvent>, subjectPosition: subjectPosition, dayPosition: dayPosition, weekType: weekType) => {
+    const subjectClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, subjectPosition: subjectPosition, dayPosition: dayPosition, weekType: weekType) => {
         e.preventDefault()
         const tmp = findSubject(subjectPosition, dayPosition, weekType)
         if (tmp !== undefined) {
@@ -239,7 +241,7 @@ const AdminForm: FC = () => {
                         <div>
                             <p>Classroom:</p>
                             <div >
-                                <input onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
+                                <input style={{width:'99%', height:'38px', margin:'5px 0px', padding:'5px 5px 5px 10px', borderRadius:'4px', border:'1px solid lightgray'}} onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
                             </div>
                         </div>
                         <button onClick={() => onSaveClick(selectedSubject)}>Сохранить</button>
@@ -254,23 +256,24 @@ const AdminForm: FC = () => {
                     <>
                     </>
                 }
+            /*Сделать компоненты*/
             </ModalAdmin>
-            <div style={{ display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                <div style={{ fontSize: '18px' }}>Редактор расписания</div>
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '10px 0px 5px 0px' }}>
-                    Department
+            <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
+                <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
+                    <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Факультет</div>
                     <Select options={departmentOptions} onChange={(value) => (departmentOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '5px 0px 5px 0px' }}>
-                    Course
+                <div style={{ width:'270px',display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
+                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Курс</div>
                     <Select options={courseOptions} onChange={(value) => (courseOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'row', margin: '5px 0px 10px 0px' }}>
-                    Group
+                <div style={{ width:'270px',display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
+                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Группа</div>
                     <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
 
-                <button onClick={async () => initialFunc()}>TEST</button>
+                <AdminButton text="Отобразить группы" onClick={async () => initialFunc()}></AdminButton>
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
@@ -278,13 +281,25 @@ const AdminForm: FC = () => {
             }}>
 
                 {currentGroupId !== undefined ?
-                    <table>
-                        <tr>
-                            <td style={{ width: '75px' }}>
+                    <table className={classes.AdminTable}>
+                        <tr >
+                            <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
                             </td>
-                            {dayPositions?.map((obj, i) => <td>{obj.name}</td>)}
+                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
                         </tr>
-                        {subjectPositions?.map((subjectPosition) => <tr>{subjectPosition.startLabel}-{subjectPosition.endLabel}{dayPositions?.map((dayPosition) => <td>{weekTypes?.map((weekType) => { const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined) return (<tr onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>{findDiscipline(subject.disciplineId)?.name} {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom}</tr>); else return (<tr onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>-1</tr>) })}</td>)}</tr>)}
+                        {subjectPositions?.map((subjectPosition) =>
+                            <tr>
+                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
+                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
+                                            return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
+                                                
+                                            </div> );
+                                                
+                                        else return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                            <tr>Пусто</tr>
+                                        </div>)
+                                    })}</td>)}</tr>)}
                     </table>
                     : <></>}
 
