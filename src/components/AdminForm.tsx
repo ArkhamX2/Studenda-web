@@ -264,11 +264,11 @@ const AdminForm: FC = () => {
                     <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Факультет</div>
                     <Select options={departmentOptions} onChange={(value) => (departmentOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{ width:'270px',display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
+                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
                 <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Курс</div>
                     <Select options={courseOptions} onChange={(value) => (courseOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{ width:'270px',display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
+                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
                 <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Группа</div>
                     <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
@@ -297,7 +297,7 @@ const AdminForm: FC = () => {
                                             </div> );
                                                 
                                         else return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                            <tr>Пусто</tr>
+                                            <tr></tr>
                                         </div>)
                                     })}</td>)}</tr>)}
                     </table>

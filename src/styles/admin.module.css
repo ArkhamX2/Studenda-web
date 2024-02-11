@@ -14,15 +14,15 @@
 }
 .TableColumn{
         border: 2px solid #B5999F;
-        padding: 2px;
+        padding: 3px;
 }
 .SubjectBox{
         border: 1px solid #490514;
         border-bottom: 2px solid #490514;
-        margin:5px;
+        margin:8px 5px;
         padding: 5px;
         border-radius: 5px;
-        height: 50px;
+        height: 52px;
         background-color: #f4f4f5;;
         width: 300px;
         text-wrap: wrap;
