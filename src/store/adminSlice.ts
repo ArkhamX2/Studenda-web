@@ -1,15 +1,21 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = {Token:""}
+const initialState = {Token:"", userId:0}
+
+type userInfo = {
+    token: string
+    userId: number
+}
 
 const adminSlice = createSlice({
     name: 'adminSlice',
     initialState,
     reducers: {
-        updateToken(state, action: PayloadAction<string>)
+        updateUserInfo(state, action: PayloadAction<userInfo>)
         {
-            state.Token=action.payload
+            state.Token=action.payload.token
+            state.userId=action.payload.userId
         }
     },    
     extraReducers: (builder) => {
@@ -17,6 +23,6 @@ const adminSlice = createSlice({
     }
 })
 
-export const {updateToken} = adminSlice.actions
+export const {updateUserInfo} = adminSlice.actions
 
 export default adminSlice.reducer

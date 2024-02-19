@@ -121,7 +121,7 @@ const AdminForm2: FC = () => {
             case "user":
                 {
                     if (obj === undefined) {
-                        const tmpobj: user = { id: 0, roleId: 0, groupId: 0, identityId: "", name: "", surname: "", patronymic: "" }
+                        const tmpobj: user = { id: 0, roleId: 1, groupId: 1, identityId: "", name: "", surname: "", patronymic: "" }
                         setSelectedObject(tmpobj)
                     }
                     else {

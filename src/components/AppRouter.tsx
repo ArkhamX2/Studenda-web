@@ -1,9 +1,7 @@
-
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from '../router';
 import store from '../store';
 import { useState } from 'react';
-
 
 const AppRouter = () => {
     const unsubscribe = store.subscribe(handleTokenChange)

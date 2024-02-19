@@ -5,7 +5,7 @@ import LoginLabel, { TextAlign } from './UI/label/LoginLabel'
 import axios from 'axios'
 import { request } from '../request'
 import { useAppDispatch } from '../hook'
-import { updateToken } from '../store/adminSlice'
+import { updateUserInfo } from '../store/adminSlice'
 import store from '../store'
 
 const LoginForm: FC = () => {
@@ -21,7 +21,7 @@ const LoginForm: FC = () => {
                 url: url,
                 data: { email: loginInfo.login, password: loginInfo.password, rolename: "admin" }
             })
-            dispatch(updateToken(response.data.Token))
+            dispatch(updateUserInfo({token:response.data.Token,userId:response.data.User.Id}))
         }
     }
     return (

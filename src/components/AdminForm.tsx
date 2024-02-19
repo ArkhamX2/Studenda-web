@@ -61,7 +61,7 @@ const AdminForm: FC = () => {
 
     const ArrayToOptions = (array: any[]) => {
         const tmparray: options[] = [];
-        array.map((obj, i) => (tmparray.push({ value: obj.id, label: obj.name })))
+        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: ""+obj.surname+" "+obj.name+" "+obj.patronymic })))))
         return tmparray
     }
 

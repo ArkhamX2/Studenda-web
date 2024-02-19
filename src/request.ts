@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
 import { dayPosition, discipline, subjectPosition, weekType, subjectType, user, role, group, course, department, } from './types/AdminType';
 import store from "./store";
-import { updateToken } from "./store/adminSlice";
+import { updateUserInfo } from "./store/adminSlice";
 
 type info = {
     id: number,
@@ -131,7 +131,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
     }
     catch (error) {        
         console.error(error)
-        store.dispatch(updateToken(""))
+        store.dispatch(updateUserInfo({token:"",userId:0}))
         return ([])
     }
 }
