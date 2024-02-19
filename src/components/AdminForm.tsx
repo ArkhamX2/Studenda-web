@@ -20,9 +20,13 @@ type options = {
 const AdminForm: FC = () => {
     const dispatch = useAppDispatch()
 
+    useEffect(() => {
+        initialFunc()      
+    }, []);
+
     const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
 
-    const noOptionsText = "Абоба не найден"
+    const noOptionsText = "Пусто"
 
     const getAcademicYear = () => {
         const currdate = new Date()
@@ -256,7 +260,6 @@ const AdminForm: FC = () => {
                     <>
                     </>
                 }
-            /*Сделать компоненты*/
             </ModalAdmin>
             <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
@@ -272,8 +275,6 @@ const AdminForm: FC = () => {
                 <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Группа</div>
                     <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-
-                <AdminButton text="Отобразить группы" onClick={async () => initialFunc()}></AdminButton>
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
