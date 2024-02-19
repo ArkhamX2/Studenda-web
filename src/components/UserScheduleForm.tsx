@@ -58,8 +58,11 @@ const UserScheduleForm: FC = () => {
 
     useEffect(() => {
         var userOption = findUserOption(currentUserId)
-        setDefaultUserOption(userOption) 
-        userOptionsOnChange(userOption!)
+        if (userOption!=undefined)
+        {
+            setDefaultUserOption(userOption) 
+            userOptionsOnChange(userOption)
+        }
     }, [userOptions]);
 
     const userOptionsOnChange = async (value: SingleValue<options>) => {

@@ -22,7 +22,7 @@ const AdminObjectValue: FC<subjectProps> = ({
             {(objectList!==undefined)
             ?
             <>          
-                {objectList.map((value:any,i)=>  
+                {objectList.slice(1).map((value:any,i)=>  
                 <>          
                     <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '20px' : '16px', fontWeight: first===BorderType.firstElement ? '600' : '500'}}>{value}</div>
                 </>

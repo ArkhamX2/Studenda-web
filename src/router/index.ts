@@ -6,9 +6,9 @@ import UserSchedule from "../pages/userSchedulePage"
 export const privateRoutes = [    
     {path: '/admin', element: Admin},
     {path: '/admin2', element: Admin2}, 
-    {path: '/userSchedule', element: UserSchedule},
 ]
 
 export const publicRoutes = [
-    {path: '/login', element: Login}   
+    {path: '/login', element: Login},      
+    {path: '/userSchedule', element: UserSchedule}
 ]

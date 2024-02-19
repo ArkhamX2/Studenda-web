@@ -210,7 +210,7 @@ const AdminForm2: FC = () => {
                 {selectedObject !== undefined
                     ?
                     <>
-                        {(Object.keys(selectedObject)).map((key, y) =>
+                        {(Object.keys(selectedObject)).slice(1).map((key, y) =>
                             <div>
                                 {key}:
                                 <input onChange={e => (typeof (selectedObject as any)[key] === 'number' ? (selectedObject as any)[key] = Number(e.target.value) : typeof (selectedObject as any)[key] === 'boolean' ? (selectedObject as any)[key] = Boolean(e.target.value) : (selectedObject as any)[key] = String(e.target.value))} defaultValue={(selectedObject as any)[key]} />
