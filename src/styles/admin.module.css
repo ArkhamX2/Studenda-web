@@ -14,17 +14,26 @@
 }
 .TableColumn{
         border: 2px solid #B5999F;
-        padding: 3px;
+        padding: 0px;
 }
 .SubjectBox{
-        border: 1px solid #490514;
-        border-bottom: 2px solid #490514;
-        margin:8px 5px;
+        border: 2px solid #490514;
+        border-bottom: 4px solid #490514;
+        margin: 6px 6px;
         padding: 5px;
-        border-radius: 5px;
-        height: 52px;
+        border-radius: 6px;
+        height: 60px;
         background-color: #f4f4f5;;
-        width: 300px;
+        width: 270px;
+        text-wrap: wrap;
+
+}
+.SubjectBox1{
+        margin: 6px 6px;
+        padding: 5px;
+        border-radius: 6px;
+        height: 100px;
+        width: 270px;
         text-wrap: wrap;
 
 }

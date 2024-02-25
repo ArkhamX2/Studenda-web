@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import LoginInput from './UI/imput/LoginInput'
+import LoginInput, { TextAlignEnum } from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import LoginLabel, { TextAlign } from './UI/label/LoginLabel'
 import axios from 'axios'
@@ -7,6 +7,7 @@ import { request } from '../request'
 import { useAppDispatch } from '../hook'
 import { updateUserInfo } from '../store/adminSlice'
 import store from '../store'
+import { text } from 'node:stream/consumers'
 
 const LoginForm: FC = () => {
     const dispatch = useAppDispatch()
@@ -28,12 +29,11 @@ const LoginForm: FC = () => {
         <main>
             <div style={{ alignSelf: 'center', display: 'flex', flexDirection: 'column', border: '2px solid lightgray', padding: '50px', color: '#371F76' }}>
                 <LoginLabel text='Введите ваш email'></LoginLabel>
-                <input autoComplete='on' placeholder='Логин' onChange={(e) => setLoginInfo({ ...loginInfo, login: e.target.value })}></input>
-                <input autoComplete='on' type="password" placeholder='Пароль' onChange={(e) => setLoginInfo({ ...loginInfo, password: e.target.value })}></input>
-                <div>                
-                Запомнить меня:                
-                <input type="checkbox" onChange={()=>setRemember(!remember)} checked={remember} />
-                </div>
+                <LoginInput autoComplete='on' text='Логин' onChange={(e) => setLoginInfo({ ...loginInfo, login: e.target.value })} align={TextAlignEnum.left}></LoginInput>
+                <LoginInput autoComplete='on' text='Пароль' type='password' onChange={(e) => setLoginInfo({ ...loginInfo, password: e.target.value })} align={TextAlignEnum.left}></LoginInput>
+                <LoginLabel text='Запомни меня:'>
+                    <input type="checkbox" onChange={()=>setRemember(!remember)} checked={remember} style={{margin:'5px', borderRadius:'10px', border:'2px solid lightgray', height:'15px'}} />
+                </LoginLabel>
                 <LoginButton variant={ButtonVariant.primary} text='Войти' onClick={() => LoginClick()}></LoginButton>
             </div>
         </main>

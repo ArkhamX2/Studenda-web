@@ -21,7 +21,7 @@ const AdminForm: FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        initialFunc()      
+        initialFunc()
     }, []);
 
     const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
@@ -61,7 +61,7 @@ const AdminForm: FC = () => {
 
     const ArrayToOptions = (array: any[]) => {
         const tmparray: options[] = [];
-        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: ""+obj.surname+" "+obj.name+" "+obj.patronymic })))))
+        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
         return tmparray
     }
 
@@ -245,7 +245,7 @@ const AdminForm: FC = () => {
                         <div>
                             <p>Classroom:</p>
                             <div >
-                                <input style={{width:'99%', height:'38px', margin:'5px 0px', padding:'5px 5px 5px 10px', borderRadius:'4px', border:'1px solid lightgray'}} onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
+                                <input style={{ width: '99%', height: '38px', margin: '5px 0px', padding: '5px 5px 5px 10px', borderRadius: '4px', border: '1px solid lightgray' }} onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
                             </div>
                         </div>
                         <button onClick={() => onSaveClick(selectedSubject)}>Сохранить</button>
@@ -261,18 +261,18 @@ const AdminForm: FC = () => {
                     </>
                 }
             </ModalAdmin>
-            <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                    <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Факультет</div>
+            <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
+                <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Факультет</div>
                     <Select options={departmentOptions} onChange={(value) => (departmentOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Курс</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Курс</div>
                     <Select options={courseOptions} onChange={(value) => (courseOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Группа</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа</div>
                     <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
@@ -284,23 +284,34 @@ const AdminForm: FC = () => {
                 {currentGroupId !== undefined ?
                     <table className={classes.AdminTable}>
                         <tr >
-                            <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
+                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
                             {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
                         </tr>
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
-                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
-                                            return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
+                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>
+                                {dayPositions?.map((dayPosition) =>
+                                    <td className={classes.TableColumn}>
+                                        {weekTypes?.map((weekType, index) => {
+                                            const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
+                                            if (subject !== undefined)
+                                                return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                                    <tr>{findDiscipline(subject.disciplineId)?.name}<br /> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
+                                                </div>);
+
+                                            else return (<div>
+                                                <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
+                                                    <tr></tr>
+                                                </div>
+                                                {index%2==0 ?
+                                                <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'1px solid #B5999F'}}></hr>
+                                                :<></>}
                                                 
-                                            </div> );
-                                                
-                                        else return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                            <tr></tr>
-                                        </div>)
-                                    })}</td>)}</tr>)}
+                                            </div>)
+                                        })}
+                                    </td>)}
+                            </tr>)}
                     </table>
                     : <></>}
 
