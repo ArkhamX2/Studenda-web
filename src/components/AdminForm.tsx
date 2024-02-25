@@ -286,11 +286,12 @@ const AdminForm: FC = () => {
                         <tr >
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
+                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}><div style={{fontSize:'24px', margin:'16px 0px 10px 0px', textAlign:'center'}}>{obj.name}
+                                </div></td>)}
                         </tr>
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
-                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>
+                                <td className={classes.TableColumn}><div style={{margin:'0px 10px 0px 10px', fontSize:'18px'}}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
                                 {dayPositions?.map((dayPosition) =>
                                     <td className={classes.TableColumn}>
                                         {weekTypes?.map((weekType, index) => {
@@ -302,10 +303,10 @@ const AdminForm: FC = () => {
 
                                             else return (<div>
                                                 <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
-                                                    <tr></tr>
+                                                    <tr> текст</tr>
                                                 </div>
                                                 {index%2==0 ?
-                                                <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'1px solid #B5999F'}}></hr>
+                                                <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'2px solid #B5999F'}}></hr>
                                                 :<></>}
                                                 
                                             </div>)
