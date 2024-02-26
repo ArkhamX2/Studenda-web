@@ -263,7 +263,7 @@ const AdminForm2: FC = () => {
 
                         </div>
                         <div style={{ display: 'flex', width: '20%', alignSelf: 'center', justifySelf: 'flex-end' }}>
-                            <AdminButton onClick={() => onAddClick(selectedButton)} text='Добавить' />
+                            <button onClick={() => onAddClick(selectedButton)}>Добавить</button>
                         </div>
 
                     </div>
