@@ -11,6 +11,7 @@ import { useAppDispatch } from '../hook'
 import store from '../store'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
+import AdminInput from './UI/imput/AdminInput';
 
 type options = {
     value: number
@@ -227,28 +228,31 @@ const AdminForm: FC = () => {
                         <div>
                             <p>DisciplineId:</p>
                             <div>
-                                <Select options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
+                                <Select className={classes.Select}  options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>SubjectTypeId:</p>
                             <div >
-                                <Select options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
+                                <Select className={classes.Select}  options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>UserId:</p>
                             <div >
-                                <Select options={usersOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, userId: findUser(value?.value!)?.id! })} defaultValue={usersOptions.find((obj) => { return obj.value === selectedSubject.userId })} isClearable={true}></Select>
+                                <Select className={classes.Select} options={usersOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, userId: findUser(value?.value!)?.id! })} defaultValue={usersOptions.find((obj) => { return obj.value === selectedSubject.userId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>Classroom:</p>
                             <div >
-                                <input style={{ width: '99%', height: '38px', margin: '5px 0px', padding: '5px 5px 5px 10px', borderRadius: '4px', border: '1px solid lightgray' }} onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
+                                <AdminInput onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
                             </div>
                         </div>
-                        <button onClick={() => onSaveClick(selectedSubject)}>Сохранить</button>
+                        <div style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+                            <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить'></AdminButton>
+                        </div>
+                        
                         {(selectedSubject as any).id !== 0
                             ?
                             <button onClick={() => onDeleteClick(selectedSubject)}>Удалить</button>

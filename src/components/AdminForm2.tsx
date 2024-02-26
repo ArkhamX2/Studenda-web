@@ -16,6 +16,7 @@ import ModalAdmin from './UI/modalAdmin/ModalAdmin'
 import useModal from './UI/modalAdmin/useModalAdmin'
 import AdminObjectValue from './UI/adminobjectvalue/AdminObjectValue'
 import { RequestValue, request } from '../request'
+import AdminInput from './UI/imput/AdminInput'
 
 const AdminForm2: FC = () => {
     const dispatch = useAppDispatch()
@@ -213,13 +214,13 @@ const AdminForm2: FC = () => {
                         {(Object.keys(selectedObject)).slice(1).map((key, y) =>
                             <div>
                                 {key}:
-                                <input onChange={e => (typeof (selectedObject as any)[key] === 'number' ? (selectedObject as any)[key] = Number(e.target.value) : typeof (selectedObject as any)[key] === 'boolean' ? (selectedObject as any)[key] = Boolean(e.target.value) : (selectedObject as any)[key] = String(e.target.value))} defaultValue={(selectedObject as any)[key]} />
+                                <AdminInput onChange={e => (typeof (selectedObject as any)[key] === 'number' ? (selectedObject as any)[key] = Number(e.target.value) : typeof (selectedObject as any)[key] === 'boolean' ? (selectedObject as any)[key] = Boolean(e.target.value) : (selectedObject as any)[key] = String(e.target.value))} defaultValue={(selectedObject as any)[key]} />
                             </div>
                         )}
-                        <button onClick={() => onSaveClick()}>Сохранить</button>
+                        <AdminButton text='Сохранить' onClick={() => onSaveClick()}></AdminButton>
                         {(selectedObject as any).id !== 0
                             ?
-                            <button onClick={() => onDeleteClick()}>Удалить</button>
+                            <AdminButton text='Удалить' onClick={() => onDeleteClick()}></AdminButton>
                             :
                             <>
                             </>}

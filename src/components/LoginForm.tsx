@@ -27,7 +27,7 @@ const LoginForm: FC = () => {
     }
     return (
         <main>
-            <div style={{ alignSelf: 'center', display: 'flex', flexDirection: 'column', border: '2px solid lightgray', padding: '50px', color: '#371F76' }}>
+            <div style={{ alignSelf: 'center', display: 'flex', flexDirection: 'column', border: '2px solid lightgray', padding: '50px', color: '#371F76', borderRadius:'8px'}}>
                 <LoginLabel text='Введите ваш email'></LoginLabel>
                 <LoginInput autoComplete='on' text='Логин' onChange={(e) => setLoginInfo({ ...loginInfo, login: e.target.value })} align={TextAlignEnum.left}></LoginInput>
                 <LoginInput autoComplete='on' text='Пароль' type='password' onChange={(e) => setLoginInfo({ ...loginInfo, password: e.target.value })} align={TextAlignEnum.left}></LoginInput>

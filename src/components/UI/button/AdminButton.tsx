@@ -13,7 +13,7 @@ const AdminButton: FC<buttonProps> =
   }) => {
 
   return (
-       <button onClick={onClick} className={classes.LoginButton}>
+       <button onClick={onClick} className={classes.AdminButton}>
         {text}
         </button>
   )
