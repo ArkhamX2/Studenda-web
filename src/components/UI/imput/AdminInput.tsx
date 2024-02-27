@@ -11,20 +11,22 @@ interface inputProps {
         autoComplete?: string | undefined;
         onChange?: ChangeEventHandler<any> | undefined;
         type?: HTMLInputTypeAttribute | undefined;
+        defaultValue?: string | number | readonly string[] | undefined;
 }
-const LoginInput: FC<inputProps> =
+const AdminInput: FC<inputProps> =
   ({
     text, 
     align,
     autoComplete,
     onChange,
     type,
+    defaultValue,
   }) => {
 
   return (
-       <input placeholder={text} className={classes.LoginInput}  style={{display: 'flex', textAlign: align===TextAlignEnum.left  ? 'left' : 'center'}}
-       autoComplete={autoComplete} onChange={onChange} type={type} ></input>
+       <input placeholder={text} className={classes.AdminInput}  style={{display: 'flex', textAlign: align===TextAlignEnum.center  ? 'center' : 'left'}}
+       autoComplete={autoComplete} onChange={onChange} type={type} defaultValue={defaultValue}></input>
   )
 }
 
-export default LoginInput;
+export default AdminInput;

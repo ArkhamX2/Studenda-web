@@ -11,6 +11,7 @@ import { useAppDispatch } from '../hook'
 import store from '../store'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
+import AdminInput from './UI/imput/AdminInput';
 
 type options = {
     value: number
@@ -21,7 +22,7 @@ const AdminForm: FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        initialFunc()      
+        initialFunc()
     }, []);
 
     const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
@@ -61,7 +62,7 @@ const AdminForm: FC = () => {
 
     const ArrayToOptions = (array: any[]) => {
         const tmparray: options[] = [];
-        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: ""+obj.surname+" "+obj.name+" "+obj.patronymic })))))
+        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
         return tmparray
     }
 
@@ -227,28 +228,31 @@ const AdminForm: FC = () => {
                         <div>
                             <p>DisciplineId:</p>
                             <div>
-                                <Select options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
+                                <Select className={classes.Select}  options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>SubjectTypeId:</p>
                             <div >
-                                <Select options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
+                                <Select className={classes.Select}  options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>UserId:</p>
                             <div >
-                                <Select options={usersOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, userId: findUser(value?.value!)?.id! })} defaultValue={usersOptions.find((obj) => { return obj.value === selectedSubject.userId })} isClearable={true}></Select>
+                                <Select className={classes.Select} options={usersOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, userId: findUser(value?.value!)?.id! })} defaultValue={usersOptions.find((obj) => { return obj.value === selectedSubject.userId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>Classroom:</p>
                             <div >
-                                <input style={{width:'99%', height:'38px', margin:'5px 0px', padding:'5px 5px 5px 10px', borderRadius:'4px', border:'1px solid lightgray'}} onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></input>
+                                <AdminInput onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
                             </div>
                         </div>
-                        <button onClick={() => onSaveClick(selectedSubject)}>Сохранить</button>
+                        <div style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+                            <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить'></AdminButton>
+                        </div>
+                        
                         {(selectedSubject as any).id !== 0
                             ?
                             <button onClick={() => onDeleteClick(selectedSubject)}>Удалить</button>
@@ -261,18 +265,18 @@ const AdminForm: FC = () => {
                     </>
                 }
             </ModalAdmin>
-            <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                    <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Факультет</div>
+            <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
+                <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Факультет</div>
                     <Select options={departmentOptions} onChange={(value) => (departmentOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Курс</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Курс</div>
                     <Select options={courseOptions} onChange={(value) => (courseOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Группа</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа</div>
                     <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
@@ -284,23 +288,35 @@ const AdminForm: FC = () => {
                 {currentGroupId !== undefined ?
                     <table className={classes.AdminTable}>
                         <tr >
-                            <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
+                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
+                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}><div style={{fontSize:'24px', margin:'16px 0px 10px 0px', textAlign:'center'}}>{obj.name}
+                                </div></td>)}
                         </tr>
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
-                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
-                                            return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
+                                <td className={classes.TableColumn}><div style={{margin:'0px 10px 0px 10px', fontSize:'18px'}}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
+                                {dayPositions?.map((dayPosition) =>
+                                    <td className={classes.TableColumn}>
+                                        {weekTypes?.map((weekType, index) => {
+                                            const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
+                                            if (subject !== undefined)
+                                                return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                                    <tr>{findDiscipline(subject.disciplineId)?.name}<br /> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
+                                                </div>);
+
+                                            else return (<div>
+                                                <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
+                                                    <tr> текст</tr>
+                                                </div>
+                                                {index%2==0 ?
+                                                <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'2px solid #B5999F'}}></hr>
+                                                :<></>}
                                                 
-                                            </div> );
-                                                
-                                        else return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                            <tr></tr>
-                                        </div>)
-                                    })}</td>)}</tr>)}
+                                            </div>)
+                                        })}
+                                    </td>)}
+                            </tr>)}
                     </table>
                     : <></>}
 

@@ -20,6 +20,7 @@ import { ObjectKey, updateDataArray } from '../store/dataArraySlice'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../store/index';
 import Select from 'react-select';
+import AdminInput from './UI/imput/AdminInput'
 
 type options = {
     value: number
@@ -275,7 +276,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         </>
                                         :
                                         <>{key}:
-                                            <input onChange={e =>
+                                            <AdminInput onChange={e =>
                                             (typeof (selectedObject as any)[key] === 'number'
                                                 ?
                                                 (selectedObject as any)[key] = Number(e.target.value)
@@ -289,10 +290,10 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                             )
                         }
                         )}
-                        <button onClick={() => onSaveClick()}>Сохранить</button>
+                        <AdminButton text='Сохранить' onClick={() => onSaveClick()}></AdminButton>
                         {(selectedObject as any).id !== 0
                             ?
-                            <button onClick={() => onDeleteClick()}>Удалить</button>
+                            <AdminButton text='Удалить' onClick={() => onDeleteClick()}></AdminButton>
                             :
                             <>
                             </>}
@@ -322,7 +323,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 }}>
                     <div style={{ display: 'flex' }}>
                         <div style={{ display: 'flex', width: '20%', alignSelf: 'center', justifySelf: 'flex-end' }}>
-                            <AdminButton onClick={() => onAddClick(selectedButton)} text='Добавить' />
+                            <button onClick={() => onAddClick(selectedButton)}>Добавить</button>
                         </div>
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid lightgray', padding: '5px' }}>
