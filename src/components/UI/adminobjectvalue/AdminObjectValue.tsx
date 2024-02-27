@@ -18,7 +18,7 @@ const AdminObjectValue: FC<subjectProps> = ({
 }) => {
 
     return (
-        <div onContextMenu={onContextMenu} style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
+        <tr onContextMenu={onContextMenu} style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
             {(objectList!==undefined)
             ?
             <>          
@@ -31,7 +31,7 @@ const AdminObjectValue: FC<subjectProps> = ({
             :
             <>
             </>}
-        </div>
+        </tr>
     )
 }
 

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Selector from './UI/selector/Selector'
 import SearchBar from './UI/searchbar/SearchBar'
 import { useAppDispatch } from '../hook'
@@ -16,41 +16,90 @@ import ModalAdmin from './UI/modalAdmin/ModalAdmin'
 import useModal from './UI/modalAdmin/useModalAdmin'
 import AdminObjectValue from './UI/adminobjectvalue/AdminObjectValue'
 import { RequestValue, request } from '../request'
+import { ObjectKey, updateDataArray } from '../store/dataArraySlice'
+import { ConnectedProps, connect } from 'react-redux'
+import { RootState } from '../store/index';
+import Select from 'react-select';
 
-const AdminForm2: FC = () => {
+type options = {
+    value: number
+    label: string
+}
+
+const mapState = (state: RootState) => (
+    {
+        Token: state.admin.Token,
+        dataArray: state.dataArray
+    }
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const connector = connect(mapState)
+
+const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
-    const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
-    const posts = [
-        { id: '1', name: 'Предмет1' },
-
-    ];
-    const { search } = window.location;
-    const query = new URLSearchParams(search).get('s');
-
-
-    const filterPosts = (posts: any[], query: any) => {
-        if (!query) {
-            return posts;
-        }
-
-        return posts.filter((post: { name: string }) => {
-            const postName = post.name.toLowerCase();
-            return postName.includes(query);
-        });
-    };
-    const [searchQuery, setSearchQuery] = useState(query || '');
-    const filteredPosts = filterPosts(posts, searchQuery);
+    const Authorization: string = "Authorization: Bearer " + props.Token
 
     const [selectedButton, setSelectedButton] = useState(RequestValue.value[0].id)
-    const [selectedArray, setSelectedArray] = useState<any[]>()
     const [selectedObject, setSelectedObject] = useState<Object>()
+    const [dataKey, setDataKey] = useState<ObjectKey>(RequestValue.value[0].name + "Array" as ObjectKey)
     const { isOpen, toggle } = useModal()
+    const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
+
+    const needUpdate = true
+
+    const ArrayToOptions = (array: any[] | undefined) => {
+        const tmparray: options[] = [];
+        if (array === undefined) {
+            return tmparray
+        }
+        array.map((obj, i) => (((!Object.keys(obj).includes("surname"))
+            ?
+            !Object.keys(obj).includes("grade")
+                ?
+                (tmparray.push({ value: obj.id, label: obj.name }))
+                :
+                (tmparray.push({ value: obj.id, label: String(obj.grade) }))
+            :
+            (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
+        return tmparray
+    }
+
+    const initialFunc = async () => {
+        RequestValue.value.slice(1).map(async (value) => {
+            const requestValue = await request(value.id, "get")
+            dispatch(updateDataArray({ dataArray: requestValue, objectKey: value.name + "Array" as ObjectKey }))
+        })
+    }
 
     useEffect(() => {
         (async () => {
-            setSelectedArray(await request(selectedButton, "get"))
+            initialFunc()
+        })()
+    }, [])
+
+    useEffect(() => {
+        (() => {
+            if (hasPageBeenRendered.current["effect1"]) {
+                if (needUpdate) {
+                    setDataKey(RequestValue.value[selectedButton].name + "Array" as ObjectKey)
+                }
+                return;
+            }
+            hasPageBeenRendered.current["effect1"] = true
         })()
     }, [selectedButton]);
+
+    useEffect(() => {
+        (async () => {
+            if (hasPageBeenRendered.current["effect2"]) {
+                dispatch(updateDataArray({ dataArray: await request(selectedButton, "get"), objectKey: dataKey }))
+                return;
+            }
+            hasPageBeenRendered.current["effect2"] = true
+        })()
+    }, [dataKey]);
 
     const onMenuComponentClick = async (ButtonStateId: number) => {
         setSelectedButton(ButtonStateId)
@@ -61,7 +110,7 @@ const AdminForm2: FC = () => {
             case "discipline":
                 {
                     if (obj === undefined) {
-                        const tmpobj: discipline = { id: 0, userId: 0, name: "", description: "" }
+                        const tmpobj: discipline = { id: 0, userId: 0, name: "", description: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
@@ -73,7 +122,7 @@ const AdminForm2: FC = () => {
             case "subjectPosition":
                 {
                     if (obj === undefined) {
-                        const tmpobj: subjectPosition = { id: 0, index: 0, startLabel: "", endLabel: "", name: "" }
+                        const tmpobj: subjectPosition = { id: 0, index: 0, startLabel: undefined, endLabel: undefined, name: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
@@ -85,7 +134,7 @@ const AdminForm2: FC = () => {
             case "dayPosition":
                 {
                     if (obj === undefined) {
-                        const tmpobj: dayPosition = { id: 0, index: 0, name: "" }
+                        const tmpobj: dayPosition = { id: 0, index: 0, name: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
@@ -97,7 +146,7 @@ const AdminForm2: FC = () => {
             case "weekType":
                 {
                     if (obj === undefined) {
-                        const tmpobj: weekType = { id: 0, index: 0, name: "" }
+                        const tmpobj: weekType = { id: 0, index: 0, name: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
@@ -109,11 +158,11 @@ const AdminForm2: FC = () => {
             case "subjectType":
                 {
                     if (obj === undefined) {
-                        const tmpobj: subjectType = { id: 0, name: "", IsScorable: false }
+                        const tmpobj: subjectType = { id: 0, name: "" }
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: subjectType = { id: obj.id, name: obj.name, IsScorable: obj.IsScorable }
+                        const tmpobj: subjectType = { id: obj.id, name: obj.name }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -121,11 +170,11 @@ const AdminForm2: FC = () => {
             case "user":
                 {
                     if (obj === undefined) {
-                        const tmpobj: user = { id: 0, roleId: 1, groupId: 1, identityId: "", name: "", surname: "", patronymic: "" }
+                        const tmpobj: user = { id: 0, roleId: 0, groupId: undefined, name: undefined, surname: undefined, patronymic: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: user = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
+                        const tmpobj: user = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -157,7 +206,7 @@ const AdminForm2: FC = () => {
             case "course":
                 {
                     if (obj === undefined) {
-                        const tmpobj: course = { id: 0, grade: 0, name: "" }
+                        const tmpobj: course = { id: 0, grade: 0, name: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
@@ -189,14 +238,14 @@ const AdminForm2: FC = () => {
 
     const onSaveClick = async () => {
         toggle()
-        setSelectedArray(await request(selectedButton, "post", selectedObject, undefined, Authorization))
-        setSelectedArray(await request(selectedButton, "get"))
+        await request(selectedButton, "post", selectedObject, undefined, Authorization)
+        await request(selectedButton, "get")
     }
 
     const onDeleteClick = async () => {
         toggle()
-        setSelectedArray(await request(selectedButton, "delete", selectedObject, undefined, Authorization))
-        setSelectedArray(await request(selectedButton, "get"))
+        await request(selectedButton, "delete", selectedObject, undefined, Authorization)
+        await request(selectedButton, "get")
     }
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, obj: any) => {
@@ -206,15 +255,39 @@ const AdminForm2: FC = () => {
 
     return (
         <>
-            <ModalAdmin isOpen={isOpen} toggle={toggle}>
-                {selectedObject !== undefined
-                    ?
+            {selectedObject !== undefined && isOpen
+                ?
+                <ModalAdmin isOpen={isOpen} toggle={toggle}>
                     <>
-                        {(Object.keys(selectedObject)).slice(1).map((key, y) =>
-                            <div>
-                                {key}:
-                                <input onChange={e => (typeof (selectedObject as any)[key] === 'number' ? (selectedObject as any)[key] = Number(e.target.value) : typeof (selectedObject as any)[key] === 'boolean' ? (selectedObject as any)[key] = Boolean(e.target.value) : (selectedObject as any)[key] = String(e.target.value))} defaultValue={(selectedObject as any)[key]} />
-                            </div>
+                        {(Object.keys(selectedObject)).slice(1).map((key, y) => {
+                            const options = ArrayToOptions(props.dataArray[key.replace("Id", "") + "Array" as ObjectKey])
+                            return (
+                                <div>
+                                    {key.includes("Id")
+                                        ?
+                                        <>
+                                            {key.replace("Id", "")}:
+                                            <Select options={options}
+                                                onChange={value => (selectedObject as any)[key] = value}
+                                                defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
+                                                isClearable={true}
+                                            ></Select>
+                                        </>
+                                        :
+                                        <>{key}:
+                                            <input onChange={e =>
+                                            (typeof (selectedObject as any)[key] === 'number'
+                                                ?
+                                                (selectedObject as any)[key] = Number(e.target.value)
+                                                :
+                                                (selectedObject as any)[key] = String(e.target.value))}
+                                                defaultValue={(selectedObject as any)[key]}
+                                            />
+                                        </>
+                                    }
+                                </div>
+                            )
+                        }
                         )}
                         <button onClick={() => onSaveClick()}>Сохранить</button>
                         {(selectedObject as any).id !== 0
@@ -224,56 +297,44 @@ const AdminForm2: FC = () => {
                             <>
                             </>}
                     </>
-                    :
-                    <>
-                    </>
-                }
-            </ModalAdmin>
+                </ModalAdmin>
+                :
+                <>
+                </>
+            }
+
             <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
                 <div style={{
                     display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px',
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
-                    <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Редактор расписания</div>
+                    <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
                     {[...Array(RequestValue.value.length - 2)].map((x, i) => {
                         const selectedButtonId = i + 1; return (
                             <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
                         )
                     }
                     )}
-                    <ul style={{ visibility: 'hidden' }}>
-                        {filteredPosts.map(post => (
-                            <li key={post.id}>{post.name}</li>
-                        ))}
-                    </ul>
                 </div>
                 <div style={{
                     width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
                     backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3, flexDirection: 'row'
                 }}>
                     <div style={{ display: 'flex' }}>
-                        <div style={{ display: 'flex', flexDirection: 'row', margin: '10px 10px 10px 10px', width: '60%' }}>
-                            <button style={{ margin: '5px', fontSize: '12px', width: '60px' }}>Фильтр</button>
-                            <input placeholder='Введите имя столбца' style={{
-                                borderRadius: '5px', border: '2px solid #490514', backgroundColor: '#FFF', height: '40px', width: '80%',
-                                display: 'flex', alignSelf: 'center', paddingLeft: '5px'
-                            }}></input>
-                            <button style={{ margin: '5px', fontSize: '12px', width: '60px' }}>Поиск</button>
-
-                        </div>
                         <div style={{ display: 'flex', width: '20%', alignSelf: 'center', justifySelf: 'flex-end' }}>
                             <AdminButton onClick={() => onAddClick(selectedButton)} text='Добавить' />
                         </div>
-
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid lightgray', padding: '5px' }}>
-                        {(selectedArray !== undefined && selectedArray[0] !== undefined) ?
-                            <>
-                                <AdminSubject itemList={(Object.keys(selectedArray[0]))} first={BorderType.firstElement} />
-                                {selectedArray.map((obj, i) =>
-                                    <AdminObjectValue onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} objectList={Object.values(obj)} />
-                                )}
-                            </>
+                        {(props.dataArray[dataKey] !== undefined && props.dataArray[dataKey]![0] !== undefined) ?
+                            <table>
+                                <AdminSubject itemList={(Object.keys(props.dataArray[dataKey]![0]))} first={BorderType.firstElement} />
+                                <tr>
+                                    {props.dataArray[dataKey]!.map((obj, i) =>
+                                        <AdminObjectValue onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} objectList={Object.values(obj)} />
+                                    )}
+                                </tr>
+                            </table>
                             :
                             <>
                             </>
@@ -289,4 +350,4 @@ const AdminForm2: FC = () => {
     )
 }
 
-export default AdminForm2
+export default connector(AdminForm2)

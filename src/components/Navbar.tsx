@@ -1,31 +1,28 @@
 import { FC, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import store from '../store'
+import store, { RootState } from '../store'
+import { ConnectedProps, connect } from 'react-redux'
 
+const mapState=(state:RootState)=>(
+    {
+        Token:state.admin.Token
+    }
+)
 
-const Navbar: FC = () => {
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const connector = connect(mapState)
+
+const Navbar: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const navigate = useNavigate()
-    const unsubscribe = store.subscribe(handleTokenChange)
-    const [loginStatus, setLoginStatus] = useState(false)
-    function handleTokenChange() {
-        const token=store.getState().admin.Token
-        if (token != "")
-        {
-            setLoginStatus(true)
-        }
-        else
-        {
-            setLoginStatus(false)
-        }
-    }    
-        useEffect(() => {
-            if (!loginStatus) navigate('/login')        
-    }, [loginStatus]);
+    useEffect(() => {
+            if (props.Token == "") navigate('/login')        
+    }, [props.Token]);
     return (
         <div style={{display:'flex',border:'2px solid lightgray',padding:'5px', color:'#371F76'}}>
                <Link style={{margin:'5px', border:'2px solid lightgray',padding:'5px', width:'120px', textAlign:'center', fontSize:'14px'}} to='/login'>
                 login</Link>
-                {loginStatus
+                {props.Token != ""
                 ?
                 <>
                     <Link  style={{margin:'5px', border:'2px solid lightgray',padding:'5px', width:'120px', textAlign:'center', fontSize:'14px'}} to='/admin'>
@@ -44,4 +41,4 @@ const Navbar: FC = () => {
     )
 }
 
-export default Navbar
+export default connector(Navbar)

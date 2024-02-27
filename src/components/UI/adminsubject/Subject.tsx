@@ -18,7 +18,7 @@ const AdminSubject: FC<subjectProps> = ({
 }) => {
 
     return (
-        <div style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
+        <tr style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
             {(itemList!==undefined)
             ?
             <>          
@@ -31,7 +31,7 @@ const AdminSubject: FC<subjectProps> = ({
             :
             <>
             </>}
-        </div>
+        </tr>
     )
 }
 

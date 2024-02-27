@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosResponse } from "axios"
 import { dayPosition, discipline, subjectPosition, weekType, subjectType, user, role, group, course, department, } from './types/AdminType';
 import store from "./store";
 import { updateUserInfo } from "./store/adminSlice";
+import { ObjectKey, updateDataArray } from "./store/dataArraySlice";
+import { useAppDispatch } from "./hook";
 
 type info = {
     id: number,
@@ -30,7 +32,7 @@ export const RequestValue: IRequestValue = {
     ]
 }
 
-export const request = async (RequestValueId: number, method: string, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined, additionalInfo: string = "") => {
+export const request = async (RequestValueId: number, method: string, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined, additionalInfo: string = ""):Promise<any[]> => {
     try {
         if (RequestValue.value[RequestValueId].route !== "") {
             if (method === "delete" && data !== undefined) {
@@ -79,14 +81,14 @@ export const request = async (RequestValueId: number, method: string, data: unde
                         {
                             const tmparr = [] as subjectType[]
                             const data = response.data as subjectType[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, name: obj.name, IsScorable: obj.IsScorable }) })
+                            data.map((obj, i) => { tmparr.push({ id: obj.id, name: obj.name }) })
                             return (tmparr)
                         }
                     case "user":
                         {
                             const tmparr = [] as user[]
                             const data = response.data as user[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
+                            data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
                             return (tmparr)
                         }
                     case "role":
@@ -134,4 +136,12 @@ export const request = async (RequestValueId: number, method: string, data: unde
         store.dispatch(updateUserInfo({token:"",userId:0}))
         return ([])
     }
+}
+
+export const getAllAndDispatch = () => {
+    const dispatch = useAppDispatch()
+    RequestValue.value.slice(1).map(async (value) => {
+        const requestValue = await request(value.id, "get")
+        dispatch(updateDataArray({ dataArray: requestValue, objectKey: value.name + "Array" as ObjectKey }))
+    })
 }

@@ -1,22 +1,20 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from '../router';
-import store from '../store';
+import store, { RootState } from '../store';
 import { useState } from 'react';
+import { ConnectedProps, connect } from 'react-redux'
 
-const AppRouter = () => {
-    const unsubscribe = store.subscribe(handleTokenChange)
-    const [loginStatus, setLoginStatus] = useState(false)
-    function handleTokenChange() {
-        const token=store.getState().admin.Token
-        if (token != "")
-        {
-            setLoginStatus(true)
-        }
-        else
-        {
-            setLoginStatus(false)
-        }
-    }  
+const mapState=(state:RootState)=>(
+    {
+        Token:state.admin.Token
+    }
+)
+
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const connector = connect(mapState)
+
+const AppRouter = (props: PropsFromRedux) => { 
     return (           
            <Routes>
                 {publicRoutes.map(route =>
@@ -25,7 +23,7 @@ const AppRouter = () => {
                         path={route.path}
                         key={route.path} />
                 )}
-                {loginStatus?privateRoutes.map(route =>
+                {props.Token!=""?privateRoutes.map(route =>
                     <Route
                         Component={route.element}
                         path={route.path}
@@ -36,4 +34,4 @@ const AppRouter = () => {
     )
 }
 
-export default AppRouter
+export default connector(AppRouter)

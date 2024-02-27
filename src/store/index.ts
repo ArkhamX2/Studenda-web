@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import adminReducer from './adminSlice'
+import dataArrayReducer from './dataArraySlice';
 
 const store = configureStore({
     reducer: {
-        admin: adminReducer
-    },    
+        admin: adminReducer,
+        dataArray: dataArrayReducer
+    }
 })
 
 export default store

@@ -41,15 +41,13 @@ export type weekType = {
 
 export type subjectType = {
     id?: number, 
-    name: string,
-    IsScorable: boolean
+    name: string
 }
 
 export type user = {
     id?: number, 
     roleId: number,
     groupId?: number,
-    identityId?: string,
     name?: string,
     surname?: string,
     patronymic?: string

@@ -3,10 +3,11 @@ import LoginInput from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import LoginLabel, { TextAlign } from './UI/label/LoginLabel'
 import axios from 'axios'
-import { request } from '../request'
+import { RequestValue, request } from '../request'
 import { useAppDispatch } from '../hook'
 import { updateUserInfo } from '../store/adminSlice'
 import store from '../store'
+import { updateDataArray } from '../store/dataArraySlice'
 
 const LoginForm: FC = () => {
     const dispatch = useAppDispatch()
@@ -37,8 +38,6 @@ const LoginForm: FC = () => {
                 <LoginButton variant={ButtonVariant.primary} text='Войти' onClick={() => LoginClick()}></LoginButton>
             </div>
         </main>
-
-
     )
 }
 
