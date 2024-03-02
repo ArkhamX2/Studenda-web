@@ -137,11 +137,3 @@ export const request = async (RequestValueId: number, method: string, data: unde
         return ([])
     }
 }
-
-export const getAllAndDispatch = () => {
-    const dispatch = useAppDispatch()
-    RequestValue.value.slice(1).map(async (value) => {
-        const requestValue = await request(value.id, "get")
-        dispatch(updateDataArray({ dataArray: requestValue, objectKey: value.name + "Array" as ObjectKey }))
-    })
-}

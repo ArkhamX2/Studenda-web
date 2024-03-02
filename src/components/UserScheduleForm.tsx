@@ -51,9 +51,7 @@ const UserScheduleForm: FC = () => {
         setDayPositions((await request(RequestValue.value[3].id, "get")).sort((a: dayPosition, b: dayPosition) => a.index - b.index))
         setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
-        let tmp = new Map<number,group>((await request(RequestValue.value[8].id, "get") as group[]).map(x=>{return [x.id!,x]}))
-        let tm2 = new Map<any,any>((await request(RequestValue.value[8].id, "get") as group[]).map(x=>{return [x.id,x]}))
-        setGroups(await request(RequestValue.value[8].id, "get") as group[])        
+        setGroups(await request(RequestValue.value[8].id, "get"))        
         setUsersOptions(await GetArrayToOptions(6))
         setCurrentUserId(store.getState().admin.userId)
     }

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
@@ -8,26 +8,37 @@ import axios from 'axios'
 import ModalAdmin from './UI/modalAdmin/ModalAdmin';
 import useModal from './UI/modalAdmin/useModalAdmin'
 import { useAppDispatch } from '../hook'
-import store from '../store'
+import store, { RootState } from '../store'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
 import AdminInput from './UI/imput/AdminInput';
+import { ConnectedProps, connect } from 'react-redux';
+import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
 
 type options = {
     value: number
     label: string
 }
 
-const AdminForm: FC = () => {
-    const dispatch = useAppDispatch()
+const mapState = (state: RootState) => (
+    {
+        Token: state.admin.Token,
+        dataArray: state.dataArray
+    }
+)
 
-    useEffect(() => {
-        initialFunc()
-    }, []);
+type PropsFromRedux = ConnectedProps<typeof connector>
+
+const connector = connect(mapState)
+
+const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
+    const dispatch = useAppDispatch()
 
     const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
 
     const noOptionsText = "Пусто"
+
+    const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
 
     const getAcademicYear = () => {
         const currdate = new Date()
@@ -44,7 +55,7 @@ const AdminForm: FC = () => {
 
     const [departmentOptions, setDepartmentOptions] = useState<options[]>([])
 
-    const [courseOptions, setCoursesOptions] = useState<options[]>([])
+    const [courseOptions, setCourseOptions] = useState<options[]>([])
 
     const [groupOptions, setGroupOptions] = useState<options[]>([])
 
@@ -52,49 +63,103 @@ const AdminForm: FC = () => {
 
     const [subjectTypesOptions, setSubjectTypesOptions] = useState<options[]>([])
 
-    const [disciplinesOptions, setDisciplinesOptions] = useState<options[]>([])
+    const [disciplinesOptions, setDisciplinesOptions] = useState<options[]>([])    
 
-    const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
-        const tmparray: options[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as any[]).map((obj, i) => (!Object.keys(obj).includes("grade")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: String(obj.grade) })))
-        return tmparray
-    }
+    const [currentGroupId, setCurrentGroupId] = useState<number>()
 
-    const ArrayToOptions = (array: any[]) => {
+    const [currentCourseId, setCurrentCourseId] = useState<number>()
+
+    const [currentDepartmentId, setCurrentDepartmentId] = useState<number>()
+
+    const [subjects, setSubjects] = useState<subject[]>([])
+
+    const [selectedSubject, setSelectedSubject] = useState<subject>()
+
+    const ArrayToOptions = (array: any[] | undefined) => {
+        console.log("test")
         const tmparray: options[] = [];
-        array.map((obj, i) => (((!Object.keys(obj).includes("surname")) ? (tmparray.push({ value: obj.id, label: obj.name })) : (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
+        if (array === undefined) {
+            return tmparray
+        }
+        array.map((obj, i) => (((!Object.keys(obj).includes("surname"))
+            ?
+            !Object.keys(obj).includes("grade")
+                ?
+                (tmparray.push({ value: obj.id, label: obj.name }))
+                :
+                (tmparray.push({ value: obj.id, label: String(obj.grade) }))
+            :
+            (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
         return tmparray
     }
 
     const initialFunc = async () => {
-        setDisciplines(await request(RequestValue.value[1].id, "get"))
-        setSubjectPositions((await request(RequestValue.value[2].id, "get")).sort((a: subjectPosition, b: subjectPosition) => a.index - b.index))
-        setDayPositions((await request(RequestValue.value[3].id, "get")).sort((a: dayPosition, b: dayPosition) => a.index - b.index))
-        setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
-        setSubjectTypes(await request(RequestValue.value[5].id, "get"))
-        setUsers(await request(RequestValue.value[6].id, "get"))
-        setDepartmentOptions(await GetArrayToOptions(10))
-        setCoursesOptions(await GetArrayToOptions(9))
-        setGroupOptions(await GetArrayToOptions(8))
+        RequestValue.value.slice(1).map(async (value) => {
+            const requestValue = await request(value.id, "get")
+            dispatch(updateDataArray({ dataArray: requestValue, objectKey: value.name + "Array" as ObjectKey }))
+        })
     }
 
-    const departmentOptionsOnChange = async (value: SingleValue<options>) => {
-        if (value !== null) {
-            setCoursesOptions(await GetArrayToOptions(9, value.value))
-        }
-    }
+    useEffect(() => {
+        (async () => {
+            initialFunc()
+        })()
+    }, [])
 
-    const courseOptionsOnChange = async (value: SingleValue<options>) => {
-        if (value !== null) {
-            setGroupOptions(await GetArrayToOptions(8, value.value))
+    useEffect(()=> {
+        setDepartmentOptions(ArrayToOptions(props.dataArray.departmentArray))
+    },[props.dataArray.departmentArray])
+
+    useEffect(()=> {
+        setCourseOptions(ArrayToOptions(props.dataArray.courseArray))
+    },[props.dataArray.courseArray])
+
+    useEffect(()=> {
+        setGroupOptions(ArrayToOptions(props.dataArray.groupArray))
+    },[props.dataArray.groupArray])
+
+    useEffect(()=> {
+        setUsersOptions(ArrayToOptions(props.dataArray.userArray))
+    },[props.dataArray.userArray])
+
+    useEffect(()=> {
+        setSubjectTypesOptions(ArrayToOptions(props.dataArray.subjectTypeArray))
+    },[props.dataArray.subjectTypeArray])
+
+    useEffect(()=> {
+        setDisciplinesOptions(ArrayToOptions(props.dataArray.disciplineArray))
+    },[props.dataArray.disciplineArray])
+
+    useEffect(()=> {
+        if (currentDepartmentId !== undefined && currentCourseId !== undefined)
+        {
+            setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.courseId===currentCourseId && group.departmentId===currentDepartmentId)))
         }
-    }
+        else
+        {
+            if (currentDepartmentId != undefined)
+            {
+                setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.departmentId===currentDepartmentId)))
+            }
+            else
+            {
+                if (currentCourseId != undefined)
+                {                    
+                    setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.courseId===currentCourseId)))
+                }
+                else
+                {
+                    setGroupOptions(ArrayToOptions(props.dataArray.groupArray))
+                }
+            }
+        }        
+    },[currentDepartmentId,currentCourseId])
 
     const groupOptionsOnChange = async (value: SingleValue<options>) => {
-        if (value !== null) {
+        if (value !== null && props.dataArray.weekTypeArray!=null) {
             setCurrentGroupId(value.value)
             var tmparrarr: subject[][] = []
-            await Promise.all(weekTypes?.map(async (obj, i) => {
+            await Promise.all(props.dataArray.weekTypeArray?.map(async (obj, i) => {
                 const param = { groupId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
                 tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
             }))
@@ -109,42 +174,6 @@ const AdminForm: FC = () => {
         }
     }
 
-    const [currentGroupId, setCurrentGroupId] = useState<number>()
-
-    const [weekTypes, setWeekTypes] = useState<weekType[]>([])
-
-    const [dayPositions, setDayPositions] = useState<dayPosition[]>([])
-
-    const [subjectPositions, setSubjectPositions] = useState<subjectPosition[]>([])
-
-    const [subjectTypes, setSubjectTypes] = useState<subjectType[]>([])
-
-    const [disciplines, setDisciplines] = useState<discipline[]>([])
-
-    const [users, setUsers] = useState<user[]>([])
-
-    const [subjects, setSubjects] = useState<subject[]>([])
-
-    const [selectedSubject, setSelectedSubject] = useState<subject>()
-
-    useEffect(() => {
-        (async () => {
-            setUsersOptions(ArrayToOptions(users))
-        })()
-    }, [users]);
-
-    useEffect(() => {
-        (async () => {
-            setDisciplinesOptions(ArrayToOptions(disciplines))
-        })()
-    }, [disciplines]);
-
-    useEffect(() => {
-        (async () => {
-            setSubjectTypesOptions(ArrayToOptions(subjectTypes))
-        })()
-    }, [subjectTypes]);
-
     const findSubject = (subjectPosition: subjectPosition, dayPosition: dayPosition, weekType: weekType) => {
         try {
             return subjects.find((obj) => obj.subjectPositionId === subjectPosition.id && obj.dayPositionId === dayPosition.id && obj.weekTypeId === weekType.id)
@@ -155,7 +184,7 @@ const AdminForm: FC = () => {
 
     const findUser = (userId: number) => {
         try {
-            return users.find((obj) => obj.id === userId)
+            return props.dataArray.userArray?.find((obj) => obj.id === userId)
         } catch (error) {
 
         }
@@ -163,7 +192,7 @@ const AdminForm: FC = () => {
 
     const findDiscipline = (disciplineId: number) => {
         try {
-            return disciplines.find((obj) => obj.id === disciplineId)
+            return props.dataArray.disciplineArray?.find((obj) => obj.id === disciplineId)
         } catch (error) {
 
         }
@@ -171,7 +200,7 @@ const AdminForm: FC = () => {
 
     const findSubjectType = (subjectTypeId: number | undefined) => {
         try {
-            return subjectTypes.find((obj) => obj.id === subjectTypeId)
+            return props.dataArray.subjectTypeArray?.find((obj) => obj.id === subjectTypeId)
         } catch (error) {
 
         }
@@ -193,7 +222,7 @@ const AdminForm: FC = () => {
         toggle()
         await (request(RequestValue.value[11].id, "post", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
-        await Promise.all(weekTypes?.map(async (obj, i) => {
+        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
             tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
         }))
@@ -208,7 +237,7 @@ const AdminForm: FC = () => {
         toggle()
         await (request(RequestValue.value[11].id, "delete", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
-        await Promise.all(weekTypes?.map(async (obj, i) => {
+        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
             tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
         }))
@@ -269,11 +298,11 @@ const AdminForm: FC = () => {
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Факультет</div>
-                    <Select options={departmentOptions} onChange={(value) => (departmentOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <Select options={departmentOptions} onChange={(value) => (setCurrentDepartmentId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Курс</div>
-                    <Select options={courseOptions} onChange={(value) => (courseOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <Select options={courseOptions} onChange={(value) => (setCurrentCourseId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа</div>
@@ -290,15 +319,15 @@ const AdminForm: FC = () => {
                         <tr >
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}><div style={{fontSize:'24px', margin:'16px 0px 10px 0px', textAlign:'center'}}>{obj.name}
+                            {props.dataArray.dayPositionArray?.map((obj, i) => <td className={classes.TableColumn}><div style={{fontSize:'24px', margin:'16px 0px 10px 0px', textAlign:'center'}}>{obj.name}
                                 </div></td>)}
                         </tr>
-                        {subjectPositions?.map((subjectPosition) =>
+                        {props.dataArray.subjectPositionArray?.map((subjectPosition) =>
                             <tr>
                                 <td className={classes.TableColumn}><div style={{margin:'0px 10px 0px 10px', fontSize:'18px'}}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
-                                {dayPositions?.map((dayPosition) =>
+                                {props.dataArray.dayPositionArray?.map((dayPosition) =>
                                     <td className={classes.TableColumn}>
-                                        {weekTypes?.map((weekType, index) => {
+                                        {props.dataArray.weekTypeArray?.map((weekType, index) => {
                                             const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
                                             if (subject !== undefined)
                                                 return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
@@ -307,7 +336,7 @@ const AdminForm: FC = () => {
 
                                             else return (<div>
                                                 <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
-                                                    <tr> текст</tr>
+                                                    <tr></tr>
                                                 </div>
                                                 {index%2==0 ?
                                                 <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'2px solid #B5999F'}}></hr>
@@ -327,4 +356,4 @@ const AdminForm: FC = () => {
     )
 }
 
-export default AdminForm
+export default connector(AdminForm)

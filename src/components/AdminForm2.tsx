@@ -323,6 +323,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 }}>
                     <div style={{ display: 'flex' }}>
                         <div style={{ display: 'flex', width: '20%', alignSelf: 'center', justifySelf: 'flex-end' }}>
+                            <label>{RequestValue.value[selectedButton].name}</label>
                             <button onClick={() => onAddClick(selectedButton)}>Добавить</button>
                         </div>
                     </div>
