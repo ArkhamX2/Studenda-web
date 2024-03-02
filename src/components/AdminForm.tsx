@@ -63,7 +63,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const [subjectTypesOptions, setSubjectTypesOptions] = useState<options[]>([])
 
-    const [disciplinesOptions, setDisciplinesOptions] = useState<options[]>([])    
+    const [disciplinesOptions, setDisciplinesOptions] = useState<options[]>([])
 
     const [currentGroupId, setCurrentGroupId] = useState<number>()
 
@@ -106,57 +106,39 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         })()
     }, [])
 
-    useEffect(()=> {
+    useEffect(() => {
         setDepartmentOptions(ArrayToOptions(props.dataArray.departmentArray))
-    },[props.dataArray.departmentArray])
+    }, [props.dataArray.departmentArray])
 
-    useEffect(()=> {
+    useEffect(() => {
         setCourseOptions(ArrayToOptions(props.dataArray.courseArray))
-    },[props.dataArray.courseArray])
+    }, [props.dataArray.courseArray])
 
-    useEffect(()=> {
+    useEffect(() => {
         setGroupOptions(ArrayToOptions(props.dataArray.groupArray))
-    },[props.dataArray.groupArray])
+    }, [props.dataArray.groupArray])
 
-    useEffect(()=> {
+    useEffect(() => {
         setUsersOptions(ArrayToOptions(props.dataArray.userArray))
-    },[props.dataArray.userArray])
+    }, [props.dataArray.userArray])
 
-    useEffect(()=> {
+    useEffect(() => {
         setSubjectTypesOptions(ArrayToOptions(props.dataArray.subjectTypeArray))
-    },[props.dataArray.subjectTypeArray])
+    }, [props.dataArray.subjectTypeArray])
 
-    useEffect(()=> {
+    useEffect(() => {
         setDisciplinesOptions(ArrayToOptions(props.dataArray.disciplineArray))
-    },[props.dataArray.disciplineArray])
+    }, [props.dataArray.disciplineArray])
 
-    useEffect(()=> {
-        if (currentDepartmentId !== undefined && currentCourseId !== undefined)
-        {
-            setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.courseId===currentCourseId && group.departmentId===currentDepartmentId)))
-        }
-        else
-        {
-            if (currentDepartmentId != undefined)
-            {
-                setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.departmentId===currentDepartmentId)))
-            }
-            else
-            {
-                if (currentCourseId != undefined)
-                {                    
-                    setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group)=>group.courseId===currentCourseId)))
-                }
-                else
-                {
-                    setGroupOptions(ArrayToOptions(props.dataArray.groupArray))
-                }
-            }
-        }        
-    },[currentDepartmentId,currentCourseId])
+    useEffect(() => {
+        setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group) => 
+        currentCourseId === undefined ? true : group.courseId === currentCourseId 
+        &&
+        currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId)))
+    }, [currentDepartmentId, currentCourseId])
 
     const groupOptionsOnChange = async (value: SingleValue<options>) => {
-        if (value !== null && props.dataArray.weekTypeArray!=null) {
+        if (value !== null && props.dataArray.weekTypeArray != null) {
             setCurrentGroupId(value.value)
             var tmparrarr: subject[][] = []
             await Promise.all(props.dataArray.weekTypeArray?.map(async (obj, i) => {
@@ -257,13 +239,13 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <div>
                             <p>DisciplineId:</p>
                             <div>
-                                <Select className={classes.Select}  options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
+                                <Select className={classes.Select} options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>SubjectTypeId:</p>
                             <div >
-                                <Select className={classes.Select}  options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
+                                <Select className={classes.Select} options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
@@ -278,10 +260,10 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 <AdminInput onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
                             </div>
                         </div>
-                        <div style={{display:'flex', alignContent:'center', justifyContent:'center'}}>
+                        <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
                             <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить'></AdminButton>
                         </div>
-                        
+
                         {(selectedSubject as any).id !== 0
                             ?
                             <button onClick={() => onDeleteClick(selectedSubject)}>Удалить</button>
@@ -319,12 +301,12 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <tr >
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {props.dataArray.dayPositionArray?.map((obj, i) => <td className={classes.TableColumn}><div style={{fontSize:'24px', margin:'16px 0px 10px 0px', textAlign:'center'}}>{obj.name}
-                                </div></td>)}
+                            {props.dataArray.dayPositionArray?.map((obj, i) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
+                            </div></td>)}
                         </tr>
                         {props.dataArray.subjectPositionArray?.map((subjectPosition) =>
                             <tr>
-                                <td className={classes.TableColumn}><div style={{margin:'0px 10px 0px 10px', fontSize:'18px'}}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
+                                <td className={classes.TableColumn}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
                                 {props.dataArray.dayPositionArray?.map((dayPosition) =>
                                     <td className={classes.TableColumn}>
                                         {props.dataArray.weekTypeArray?.map((weekType, index) => {
@@ -338,10 +320,10 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
                                                     <tr></tr>
                                                 </div>
-                                                {index%2==0 ?
-                                                <hr style={{color:'#B5999F', backgroundColor:'#B5999F', border:'2px solid #B5999F'}}></hr>
-                                                :<></>}
-                                                
+                                                {index % 2 == 0 ?
+                                                    <hr style={{ color: '#B5999F', backgroundColor: '#B5999F', border: '2px solid #B5999F' }}></hr>
+                                                    : <></>}
+
                                             </div>)
                                         })}
                                     </td>)}

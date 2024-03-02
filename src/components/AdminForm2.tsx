@@ -240,13 +240,15 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const onSaveClick = async () => {
         toggle()
         await request(selectedButton, "post", selectedObject, undefined, Authorization)
-        await request(selectedButton, "get")
+        const requestValue = await request(selectedButton, "get")
+        dispatch(updateDataArray({ dataArray: requestValue, objectKey: RequestValue.value[selectedButton].name + "Array" as ObjectKey }))
     }
 
     const onDeleteClick = async () => {
         toggle()
         await request(selectedButton, "delete", selectedObject, undefined, Authorization)
-        await request(selectedButton, "get")
+        const requestValue = await request(selectedButton, "get")
+        dispatch(updateDataArray({ dataArray: requestValue, objectKey: RequestValue.value[selectedButton].name + "Array" as ObjectKey }))
     }
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, obj: any) => {
