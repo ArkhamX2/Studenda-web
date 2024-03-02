@@ -35,7 +35,9 @@ const Navbar: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 </>                
                 } 
                 <Link style={{margin:'5px', border:'2px solid lightgray',padding:'5px', width:'120px', textAlign:'center', fontSize:'14px'}} to='/userSchedule'>
-                    UserSchedule</Link>             
+                    UserSchedule</Link>
+                <Link style={{margin:'5px', border:'2px solid lightgray',padding:'5px', width:'120px', textAlign:'center', fontSize:'14px'}} to='/journal'>
+                journal</Link>                 
         </div>
 
     )

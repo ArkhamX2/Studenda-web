@@ -3,34 +3,35 @@ import classes from './Subject.module.css'
 import { Style } from 'util';
 
 export enum BorderType {
-    firstElement='outlined',
-    otherElements='primary'
-  }
+    firstElement = 'outlined',
+    otherElements = 'primary'
+}
 
-interface subjectProps{
+interface subjectProps {
     objectList?: any[];
     first?: BorderType;
-    onContextMenu?: (e:React.MouseEvent<HTMLDivElement>)=> void;
+    forbiddenKeys: string[];
+    onContextMenu?: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const AdminObjectValue: FC<subjectProps> = ({
-        objectList, first, onContextMenu
+    objectList, first, forbiddenKeys, onContextMenu
 }) => {
 
     return (
-        <tr onContextMenu={onContextMenu} style={{display:'flex', flexDirection:'row', border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F'}}>
-            {(objectList!==undefined)
-            ?
-            <>          
-                {objectList.slice(1).map((value:any,i)=>  
-                <>          
-                    <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '20px' : '16px', fontWeight: first===BorderType.firstElement ? '600' : '500'}}>{value}</div>
+        <tr onContextMenu={onContextMenu} style={{ display: 'flex', flexDirection: 'row', border: first === BorderType.firstElement ? '1px solid #8C2425' : '1px solid #B5999F' }}>
+            {(objectList !== undefined)
+                ?
+                <>
+                    {objectList.filter((val) => !forbiddenKeys.find((forbiddenKeyName) => forbiddenKeyName === val[0])).map((value: any) =>
+                        <>
+                            <div className={classes.Subject} style={{ border: first === BorderType.firstElement ? '1px solid #8C2425' : '1px solid #B5999F', fontSize: first === BorderType.firstElement ? '20px' : '16px', fontWeight: first === BorderType.firstElement ? '600' : '500' }}>{value[1]}</div>
+                        </>
+                    )}
                 </>
-                )}
-            </>
-            :
-            <>
-            </>}
+                :
+                <>
+                </>}
         </tr>
     )
 }

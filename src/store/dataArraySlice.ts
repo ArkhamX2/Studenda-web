@@ -40,10 +40,6 @@ const dataArraySlice = createSlice({
         {
             state[action.payload.objectKey] = action.payload.dataArray
             console.log(state[action.payload.objectKey])
-        },
-        doNothing(state, action: PayloadAction<any>)
-        {
-
         }
     },    
     extraReducers: (builder) => {
@@ -51,6 +47,6 @@ const dataArraySlice = createSlice({
     }
 })
 
-export const {updateDataArray, doNothing} = dataArraySlice.actions
+export const {updateDataArray} = dataArraySlice.actions
 
 export default dataArraySlice.reducer

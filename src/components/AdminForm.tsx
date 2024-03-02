@@ -76,7 +76,6 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const [selectedSubject, setSelectedSubject] = useState<subject>()
 
     const ArrayToOptions = (array: any[] | undefined) => {
-        console.log("test")
         const tmparray: options[] = [];
         if (array === undefined) {
             return tmparray

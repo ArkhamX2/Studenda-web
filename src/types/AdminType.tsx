@@ -48,6 +48,7 @@ export type user = {
     id?: number, 
     roleId: number,
     groupId?: number,
+    identityId: string,
     name?: string,
     surname?: string,
     patronymic?: string

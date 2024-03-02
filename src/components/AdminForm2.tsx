@@ -11,7 +11,7 @@ import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
 import store from '../store/'
 import { dayPosition, discipline, subjectPosition, weekType, subjectType, user, role, group, course, department, } from '../types/AdminType';
-import axios from 'axios'
+import axios, { AxiosHeaders } from 'axios'
 import ModalAdmin from './UI/modalAdmin/ModalAdmin'
 import useModal from './UI/modalAdmin/useModalAdmin'
 import AdminObjectValue from './UI/adminobjectvalue/AdminObjectValue'
@@ -25,6 +25,12 @@ import AdminInput from './UI/imput/AdminInput'
 type options = {
     value: number
     label: string
+}
+
+interface registerUser extends user {
+    email: string,
+    password: string,
+    rolename: string
 }
 
 const mapState = (state: RootState) => (
@@ -41,6 +47,8 @@ const connector = connect(mapState)
 const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
     const Authorization: string = "Authorization: Bearer " + props.Token
+
+    const forbiddenKeys:string[]=["id","identityId"];
 
     const [selectedButton, setSelectedButton] = useState(RequestValue.value[0].id)
     const [selectedObject, setSelectedObject] = useState<Object>()
@@ -171,11 +179,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             case "user":
                 {
                     if (obj === undefined) {
-                        const tmpobj: user = { id: 0, roleId: 0, groupId: undefined, name: undefined, surname: undefined, patronymic: undefined }
+                        const tmpobj: registerUser = { id: 0, email: "", password: "", rolename: "", roleId: 1, groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: user = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
+                        const tmpobj: user = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -239,7 +247,22 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onSaveClick = async () => {
         toggle()
-        await request(selectedButton, "post", selectedObject, undefined, Authorization)
+        if (RequestValue.value[selectedButton].name==="user" && (selectedObject as registerUser).email !== undefined)
+        {
+            await axios({
+                method: "post",
+                url: "http://88.210.3.137/api/security/register",
+                data: { email: (selectedObject as registerUser).email, password: (selectedObject as registerUser).password, rolename: (selectedObject as registerUser).rolename },
+                headers: new AxiosHeaders(Authorization)
+            }).then
+            (async (response)=>
+            await request(selectedButton, "post", { id: response.data.User.Id, roleId: (selectedObject as registerUser).roleId, groupId: (selectedObject as registerUser).groupId, identityId:response.data.User.IdentityId, name: (selectedObject as registerUser).name, surname: (selectedObject as registerUser).surname, patronymic: (selectedObject as registerUser).patronymic }, undefined, Authorization)
+            )
+        }
+        else
+        {
+            await request(selectedButton, "post", selectedObject, undefined, Authorization)
+        }
         const requestValue = await request(selectedButton, "get")
         dispatch(updateDataArray({ dataArray: requestValue, objectKey: RequestValue.value[selectedButton].name + "Array" as ObjectKey }))
     }
@@ -269,12 +292,19 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     {key.includes("Id")
                                         ?
                                         <>
-                                            {key.replace("Id", "")}:
+                                            {key.includes("identityId")
+                                            ?
+                                            <></>
+                                            :
+                                            <>                                                                                                         
+                                            {key.replace("Id", "")}:  
                                             <Select options={options}
-                                                onChange={value => (selectedObject as any)[key] = value}
+                                                onChange={value => (selectedObject as any)[key] = value?.value}
                                                 defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
                                                 isClearable={true}
                                             ></Select>
+                                            </>
+                                            }
                                         </>
                                         :
                                         <>{key}:
@@ -332,10 +362,18 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid lightgray', padding: '5px' }}>
                         {(props.dataArray[dataKey] !== undefined && props.dataArray[dataKey]![0] !== undefined) ?
                             <table>
-                                <AdminSubject itemList={(Object.keys(props.dataArray[dataKey]![0]))} first={BorderType.firstElement} />
+                                <AdminSubject 
+                                itemList={(Object.keys(props.dataArray[dataKey]![0]))} 
+                                first={BorderType.firstElement} 
+                                forbiddenKeys={forbiddenKeys}
+                                />
                                 <tr>
                                     {props.dataArray[dataKey]!.map((obj, i) =>
-                                        <AdminObjectValue onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} objectList={Object.values(obj)} />
+                                        <AdminObjectValue 
+                                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} 
+                                        objectList={Object.entries(obj)}
+                                        forbiddenKeys={forbiddenKeys}
+                                        />
                                     )}
                                 </tr>
                             </table>

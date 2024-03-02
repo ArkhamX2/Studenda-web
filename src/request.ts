@@ -32,9 +32,9 @@ export const RequestValue: IRequestValue = {
     ]
 }
 
-export const request = async (RequestValueId: number, method: string, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined, additionalInfo: string = ""):Promise<any[]> => {
+export const request = async (RequestValueId: number, method: string, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined, additionalInfo: string = ""): Promise<any[]> => {
     try {
-        if (RequestValue.value[RequestValueId].route !== "") {
+        if (RequestValue.value[RequestValueId].route !== "" || additionalInfo !== "") {
             if (method === "delete" && data !== undefined) {
                 data = data.id
             }
@@ -88,7 +88,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
                         {
                             const tmparr = [] as user[]
                             const data = response.data as user[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
+                            data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
                             return (tmparr)
                         }
                     case "role":
@@ -131,9 +131,9 @@ export const request = async (RequestValueId: number, method: string, data: unde
             return ([])
         }
     }
-    catch (error) {        
+    catch (error) {
         console.error(error)
-        store.dispatch(updateUserInfo({token:"",userId:0}))
+        store.dispatch(updateUserInfo({ token: "", userId: 0 }))
         return ([])
     }
 }
