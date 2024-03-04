@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios"
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, user, role, group, course, department, } from './types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, } from './types/AdminType';
 import store from "./store";
-import { updateUserInfo } from "./store/adminSlice";
+import { updateAccountInfo } from "./store/adminSlice";
 import { ObjectKey, updateDataArray } from "./store/dataArraySlice";
 import { useAppDispatch } from "./hook";
 
@@ -23,7 +23,7 @@ export const RequestValue: IRequestValue = {
         { id: 3, name: "dayPosition", route: "api/schedule/day-position" },
         { id: 4, name: "weekType", route: "api/schedule/week-type" },
         { id: 5, name: "subjectType", route: "api/schedule/subject-type" },
-        { id: 6, name: "user", route: "api/security/user" },
+        { id: 6, name: "account", route: "api/account" },
         { id: 7, name: "role", route: "" },
         { id: 8, name: "group", route: "api/group" },
         { id: 9, name: "course", route: "api/course" },
@@ -53,7 +53,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
                         {
                             const tmparr = [] as discipline[]
                             const data = response.data as discipline[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, userId: obj.userId, name: obj.name, description: obj.description }) })
+                            data.map((obj, i) => { tmparr.push({ id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }) })
                             return (tmparr)
                         }
                     case "subjectPosition":
@@ -84,18 +84,11 @@ export const request = async (RequestValueId: number, method: string, data: unde
                             data.map((obj, i) => { tmparr.push({ id: obj.id, name: obj.name }) })
                             return (tmparr)
                         }
-                    case "user":
+                    case "account":
                         {
-                            const tmparr = [] as user[]
-                            const data = response.data as user[]
+                            const tmparr = [] as account[]
+                            const data = response.data as account[]
                             data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
-                            return (tmparr)
-                        }
-                    case "role":
-                        {
-                            const tmparr = [] as role[]
-                            const data = response.data as role[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, name: obj.name }) })
                             return (tmparr)
                         }
                     case "group":
@@ -133,7 +126,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
     }
     catch (error) {
         console.error(error)
-        store.dispatch(updateUserInfo({ token: "", userId: 0 }))
+        store.dispatch(updateAccountInfo({ token: "", accountId: 0 }))
         return ([])
     }
 }

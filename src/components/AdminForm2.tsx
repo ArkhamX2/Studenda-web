@@ -10,7 +10,7 @@ import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
 import store from '../store/'
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, user, role, group, course, department, } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, } from '../types/AdminType';
 import axios, { AxiosHeaders } from 'axios'
 import ModalAdmin from './UI/modalAdmin/ModalAdmin'
 import useModal from './UI/modalAdmin/useModalAdmin'
@@ -27,7 +27,7 @@ type options = {
     label: string
 }
 
-interface registerUser extends user {
+interface registerAccount extends account {
     email: string,
     password: string,
     rolename: string
@@ -119,11 +119,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             case "discipline":
                 {
                     if (obj === undefined) {
-                        const tmpobj: discipline = { id: 0, userId: 0, name: "", description: undefined }
+                        const tmpobj: discipline = { id: 0, accountId: 0, name: "", description: undefined }
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: discipline = { id: obj.id, userId: obj.userId, name: obj.name, description: obj.description }
+                        const tmpobj: discipline = { id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -176,26 +176,14 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     }
                     break;
                 }
-            case "user":
+            case "account":
                 {
                     if (obj === undefined) {
-                        const tmpobj: registerUser = { id: 0, email: "", password: "", rolename: "", roleId: 1, groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
+                        const tmpobj: registerAccount = { id: 0, email: "", password: "", rolename: "", roleId: 1, groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: user = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
-                        setSelectedObject(tmpobj)
-                    }
-                    break;
-                }
-            case "role":
-                {
-                    if (obj === undefined) {
-                        const tmpobj: role = { id: 0, name: "" }
-                        setSelectedObject(tmpobj)
-                    }
-                    else {
-                        const tmpobj: role = { id: obj.id, name: obj.name }
+                        const tmpobj: account = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -247,16 +235,16 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onSaveClick = async () => {
         toggle()
-        if (RequestValue.value[selectedButton].name==="user" && (selectedObject as registerUser).email !== undefined)
+        if (RequestValue.value[selectedButton].name==="account" && (selectedObject as registerAccount).email !== undefined)
         {
             await axios({
                 method: "post",
                 url: "http://88.210.3.137/api/security/register",
-                data: { email: (selectedObject as registerUser).email, password: (selectedObject as registerUser).password, rolename: (selectedObject as registerUser).rolename },
+                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, rolename: (selectedObject as registerAccount).rolename },
                 headers: new AxiosHeaders(Authorization)
             }).then
             (async (response)=>
-            await request(selectedButton, "post", { id: response.data.User.Id, roleId: (selectedObject as registerUser).roleId, groupId: (selectedObject as registerUser).groupId, identityId:response.data.User.IdentityId, name: (selectedObject as registerUser).name, surname: (selectedObject as registerUser).surname, patronymic: (selectedObject as registerUser).patronymic }, undefined, Authorization)
+            await request(selectedButton, "post", { id: response.data.Account.Id, roleId: (selectedObject as registerAccount).roleId, groupId: (selectedObject as registerAccount).groupId, identityId:response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
             )
         }
         else

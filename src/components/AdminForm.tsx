@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
-import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, user, subject } from '../types/AdminType';
+import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
 import { RequestValue, request } from '../request'
 import axios from 'axios'
 import ModalAdmin from './UI/modalAdmin/ModalAdmin';
@@ -59,7 +59,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const [groupOptions, setGroupOptions] = useState<options[]>([])
 
-    const [usersOptions, setUsersOptions] = useState<options[]>([])
+    const [accountsOptions, setAccountsOptions] = useState<options[]>([])
 
     const [subjectTypesOptions, setSubjectTypesOptions] = useState<options[]>([])
 
@@ -118,8 +118,8 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     }, [props.dataArray.groupArray])
 
     useEffect(() => {
-        setUsersOptions(ArrayToOptions(props.dataArray.userArray))
-    }, [props.dataArray.userArray])
+        setAccountsOptions(ArrayToOptions(props.dataArray.accountArray))
+    }, [props.dataArray.accountArray])
 
     useEffect(() => {
         setSubjectTypesOptions(ArrayToOptions(props.dataArray.subjectTypeArray))
@@ -163,9 +163,9 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         }
     }
 
-    const findUser = (userId: number) => {
+    const findAccount = (accountId: number) => {
         try {
-            return props.dataArray.userArray?.find((obj) => obj.id === userId)
+            return props.dataArray.accountArray?.find((obj) => obj.id === accountId)
         } catch (error) {
 
         }
@@ -194,7 +194,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             setSelectedSubject(tmp)
         }
         else {
-            setSelectedSubject({ id: 0, academicYear: currentAcademicYear, disciplineId: 0, classroom: "", subjectTypeId: 0, userId: 0, subjectPositionId: subjectPosition.id!, dayPositionId: dayPosition.id!, weekTypeId: weekType.id!, groupId: currentGroupId!, description: "" })
+            setSelectedSubject({ id: 0, academicYear: currentAcademicYear, disciplineId: 0, classroom: "", subjectTypeId: 0, accountId: 0, subjectPositionId: subjectPosition.id!, dayPositionId: dayPosition.id!, weekTypeId: weekType.id!, groupId: currentGroupId!, description: "" })
         }
         toggle()
     }
@@ -248,9 +248,9 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                             </div>
                         </div>
                         <div>
-                            <p>UserId:</p>
+                            <p>AccountId:</p>
                             <div >
-                                <Select className={classes.Select} options={usersOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, userId: findUser(value?.value!)?.id! })} defaultValue={usersOptions.find((obj) => { return obj.value === selectedSubject.userId })} isClearable={true}></Select>
+                                <Select className={classes.Select} options={accountsOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })} defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>

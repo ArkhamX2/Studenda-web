@@ -2,7 +2,7 @@ import Admin from "../pages/adminpage"
 import Admin2 from "../pages/adminpage2"
 import Journal from "../pages/journalpage"
 import Login from "../pages/loginpage"
-import UserSchedule from "../pages/userSchedulePage"
+import AccountSchedule from "../pages/userSchedulePage"
 
 export const privateRoutes = [    
     {path: '/admin', element: Admin},
@@ -11,6 +11,6 @@ export const privateRoutes = [
 
 export const publicRoutes = [
     {path: '/login', element: Login},      
-    {path: '/userSchedule', element: UserSchedule},
+    {path: '/userSchedule', element: AccountSchedule},
     {path: '/journal', element: Journal}
 ]
