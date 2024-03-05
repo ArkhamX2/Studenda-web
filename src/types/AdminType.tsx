@@ -4,7 +4,7 @@ export type subject = {
     disciplineId: number, 
     classroom?: string, 
     subjectTypeId?: number, 
-    userId?: number, 
+    accountId?: number, 
     subjectPositionId: number, 
     dayPositionId: number, 
     weekTypeId: number, 
@@ -14,7 +14,7 @@ export type subject = {
 
 export type discipline = {
     id?: number, 
-    userId: number,
+    accountId: number,
     name: string,
     description?: string
 }
@@ -44,7 +44,7 @@ export type subjectType = {
     name: string
 }
 
-export type user = {
+export type account = {
     id?: number, 
     roleId: number,
     groupId?: number,
@@ -52,11 +52,6 @@ export type user = {
     name?: string,
     surname?: string,
     patronymic?: string
-}
-
-export type role = {
-    id?: number, 
-    name: string
 }
 
 export type group = {
