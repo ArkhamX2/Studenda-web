@@ -1,0 +1,64 @@
+.JournalTable{
+        border-collapse: separate;
+        border-spacing: 0;
+        border-top: 1px solid grey;
+
+}
+.TableRow{
+        
+}
+.TableColumn{
+        border: 2px solid #B5999F;
+
+}
+.NameColumn{
+        border: 2px solid #B5999F;
+        position: absolute;
+        width: 18em;
+        left: 5em;
+        border-top-width: 1px;
+        background-color: #f4f4f5;
+        white-space: break-spaces;
+
+
+}
+.FirstColumn{
+        border: 2px solid #B5999F;
+        position: absolute;
+        width: 5em;
+        left: 5px;
+        border-top-width: 1px;
+        background-color: #f4f4f5;
+
+}
+.FirstColumn, .NameColumn, .TableColumn{
+        height: 50px;
+}
+
+
+
+
+
+.SubjectBox{
+        border: 2px solid #490514;
+        border-bottom: 4px solid #490514;
+        margin: 5px 5px;
+        padding: 12px 7px;
+        border-radius: 6px;
+        min-height: 70px;
+        background-color: #f4f4f5;;
+        width: 270px;
+        text-wrap: wrap;
+        word-break: break-all;
+        font-size: 18px;
+
+}
+.SubjectBox1{
+        margin: 6px 6px;
+        padding: 5px;
+        border-radius: 6px;
+        height: 140px;
+        width: 270px;
+        text-wrap: wrap;
+
+}
