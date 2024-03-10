@@ -8,7 +8,7 @@ const JournalForm: FC = () => {
 
     return (
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
-            <div style={{ width: '220px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
+            <div style={{ width: '200px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Журнал</div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Фильтр</div>
@@ -23,7 +23,7 @@ const JournalForm: FC = () => {
                 width: '85%', border: '2px solid #490514', margin: '5px', overflowX: 'hidden', overflowY: 'auto', whiteSpace: 'nowrap',
                 backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: "#490514", position: 'relative', padding: '5px'
             }}>
-                <div style={{ marginLeft: '23.1em', overflowX: 'scroll', overflowY: 'visible' }}>
+                <div style={{ marginLeft: '23.1em', overflowX: 'scroll', overflowY: 'visible', whiteSpace:'nowrap'}}>
                     <table className={classes.JournalTable}>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn} style={{textAlign:'center', fontSize:'20px'}}>№</th>

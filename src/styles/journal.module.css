@@ -9,6 +9,7 @@
 }
 .TableColumn{
         border: 2px solid #B5999F;
+        padding: 5px;
 
 }
 .NameColumn{
@@ -19,6 +20,7 @@
         border-top-width: 1px;
         background-color: #f4f4f5;
         white-space: break-spaces;
+        padding: 5px;
 
 
 }
@@ -29,6 +31,7 @@
         left: 5px;
         border-top-width: 1px;
         background-color: #f4f4f5;
+        padding: 5px;
 
 }
 .FirstColumn, .NameColumn, .TableColumn{
