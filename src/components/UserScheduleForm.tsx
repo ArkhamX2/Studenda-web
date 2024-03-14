@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
-import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
 import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, user, subject } from '../types/AdminType';
 import { RequestValue, request } from '../request'
@@ -9,7 +8,6 @@ import ModalAdmin from './UI/modalAdmin/ModalAdmin';
 import useModal from './UI/modalAdmin/useModalAdmin'
 import { useAppDispatch } from '../hook'
 import store from '../store'
-import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
 
 type options = {
@@ -21,7 +19,7 @@ const UserScheduleForm: FC = () => {
     const dispatch = useAppDispatch()
 
     useEffect(() => {
-        initialFunc()      
+        initialFunc()
     }, []);
 
     const noOptionsText = "Пусто"
@@ -41,7 +39,7 @@ const UserScheduleForm: FC = () => {
 
     const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
         const tmparray: options[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as user[]).map((obj, i) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
+        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as user[]).map((obj, i) => (tmparray.push({ value: obj.id!, label: "" + obj?.surname + " " + obj?.name + " " + obj?.patronymic })))
         return tmparray
     }
 
@@ -51,22 +49,21 @@ const UserScheduleForm: FC = () => {
         setDayPositions((await request(RequestValue.value[3].id, "get")).sort((a: dayPosition, b: dayPosition) => a.index - b.index))
         setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
-        setGroups(await request(RequestValue.value[8].id, "get"))        
+        setGroups(await request(RequestValue.value[8].id, "get"))
         setUsersOptions(await GetArrayToOptions(6))
         setCurrentUserId(store.getState().admin.userId)
     }
 
     useEffect(() => {
         var userOption = findUserOption(currentUserId)
-        if (userOption!=undefined)
-        {
-            setDefaultUserOption(userOption) 
+        if (userOption != undefined) {
+            setDefaultUserOption(userOption)
             userOptionsOnChange(userOption)
         }
     }, [userOptions]);
 
     const userOptionsOnChange = async (value: SingleValue<options>) => {
-        if (value !== null) {            
+        if (value !== null) {
             setDefaultUserOption(value)
             setCurrentUserId(value.value)
             var tmparrarr: subject[][] = []
@@ -146,37 +143,35 @@ const UserScheduleForm: FC = () => {
         } catch (error) {
 
         }
-    } 
+    }
 
     return (
-        <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
-            <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Расписание</div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Пользователь:</div>
+        <main className={classes.Main}>
+            <div className={classes.NavigationBox}>
+                <div className={classes.Header}>Расписание</div>
+                <div className={classes.SearchBox}>
+                    <div className={classes.SearchBoxLabel}>Пользователь:</div>
                     <Select options={userOptions} value={defaultUserOption} onChange={(value) => (userOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
-            <div style={{
-                width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
-                backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3
-            }}>
+            <div className={classes.TableBox}>
                 {toggle ?
                     <table className={classes.AdminTable}>
                         <tr >
-                            <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
+                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
                             {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
                         </tr>
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
                                 <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
+                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {
+                                        const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
                                             return (<div className={classes.SubjectBox}>
-                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} {findGroup(subject.groupId)?.name}</tr>
-                                                
-                                            </div> );
-                                                
+                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br /> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} {findGroup(subject.groupId)?.name}</tr>
+
+                                            </div>);
+
                                         else return (<div className={classes.SubjectBox}>
                                             <tr></tr>
                                         </div>)

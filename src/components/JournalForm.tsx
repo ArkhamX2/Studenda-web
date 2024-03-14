@@ -31,6 +31,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>Дата 1</td>
                             <td className={classes.TableColumn}>Дата 1</td>
                             <td className={classes.TableColumn}>Дата 1</td>
+                            <td className={classes.TableColumn}><button style={{width:'40px'}}>+</button></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -38,6 +39,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -45,6 +47,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -52,6 +55,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -59,6 +63,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -66,6 +71,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -73,6 +79,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -80,6 +87,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -87,6 +95,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -94,6 +103,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -101,6 +111,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -108,6 +119,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -115,6 +127,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -122,6 +135,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -129,6 +143,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                         <tr className={classes.TableRow}>
                             <th className={classes.FirstColumn}>11</th>
@@ -136,6 +151,7 @@ const JournalForm: FC = () => {
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
                             <td className={classes.TableColumn}>111111111111111111111111111111111111111111111111111111</td>
+                            <td className={classes.TableColumn}></td>
                         </tr>
                     </table>
                 </div>
