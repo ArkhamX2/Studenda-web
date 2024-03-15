@@ -71,3 +71,10 @@ export type department = {
     id?: number, 
     name: string
 }
+
+export type roleNames = {
+    studentRoleName: "Student",
+    leaderRoleName: "Leader",
+    teacherRoleName: "Teacher",
+    adminRoleName: "Admin"
+}

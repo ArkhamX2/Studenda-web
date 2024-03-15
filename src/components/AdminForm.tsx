@@ -3,10 +3,10 @@ import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
 import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
-import { RequestValue, request } from '../request'
+import { RequestValue, request } from '../base/Request'
 import axios from 'axios'
-import ModalAdmin from './UI/modalAdmin/ModalAdmin';
-import useModal from './UI/modalAdmin/useModalAdmin'
+import Modal from './UI/modal/Modal';
+import useModal from './UI/modal/useModal'
 import { useAppDispatch } from '../hook'
 import store, { RootState } from '../store'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
@@ -14,11 +14,8 @@ import AdminButton from './UI/button/AdminButton';
 import AdminInput from './UI/imput/AdminInput';
 import { ConnectedProps, connect } from 'react-redux';
 import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
-
-type options = {
-    value: number
-    label: string
-}
+import { ArrayToOptions } from '../base/ArrayToOptionsConverter';
+import { option } from '../types/OptionType';
 
 const mapState = (state: RootState) => (
     {
@@ -34,7 +31,7 @@ const connector = connect(mapState)
 const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
 
-    const Authorization: string = "Authorization: Bearer " + store.getState().admin.Token
+    const Authorization: string = "Authorization: Bearer " + props.Token
 
     const noOptionsText = "Пусто"
 
@@ -53,17 +50,17 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const { isOpen, toggle } = useModal()
 
-    const [departmentOptions, setDepartmentOptions] = useState<options[]>([])
+    const [departmentOptions, setDepartmentOptions] = useState<option[]>([])
 
-    const [courseOptions, setCourseOptions] = useState<options[]>([])
+    const [courseOptions, setCourseOptions] = useState<option[]>([])
 
-    const [groupOptions, setGroupOptions] = useState<options[]>([])
+    const [groupOptions, setGroupOptions] = useState<option[]>([])
 
-    const [accountsOptions, setAccountsOptions] = useState<options[]>([])
+    const [accountsOptions, setAccountsOptions] = useState<option[]>([])
 
-    const [subjectTypesOptions, setSubjectTypesOptions] = useState<options[]>([])
+    const [subjectTypesOptions, setSubjectTypesOptions] = useState<option[]>([])
 
-    const [disciplinesOptions, setDisciplinesOptions] = useState<options[]>([])
+    const [disciplinesOptions, setDisciplinesOptions] = useState<option[]>([])
 
     const [currentGroupId, setCurrentGroupId] = useState<number>()
 
@@ -74,23 +71,6 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const [subjects, setSubjects] = useState<subject[]>([])
 
     const [selectedSubject, setSelectedSubject] = useState<subject>()
-
-    const ArrayToOptions = (array: any[] | undefined) => {
-        const tmparray: options[] = [];
-        if (array === undefined) {
-            return tmparray
-        }
-        array.map((obj, i) => (((!Object.keys(obj).includes("surname"))
-            ?
-            !Object.keys(obj).includes("grade")
-                ?
-                (tmparray.push({ value: obj.id, label: obj.name }))
-                :
-                (tmparray.push({ value: obj.id, label: String(obj.grade) }))
-            :
-            (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
-        return tmparray
-    }
 
     const initialFunc = async () => {
         RequestValue.value.slice(1).map(async (value) => {
@@ -136,13 +116,13 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId)))
     }, [currentDepartmentId, currentCourseId])
 
-    const groupOptionsOnChange = async (value: SingleValue<options>) => {
+    const groupOptionsOnChange = async (value: SingleValue<option>) => {
         if (value !== null && props.dataArray.weekTypeArray != null) {
             setCurrentGroupId(value.value)
             var tmparrarr: subject[][] = []
             await Promise.all(props.dataArray.weekTypeArray?.map(async (obj, i) => {
                 const param = { groupId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
-                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+                tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
             }))
             var tmparr: subject[] = []
             tmparrarr.map((obj, i) => {
@@ -194,18 +174,18 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             setSelectedSubject(tmp)
         }
         else {
-            setSelectedSubject({ id: 0, academicYear: currentAcademicYear, disciplineId: 0, classroom: "", subjectTypeId: 0, accountId: 0, subjectPositionId: subjectPosition.id!, dayPositionId: dayPosition.id!, weekTypeId: weekType.id!, groupId: currentGroupId!, description: "" })
+            setSelectedSubject({ id: 0, academicYear: currentAcademicYear, disciplineId: 0, classroom: "", subjectTypeId: undefined, accountId: undefined, subjectPositionId: subjectPosition.id!, dayPositionId: dayPosition.id!, weekTypeId: weekType.id!, groupId: currentGroupId!, description: "" })
         }
         toggle()
     }
 
     const onSaveClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[11].id, "post", subject, undefined, Authorization))
+        await (request(RequestValue.value[10].id, "post", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
         await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
         tmparrarr.map((obj, i) => {
@@ -216,11 +196,11 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onDeleteClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[11].id, "delete", subject, undefined, Authorization))
+        await (request(RequestValue.value[10].id, "delete", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
         await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
         tmparrarr.map((obj, i) => {
@@ -231,7 +211,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     return (
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
-            <ModalAdmin isOpen={isOpen} toggle={toggle}>
+            <Modal isOpen={isOpen} toggle={toggle}>
                 {selectedSubject !== undefined
                     ?
                     <>
@@ -274,7 +254,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     <>
                     </>
                 }
-            </ModalAdmin>
+            </Modal>
             <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
@@ -297,7 +277,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
                 {currentGroupId !== undefined ?
                     <table className={classes.AdminTable}>
-                        <tr >
+                        <tr>
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
                             {props.dataArray.dayPositionArray?.map((obj, i) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}

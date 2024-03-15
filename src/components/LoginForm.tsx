@@ -3,7 +3,7 @@ import LoginInput, { TextAlignEnum } from './UI/imput/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import LoginLabel, { TextAlign } from './UI/label/LoginLabel'
 import axios from 'axios'
-import { RequestValue, request } from '../request'
+import { RequestValue, request } from '../base/Request'
 import { useAppDispatch } from '../hook'
 import { updateAccountInfo } from '../store/adminSlice'
 import store from '../store'
@@ -19,7 +19,7 @@ const LoginForm: FC = () => {
             const response = await axios({
                 method: "post",
                 url: url,
-                data: { email: loginInfo.login, password: loginInfo.password, rolename: "admin" }
+                data: { email: loginInfo.login, password: loginInfo.password}
             })
             dispatch(updateAccountInfo({token:response.data.Token,accountId:response.data.Account.Id}))
         }

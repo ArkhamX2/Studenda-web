@@ -1,5 +1,5 @@
 import { FC, ReactNode } from "react";
-import cl from './ModalAdmin.module.css'
+import cl from './Modal.module.css'
 
 interface ModalType {
     children?: ReactNode;
@@ -8,7 +8,7 @@ interface ModalType {
 }
 
 //Закрывается если зажать внутри и отпустить снаружи
-const ModalAdmin: FC<ModalType> = (props) => {
+const Modal: FC<ModalType> = (props) => {
     return (
         <>
           {props.isOpen && (
@@ -22,4 +22,4 @@ const ModalAdmin: FC<ModalType> = (props) => {
       );
 }
 
-export default ModalAdmin;
+export default Modal;

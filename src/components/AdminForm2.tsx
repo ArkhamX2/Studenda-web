@@ -10,28 +10,32 @@ import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
 import store from '../store/'
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department,  } from '../types/AdminType';
 import axios, { AxiosHeaders } from 'axios'
-import ModalAdmin from './UI/modalAdmin/ModalAdmin'
-import useModal from './UI/modalAdmin/useModalAdmin'
+import Modal from './UI/modal/Modal'
+import useModal from './UI/modal/useModal'
 import AdminObjectValue from './UI/adminobjectvalue/AdminObjectValue'
-import { RequestValue, request } from '../request'
+import { RequestValue, request } from '../base/Request'
 import { ObjectKey, updateDataArray } from '../store/dataArraySlice'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../store/index';
 import Select from 'react-select';
 import AdminInput from './UI/imput/AdminInput'
-
-type options = {
-    value: number
-    label: string
-}
+import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
+import { option } from '../types/OptionType'
 
 interface registerAccount extends account {
     email: string,
     password: string,
-    rolename: string
+    roleNames: string[]
 }
+
+const RoleNames = [["Student"],
+                   ["Student","Leader"],
+                   ["Student","Leader","Teacher"],
+                   ["Student","Leader","Teacher","Admin"]]
+                   
+const roleNamesSelect:option[] = [{value: 0, label: "Student"},{value: 1, label: "Leader"},{value: 2, label: "Teacher"},{value: 3, label: "Admin"}]
 
 const mapState = (state: RootState) => (
     {
@@ -57,23 +61,6 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
 
     const needUpdate = true
-
-    const ArrayToOptions = (array: any[] | undefined) => {
-        const tmparray: options[] = [];
-        if (array === undefined) {
-            return tmparray
-        }
-        array.map((obj, i) => (((!Object.keys(obj).includes("surname"))
-            ?
-            !Object.keys(obj).includes("grade")
-                ?
-                (tmparray.push({ value: obj.id, label: obj.name }))
-                :
-                (tmparray.push({ value: obj.id, label: String(obj.grade) }))
-            :
-            (tmparray.push({ value: obj.id, label: "" + obj.surname + " " + obj.name + " " + obj.patronymic })))))
-        return tmparray
-    }
 
     const initialFunc = async () => {
         RequestValue.value.slice(1).map(async (value) => {
@@ -179,11 +166,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             case "account":
                 {
                     if (obj === undefined) {
-                        const tmpobj: registerAccount = { id: 0, email: "", password: "", rolename: "", roleId: 1, groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
+                        const tmpobj: registerAccount = { id: 0, email: "", password: "", roleNames: [""], groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: account = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
+                        const tmpobj: account = { id: obj.id, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -240,11 +227,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             await axios({
                 method: "post",
                 url: "http://88.210.3.137/api/security/register",
-                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, rolename: (selectedObject as registerAccount).rolename },
+                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, roleNames: (selectedObject as registerAccount).roleNames },
                 headers: new AxiosHeaders(Authorization)
             }).then
             (async (response)=>
-            await request(selectedButton, "post", { id: response.data.Account.Id, roleId: (selectedObject as registerAccount).roleId, groupId: (selectedObject as registerAccount).groupId, identityId:response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
+            await request(selectedButton, "post", { id: response.data.Account.Id, groupId: (selectedObject as registerAccount).groupId, identityId:response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
             )
         }
         else
@@ -271,7 +258,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         <>
             {selectedObject !== undefined && isOpen
                 ?
-                <ModalAdmin isOpen={isOpen} toggle={toggle}>
+                <Modal isOpen={isOpen} toggle={toggle}>
                     <>
                         {(Object.keys(selectedObject)).slice(1).map((key, y) => {
                             const options = ArrayToOptions(props.dataArray[key.replace("Id", "") + "Array" as ObjectKey])
@@ -296,14 +283,25 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         </>
                                         :
                                         <>{key}:
-                                            <AdminInput onChange={e =>
-                                            (typeof (selectedObject as any)[key] === 'number'
-                                                ?
-                                                (selectedObject as any)[key] = Number(e.target.value)
-                                                :
-                                                (selectedObject as any)[key] = String(e.target.value))}
-                                                defaultValue={(selectedObject as any)[key]}
-                                            />
+                                            {key.includes("roleNames")
+                                            ?
+                                                <>
+                                                <Select options={roleNamesSelect}
+                                                onChange={value => (selectedObject as any)[key] = RoleNames[value?.value!]}
+                                                ></Select>
+                                                </>
+                                            :
+                                                <>
+                                                    <AdminInput onChange={e =>
+                                                    (typeof (selectedObject as any)[key] === 'number'
+                                                        ?
+                                                        (selectedObject as any)[key] = Number(e.target.value)
+                                                        :
+                                                        (selectedObject as any)[key] = String(e.target.value))}
+                                                        defaultValue={(selectedObject as any)[key]}
+                                                    />
+                                                </>
+                                            }
                                         </>
                                     }
                                 </div>
@@ -318,7 +316,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                             <>
                             </>}
                     </>
-                </ModalAdmin>
+                </Modal>
                 :
                 <>
                 </>

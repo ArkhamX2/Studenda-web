@@ -1,9 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from "axios"
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, } from './types/AdminType';
-import store from "./store";
-import { updateAccountInfo } from "./store/adminSlice";
-import { ObjectKey, updateDataArray } from "./store/dataArraySlice";
-import { useAppDispatch } from "./hook";
+import axios from "axios"
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, } from '../types/AdminType';
+import store from "../store";
+import { updateAccountInfo } from "../store/adminSlice";
 
 type info = {
     id: number,
@@ -24,11 +22,10 @@ export const RequestValue: IRequestValue = {
         { id: 4, name: "weekType", route: "api/schedule/week-type" },
         { id: 5, name: "subjectType", route: "api/schedule/subject-type" },
         { id: 6, name: "account", route: "api/account" },
-        { id: 7, name: "role", route: "" },
-        { id: 8, name: "group", route: "api/group" },
-        { id: 9, name: "course", route: "api/course" },
-        { id: 10, name: "department", route: "api/department" },
-        { id: 11, name: "schedule", route: "api/schedule/subject" },
+        { id: 7, name: "group", route: "api/group" },
+        { id: 8, name: "course", route: "api/course" },
+        { id: 9, name: "department", route: "api/department" },
+        { id: 10, name: "schedule", route: "api/schedule/subject" },
     ]
 }
 
@@ -88,7 +85,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
                         {
                             const tmparr = [] as account[]
                             const data = response.data as account[]
-                            data.map((obj, i) => { tmparr.push({ id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
+                            data.map((obj, i) => { tmparr.push({ id: obj.id, groupId: obj.groupId, identityId: obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }) })
                             return (tmparr)
                         }
                     case "group":

@@ -2,23 +2,20 @@ import { FC, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
-import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, user, subject } from '../types/AdminType';
-import { RequestValue, request } from '../request'
+import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
+import { RequestValue, request } from '../base/Request'
 import axios from 'axios'
-import ModalAdmin from './UI/modalAdmin/ModalAdmin';
-import useModal from './UI/modalAdmin/useModalAdmin'
+import Modal from './UI/modal/Modal';
 import { useAppDispatch } from '../hook'
 import store from '../store'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
+import { option } from '../types/OptionType';
+import useModal from './UI/modal/useModal';
 
-type options = {
-    value: number
-    label: string
-}
-
-const UserScheduleForm: FC = () => {
+const AccountScheduleForm: FC = () => {
     const dispatch = useAppDispatch()
+    const { isOpen, toggle } = useModal()
 
     useEffect(() => {
         initialFunc()      
@@ -37,11 +34,11 @@ const UserScheduleForm: FC = () => {
 
     const currentAcademicYear = getAcademicYear()
 
-    const [userOptions, setUsersOptions] = useState<options[]>([])
+    const [accountOptions, setAccountsOptions] = useState<option[]>([])
 
     const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
-        const tmparray: options[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as user[]).map((obj, i) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
+        const tmparray: option[] = [];
+        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj, i) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
         return tmparray
     }
 
@@ -52,45 +49,46 @@ const UserScheduleForm: FC = () => {
         setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
         setGroups(await request(RequestValue.value[8].id, "get"))        
-        setUsersOptions(await GetArrayToOptions(6))
-        setCurrentUserId(store.getState().admin.userId)
+        setAccountsOptions(await GetArrayToOptions(6))
+        setCurrentAccountId(store.getState().admin.accountId)
     }
 
     useEffect(() => {
-        var userOption = findUserOption(currentUserId)
-        if (userOption!=undefined)
+        var accountOption = findAccountOption(currentAccountId)
+        if (accountOption!=undefined)
         {
-            setDefaultUserOption(userOption) 
-            userOptionsOnChange(userOption)
+            setDefaultAccountOption(accountOption) 
+            accountOptionsOnChange(accountOption)
         }
-    }, [userOptions]);
+    }, [accountOptions]);
 
-    const userOptionsOnChange = async (value: SingleValue<options>) => {
+    const accountOptionsOnChange = async (value: SingleValue<option>) => {
         if (value !== null) {            
-            setDefaultUserOption(value)
-            setCurrentUserId(value.value)
+            setDefaultAccountOption(value)
+            setCurrentAccountId(value.value)
             var tmparrarr: subject[][] = []
             await Promise.all(weekTypes?.map(async (obj, i) => {
-                const param = { userId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
-                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/user?"))
+                const param = { accountId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
+                console.log(param)
+                tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/account?"))
             }))
             var tmparr: subject[] = []
             tmparrarr.map((obj, i) => {
                 tmparr = tmparr.concat(obj)
             })
-            setToggle(true)
+            setToggleVisibility(true)
             setSubjects(tmparr)
         }
         else {
-            setToggle(false)
-            setDefaultUserOption(undefined)
-            setCurrentUserId(undefined)
+            setToggleVisibility(false)
+            setDefaultAccountOption(undefined)
+            setCurrentAccountId(undefined)
         }
     }
 
-    const [defaultUserOption, setDefaultUserOption] = useState<options>()
+    const [defaultAccountOption, setDefaultAccountOption] = useState<option>()
 
-    const [currentUserId, setCurrentUserId] = useState<number>()
+    const [currentAccountId, setCurrentAccountId] = useState<number>()
 
     const [weekTypes, setWeekTypes] = useState<weekType[]>([])
 
@@ -106,7 +104,7 @@ const UserScheduleForm: FC = () => {
 
     const [groups, setGroups] = useState<group[]>([])
 
-    const [toggle, setToggle] = useState<boolean>(false)
+    const [toggleVisibility, setToggleVisibility] = useState<boolean>(false)
 
     const findSubject = (subjectPosition: subjectPosition, dayPosition: dayPosition, weekType: weekType) => {
         try {
@@ -140,28 +138,36 @@ const UserScheduleForm: FC = () => {
         }
     }
 
-    const findUserOption = (userId: number | undefined) => {
+    const findAccountOption = (accountId: number | undefined) => {
         try {
-            return userOptions.find((obj) => obj.value === userId)
+            return accountOptions.find((obj) => obj.value === accountId)
         } catch (error) {
 
         }
     } 
 
+    const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        event.preventDefault()
+        toggle()
+    }
+    
     return (
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
+            <Modal isOpen={isOpen} toggle={toggle}>
+                
+            </Modal>
             <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Расписание</div>
                 <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
                 <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Пользователь:</div>
-                    <Select options={userOptions} value={defaultUserOption} onChange={(value) => (userOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <Select options={accountOptions} value={defaultAccountOption} onChange={(value) => (accountOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
                 backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3
             }}>
-                {toggle ?
+                {toggleVisibility ?
                     <table className={classes.AdminTable}>
                         <tr >
                             <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
@@ -172,7 +178,7 @@ const UserScheduleForm: FC = () => {
                             <tr>
                                 <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
                                     <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
-                                            return (<div className={classes.SubjectBox}>
+                                            return (<div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e)}>
                                                 <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} {findGroup(subject.groupId)?.name}</tr>
                                                 
                                             </div> );
@@ -191,4 +197,4 @@ const UserScheduleForm: FC = () => {
     )
 }
 
-export default UserScheduleForm
+export default AccountScheduleForm
