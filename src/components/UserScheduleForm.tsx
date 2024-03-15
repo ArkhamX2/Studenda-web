@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
-import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
 import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
 import { RequestValue, request } from '../base/Request'
@@ -8,7 +7,6 @@ import axios from 'axios'
 import Modal from './UI/modal/Modal';
 import { useAppDispatch } from '../hook'
 import store from '../store'
-import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
 import AdminButton from './UI/button/AdminButton';
 import { option } from '../types/OptionType';
 import useModal from './UI/modal/useModal';
@@ -18,7 +16,7 @@ const AccountScheduleForm: FC = () => {
     const { isOpen, toggle } = useModal()
 
     useEffect(() => {
-        initialFunc()      
+        initialFunc()
     }, []);
 
     const noOptionsText = "Пусто"
@@ -144,7 +142,7 @@ const AccountScheduleForm: FC = () => {
         } catch (error) {
 
         }
-    } 
+    }
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         event.preventDefault()
@@ -165,12 +163,12 @@ const AccountScheduleForm: FC = () => {
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
-                backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3
+                backgroundColor: '#F7F3F3', borderRadius: '5px'
             }}>
                 {toggleVisibility ?
                     <table className={classes.AdminTable}>
                         <tr >
-                            <td className={classes.TableColumn} style={{ width: '75px', height:'42px'}}>
+                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
                             {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
                         </tr>

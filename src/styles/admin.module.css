@@ -43,3 +43,56 @@
         text-wrap: wrap;
 
 }
+.Header{
+        align-self: flex-start;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 5px;
+}
+.SearchBox{
+        display: flex;
+        flex-direction: column;
+        margin: 10px 0px 5px 0px;
+        border-left: 2px solid #8C2425;
+        border-radius: 5px;
+        padding: 2px 5px;
+        background-color: #F0EAE9;
+        width: 100%;
+}
+.SearchBoxLabel{
+        width: 120px;
+        align-self: self-start;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 5px;
+}
+.TableBox{
+        width: 80%;
+        border: 2px solid #490514;
+        margin: 5px;
+        overflow-x: auto;
+        overflow-y: auto;
+        white-space: nowrap;
+        background-color: #F7F3F3;
+        border-radius: 5px;
+        scrollbar-color: #490514;
+}
+.Main{
+        display: flex;
+        background-color: white;
+        max-height: 90vh;
+        color: #1B0E17;
+        box-sizing: border-box;
+        
+}
+.NavigationBox{
+        max-width: 270px;
+        min-width: 270px;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid #490514;
+        margin: 5px;
+        padding: 10px;
+        background-color: #F7F3F3;
+        border-radius: 5px;
+}
