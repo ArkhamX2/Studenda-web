@@ -2,16 +2,14 @@ import { FC, useEffect, useRef, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
-import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
+import { weekType, subjectPosition, dayPosition, subject } from '../types/AdminType';
 import { RequestValue, request } from '../base/Request'
-import axios from 'axios'
 import Modal from './UI/modal/Modal';
 import useModal from './UI/modal/useModal'
 import { useAppDispatch } from '../hook'
-import store, { RootState } from '../store'
-import LoginButton, { ButtonVariant } from './UI/button/LoginButton';
+import { RootState } from '../store'
 import AdminButton from './UI/button/AdminButton';
-import AdminInput from './UI/imput/AdminInput';
+import AdminInput from './UI/input/AdminInput';
 import { ConnectedProps, connect } from 'react-redux';
 import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter';
@@ -35,7 +33,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const noOptionsText = "Пусто"
 
-    const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
+    //const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
 
     const getAcademicYear = () => {
         const currdate = new Date()
@@ -120,12 +118,12 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         if (value !== null && props.dataArray.weekTypeArray != null) {
             setCurrentGroupId(value.value)
             var tmparrarr: subject[][] = []
-            await Promise.all(props.dataArray.weekTypeArray?.map(async (obj, i) => {
+            await Promise.all(props.dataArray.weekTypeArray?.map(async (obj) => {
                 const param = { groupId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
-                tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
+                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
             }))
             var tmparr: subject[] = []
-            tmparrarr.map((obj, i) => {
+            tmparrarr.map((obj) => {
                 tmparr = tmparr.concat(obj)
             })
             setSubjects(tmparr)
@@ -181,14 +179,14 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onSaveClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[10].id, "post", subject, undefined, Authorization))
+        await (request(RequestValue.value[11].id, "post", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
-        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
+        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
-        tmparrarr.map((obj, i) => {
+        tmparrarr.map((obj) => {
             tmparr = tmparr.concat(obj)
         })
         setSubjects(tmparr)
@@ -196,14 +194,14 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onDeleteClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[10].id, "delete", subject, undefined, Authorization))
+        await (request(RequestValue.value[11].id, "delete", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
-        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj, i) => {
+        await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
-        tmparrarr.map((obj, i) => {
+        tmparrarr.map((obj) => {
             tmparr = tmparr.concat(obj)
         })
         setSubjects(tmparr)
@@ -223,19 +221,19 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         </div>
                         <div>
                             <p>SubjectTypeId:</p>
-                            <div >
+                            <div>
                                 <Select className={classes.Select} options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>AccountId:</p>
-                            <div >
+                            <div>
                                 <Select className={classes.Select} options={accountsOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })} defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })} isClearable={true}></Select>
                             </div>
                         </div>
                         <div>
                             <p>Classroom:</p>
-                            <div >
+                            <div>
                                 <AdminInput onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
                             </div>
                         </div>
@@ -280,7 +278,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <tr>
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {props.dataArray.dayPositionArray?.map((obj, i) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
+                            {props.dataArray.dayPositionArray?.map((obj) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
                             </div></td>)}
                         </tr>
                         {props.dataArray.subjectPositionArray?.map((subjectPosition) =>

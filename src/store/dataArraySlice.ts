@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { course, dayPosition, department, discipline, group, subject, subjectPosition, subjectType, account, weekType } from '../types/AdminType';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { course, dayPosition, department, discipline, group, subject, subjectPosition, subjectType, account, weekType, role } from '../types/AdminType';
 
 type dataArrays = {
     subjectArray?: subject[],
@@ -10,6 +9,7 @@ type dataArrays = {
     weekTypeArray?: weekType[],
     subjectTypeArray?: subjectType[],
     accountArray?: account[],
+    roleArray?: role[],
     groupArray?: group[],
     courseArray?: course[],
     departmentArray?: department[]
@@ -23,6 +23,7 @@ const initialState:dataArrays = {
     weekTypeArray: undefined,
     subjectTypeArray: undefined,
     accountArray: undefined,
+    roleArray: undefined,
     groupArray: undefined,
     courseArray: undefined,
     departmentArray: undefined

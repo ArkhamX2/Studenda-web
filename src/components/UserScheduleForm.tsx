@@ -1,18 +1,14 @@
 import { FC, useEffect, useState } from 'react'
 import Select, { SingleValue } from 'react-select'
 import classes from '../styles/admin.module.css'
-import { course, department, group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
+import { group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
 import { RequestValue, request } from '../base/Request'
-import axios from 'axios'
 import Modal from './UI/modal/Modal';
-import { useAppDispatch } from '../hook'
 import store from '../store'
-import AdminButton from './UI/button/AdminButton';
 import { option } from '../types/OptionType';
 import useModal from './UI/modal/useModal';
 
 const AccountScheduleForm: FC = () => {
-    const dispatch = useAppDispatch()
     const { isOpen, toggle } = useModal()
 
     useEffect(() => {
@@ -36,7 +32,7 @@ const AccountScheduleForm: FC = () => {
 
     const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
         const tmparray: option[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj, i) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
+        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
         return tmparray
     }
 
@@ -65,13 +61,13 @@ const AccountScheduleForm: FC = () => {
             setDefaultAccountOption(value)
             setCurrentAccountId(value.value)
             var tmparrarr: subject[][] = []
-            await Promise.all(weekTypes?.map(async (obj, i) => {
+            await Promise.all(weekTypes?.map(async (obj) => {
                 const param = { accountId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
                 console.log(param)
-                tmparrarr.push(await request(RequestValue.value[10].id, "get", undefined, param, undefined, "/account?"))
+                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/account?"))
             }))
             var tmparr: subject[] = []
-            tmparrarr.map((obj, i) => {
+            tmparrarr.map((obj) => {
                 tmparr = tmparr.concat(obj)
             })
             setToggleVisibility(true)
@@ -170,7 +166,7 @@ const AccountScheduleForm: FC = () => {
                         <tr >
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
-                            {dayPositions?.map((obj, i) => <td className={classes.TableColumn}>{obj.name}</td>)}
+                            {dayPositions?.map((obj) => <td className={classes.TableColumn}>{obj.name}</td>)}
                         </tr>
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>

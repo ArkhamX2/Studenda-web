@@ -1,12 +1,10 @@
 import { FC, useState } from 'react'
-import LoginInput, { TextAlignEnum } from './UI/imput/LoginInput'
+import LoginInput, { TextAlignEnum } from './UI/input/LoginInput'
 import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
-import LoginLabel, { TextAlign } from './UI/label/LoginLabel'
+import LoginLabel from './UI/label/LoginLabel'
 import axios from 'axios'
-import { RequestValue, request } from '../base/Request'
 import { useAppDispatch } from '../hook'
 import { updateAccountInfo } from '../store/adminSlice'
-import store from '../store'
 
 const LoginForm: FC = () => {
     const dispatch = useAppDispatch()

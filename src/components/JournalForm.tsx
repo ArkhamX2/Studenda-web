@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import { COLORS } from '../styles/colors'
-import Select, { SingleValue } from 'react-select'
-import { account, discipline, group } from '../types/AdminType';
+import Select from 'react-select'
+import { account } from '../types/AdminType';
 import { option } from '../types/OptionType';
 import { useAppDispatch } from '../hook';
 import { RootState } from '../store';
@@ -97,7 +97,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <tr>
                             ФИО
                         </tr>
-                        {currentGroupAccounts.map((obj, i) => <tr><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.surname}{obj.name}{obj.patronymic}
+                        {currentGroupAccounts.map((obj) => <tr><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.surname}{obj.name}{obj.patronymic}
                         </div></tr>)}
                     </td>                  
                 </table>

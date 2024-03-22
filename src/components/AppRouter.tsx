@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { privateRoutes, publicRoutes } from '../router';
-import store, { RootState } from '../store';
-import { useState } from 'react';
+import { RootState } from '../store';
 import { ConnectedProps, connect } from 'react-redux'
 
 const mapState=(state:RootState)=>(

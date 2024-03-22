@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, HTMLInputTypeAttribute } from 'react'
+import { ChangeEventHandler, FC, HTMLInputTypeAttribute } from 'react'
 import classes from './LoginInput.module.css'
 export enum TextAlignEnum {
   left='left',

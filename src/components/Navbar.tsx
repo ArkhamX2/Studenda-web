@@ -1,6 +1,6 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import store, { RootState } from '../store'
+import { RootState } from '../store'
 import { ConnectedProps, connect } from 'react-redux'
 
 const mapState=(state:RootState)=>(

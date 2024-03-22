@@ -46,12 +46,12 @@ export type subjectType = {
 
 export type account = {
     id?: number, 
-    roleId: number,
-    groupId?: number,
-    identityId: string,
-    name?: string,
+    identityId: string,    
     surname?: string,
-    patronymic?: string
+    name?: string,
+    patronymic?: string,
+    roleId?: number,
+    groupId?: number,
 }
 
 export type group = {
@@ -72,9 +72,10 @@ export type department = {
     name: string
 }
 
-export type roleNames = {
-    studentRoleName: "Student",
-    leaderRoleName: "Leader",
-    teacherRoleName: "Teacher",
-    adminRoleName: "Admin"
+export type role = {
+    id?: number,
+    name: string,
+    permission: string,
+    tokenLifetimeSeconds: number,
+    canRegister: boolean
 }

@@ -5,7 +5,7 @@ export const ArrayToOptions = (array: any[] | undefined) => {
     if (array === undefined) {
         return tmparray
     }
-    array.map((obj, i) => (((!Object.keys(obj).includes("surname"))
+    array.map((obj) => (((!Object.keys(obj).includes("surname"))
         ?
         !Object.keys(obj).includes("grade")
             ?

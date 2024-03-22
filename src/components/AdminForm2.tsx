@@ -1,16 +1,11 @@
-import { FC, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import Selector from './UI/selector/Selector'
-import SearchBar from './UI/searchbar/SearchBar'
+import { FC, useEffect, useRef, useState } from 'react'
 import { useAppDispatch } from '../hook'
 import { COLORS } from '../styles/colors'
 import '../styles/admin.module.css'
-import LoginInput from './UI/imput/LoginInput'
-import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
-import store from '../store/'
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department,  } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role,  } from '../types/AdminType';
 import axios, { AxiosHeaders } from 'axios'
 import Modal from './UI/modal/Modal'
 import useModal from './UI/modal/useModal'
@@ -20,22 +15,13 @@ import { ObjectKey, updateDataArray } from '../store/dataArraySlice'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../store/index';
 import Select from 'react-select';
-import AdminInput from './UI/imput/AdminInput'
+import AdminInput from './UI/input/AdminInput'
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
-import { option } from '../types/OptionType'
 
 interface registerAccount extends account {
     email: string,
-    password: string,
-    roleNames: string[]
+    password: string
 }
-
-const RoleNames = [["Student"],
-                   ["Student","Leader"],
-                   ["Student","Leader","Teacher"],
-                   ["Student","Leader","Teacher","Admin"]]
-                   
-const roleNamesSelect:option[] = [{value: 0, label: "Student"},{value: 1, label: "Leader"},{value: 2, label: "Teacher"},{value: 3, label: "Admin"}]
 
 const mapState = (state: RootState) => (
     {
@@ -166,11 +152,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             case "account":
                 {
                     if (obj === undefined) {
-                        const tmpobj: registerAccount = { id: 0, email: "", password: "", roleNames: [""], groupId: undefined, identityId:"", name: undefined, surname: undefined, patronymic: undefined}
+                        const tmpobj: registerAccount = { id: 0, email: "", password: "", roleId: undefined, groupId: undefined, identityId:"", surname: undefined, name: undefined, patronymic: undefined}
                         setSelectedObject(tmpobj)
                     }
                     else {
-                        const tmpobj: account = { id: obj.id, groupId: obj.groupId, identityId:obj.identityId, name: obj.name, surname: obj.surname, patronymic: obj.patronymic }
+                        const tmpobj: account = { id: obj.id, roleId: undefined, groupId: obj.groupId, identityId:obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic }
                         setSelectedObject(tmpobj)
                     }
                     break;
@@ -211,6 +197,18 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     }
                     break;
                 }
+            case "role":
+                {
+                    if (obj === undefined) {
+                        const tmpobj: role = { id: 0, name: "", permission: "", tokenLifetimeSeconds: 0, canRegister: false }
+                        setSelectedObject(tmpobj)
+                    }
+                    else {
+                        const tmpobj: role = { id: 0, name: obj.name, permission: obj.permission, tokenLifetimeSeconds: obj.tokenLifetimeSeconds, canRegister: obj.canRegister }
+                        setSelectedObject(tmpobj)
+                    }
+                    break;
+                }
             default:
                 {
                     setSelectedObject({})
@@ -227,7 +225,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             await axios({
                 method: "post",
                 url: "http://88.210.3.137/api/security/register",
-                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, roleNames: (selectedObject as registerAccount).roleNames },
+                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password },
                 headers: new AxiosHeaders(Authorization)
             }).then
             (async (response)=>
@@ -260,7 +258,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 ?
                 <Modal isOpen={isOpen} toggle={toggle}>
                     <>
-                        {(Object.keys(selectedObject)).slice(1).map((key, y) => {
+                        {(Object.keys(selectedObject)).slice(1).map((key) => {
                             const options = ArrayToOptions(props.dataArray[key.replace("Id", "") + "Array" as ObjectKey])
                             return (
                                 <div>
@@ -282,26 +280,16 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                             }
                                         </>
                                         :
-                                        <>{key}:
-                                            {key.includes("roleNames")
-                                            ?
-                                                <>
-                                                <Select options={roleNamesSelect}
-                                                onChange={value => (selectedObject as any)[key] = RoleNames[value?.value!]}
-                                                ></Select>
-                                                </>
-                                            :
-                                                <>
-                                                    <AdminInput onChange={e =>
-                                                    (typeof (selectedObject as any)[key] === 'number'
-                                                        ?
-                                                        (selectedObject as any)[key] = Number(e.target.value)
-                                                        :
-                                                        (selectedObject as any)[key] = String(e.target.value))}
-                                                        defaultValue={(selectedObject as any)[key]}
-                                                    />
-                                                </>
-                                            }
+                                        <>
+                                            {key}:
+                                            <AdminInput onChange={e =>
+                                            (typeof (selectedObject as any)[key] === 'number'
+                                                ?
+                                                (selectedObject as any)[key] = Number(e.target.value)
+                                                :
+                                                (selectedObject as any)[key] = String(e.target.value))}
+                                                defaultValue={(selectedObject as any)[key]}
+                                            />
                                         </>
                                     }
                                 </div>
@@ -354,7 +342,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 forbiddenKeys={forbiddenKeys}
                                 />
                                 <tr>
-                                    {props.dataArray[dataKey]!.map((obj, i) =>
+                                    {props.dataArray[dataKey]!.map((obj) =>
                                         <AdminObjectValue 
                                         onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} 
                                         objectList={Object.entries(obj)}

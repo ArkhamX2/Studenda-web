@@ -1,6 +1,4 @@
 import JournalForm from '../components/JournalForm'
-import GroupSelectorForm from '../components/JournalForm'
-
 
 const Journal = () => {
     return (
