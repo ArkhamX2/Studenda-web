@@ -79,3 +79,11 @@ export type role = {
     tokenLifetimeSeconds: number,
     canRegister: boolean
 }
+
+export type security = {
+    defaultPermission: string,
+    leaderPermission: string,
+    teacherPermission: string,
+    adminPermission: string,
+    coordinatedUniversalTime: Date
+}

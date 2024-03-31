@@ -109,9 +109,9 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     useEffect(() => {
         setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group) => 
-        currentCourseId === undefined ? true : group.courseId === currentCourseId 
+        (currentCourseId === undefined ? true : group.courseId === currentCourseId)
         &&
-        currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId)))
+        (currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId))))
     }, [currentDepartmentId, currentCourseId])
 
     const groupOptionsOnChange = async (value: SingleValue<option>) => {

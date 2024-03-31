@@ -3,14 +3,14 @@ import Select, { SingleValue } from 'react-select'
 import classes from '../styles/admin.module.css'
 import { group, weekType, subjectPosition, dayPosition, subjectType, discipline, account, subject } from '../types/AdminType';
 import { RequestValue, request } from '../base/Request'
-import Modal from './UI/modal/Modal';
 import store from '../store'
 import { option } from '../types/OptionType';
-import useModal from './UI/modal/useModal';
+import { useAppDispatch } from '../hook';
+import { updateJournalData } from '../store/journalSlice';
 
 const AccountScheduleForm: FC = () => {
-    const { isOpen, toggle } = useModal()
-
+    const dispatch = useAppDispatch()
+    
     useEffect(() => {
         initialFunc()
     }, []);
@@ -42,7 +42,7 @@ const AccountScheduleForm: FC = () => {
         setDayPositions((await request(RequestValue.value[3].id, "get")).sort((a: dayPosition, b: dayPosition) => a.index - b.index))
         setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
-        setGroups(await request(RequestValue.value[8].id, "get"))        
+        setGroups(await request(RequestValue.value[7].id, "get"))        
         setAccountsOptions(await GetArrayToOptions(6))
         setCurrentAccountId(store.getState().admin.accountId)
     }
@@ -102,7 +102,7 @@ const AccountScheduleForm: FC = () => {
 
     const findSubject = (subjectPosition: subjectPosition, dayPosition: dayPosition, weekType: weekType) => {
         try {
-            return subjects.find((obj) => obj.subjectPositionId === subjectPosition.id && obj.dayPositionId === dayPosition.id && obj.weekTypeId === weekType.id)
+            return subjects.filter((obj) => obj.subjectPositionId === subjectPosition.id && obj.dayPositionId === dayPosition.id && obj.weekTypeId === weekType.id)
         } catch (error) {
 
         }
@@ -140,16 +140,13 @@ const AccountScheduleForm: FC = () => {
         }
     }
 
-    const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, subjects: subject[]) => {
         event.preventDefault()
-        toggle()
+        dispatch(updateJournalData({groupIds: subjects.map((subject)=>findGroup(subject.groupId)?.id!)}))
     }
     
     return (
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
-            <Modal isOpen={isOpen} toggle={toggle}>
-                
-            </Modal>
             <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Расписание</div>
                 <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
@@ -171,12 +168,12 @@ const AccountScheduleForm: FC = () => {
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
                                 <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subject !== undefined)
-                                            return (<div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e)}>
-                                                <tr>{findDiscipline(subject.disciplineId)?.name}<br/> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} {findGroup(subject.groupId)?.name}</tr>
-                                                
+                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subjects: subject[] | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subjects !== undefined && subjects[0] !== undefined)
+                                        {
+                                            return (<div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, subjects)}>
+                                                <tr onClick={()=>console.log(subjects.map((subject)=>findGroup(subject.groupId)?.name))}>{findDiscipline(subjects[0].disciplineId)?.name}<br/> {findSubjectType(subjects[0].subjectTypeId)?.name} {subjects[0].classroom} {subjects.map((subject)=><>{findGroup(subject.groupId)?.name}</>)}</tr>
                                             </div> );
-                                                
+                                        }                                                
                                         else return (<div className={classes.SubjectBox}>
                                             <tr></tr>
                                         </div>)

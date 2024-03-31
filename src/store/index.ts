@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import adminReducer from './adminSlice'
 import dataArrayReducer from './dataArraySlice';
+import journalDataReducer from './journalSlice'
 
 const store = configureStore({
     reducer: {
         admin: adminReducer,
-        dataArray: dataArrayReducer
+        dataArray: dataArrayReducer,
+        journal: journalDataReducer
     }
 })
 

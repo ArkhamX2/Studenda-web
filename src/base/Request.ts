@@ -1,7 +1,7 @@
 import axios from "axios"
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security, } from '../types/AdminType';
 import store from "../store";
-import { updateAccountInfo } from "../store/adminSlice";
+import { updateAccountData } from "../store/adminSlice";
 
 type info = {
     id: number,
@@ -21,12 +21,12 @@ export const RequestValue: IRequestValue = {
         { id: 3, name: "dayPosition", route: "api/schedule/day-position" },
         { id: 4, name: "weekType", route: "api/schedule/week-type" },
         { id: 5, name: "subjectType", route: "api/schedule/subject-type" },
-        { id: 6, name: "account", route: "api/security/account" },        
+        { id: 6, name: "account", route: "api/security/account" },
         { id: 7, name: "group", route: "api/group" },
         { id: 8, name: "role", route: "api/security/role" },
         { id: 9, name: "course", route: "api/course" },
         { id: 10, name: "department", route: "api/department" },
-        { id: 11, name: "schedule", route: "api/schedule/subject" },
+        { id: 11, name: "schedule", route: "api/schedule/subject" }
     ]
 }
 
@@ -49,74 +49,44 @@ export const request = async (RequestValueId: number, method: string, data: unde
                 switch (RequestValue.value[RequestValueId].name) {
                     case "discipline":
                         {
-                            const tmparr = [] as discipline[]
-                            const data = response.data as discipline[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }) })
-                            return (tmparr)
+                            return (response.data as discipline[]).map((obj) => { return ({ id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }) })
                         }
                     case "subjectPosition":
                         {
-                            const tmparr = [] as subjectPosition[]
-                            const data = response.data as subjectPosition[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, index: obj.index, startLabel: obj.startLabel, endLabel: obj.endLabel, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as subjectPosition[]).map((obj) => { return ({ id: obj.id, index: obj.index, startLabel: obj.startLabel, endLabel: obj.endLabel, name: obj.name }) })
                         }
                     case "dayPosition":
                         {
-                            const tmparr = [] as dayPosition[]
-                            const data = response.data as dayPosition[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, index: obj.index, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as dayPosition[]).map((obj) => { return ({ id: obj.id, index: obj.index, name: obj.name }) })
                         }
                     case "weekType":
                         {
-                            const tmparr = [] as weekType[]
-                            const data = response.data as weekType[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, index: obj.index, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as weekType[]).map((obj) => { return ({ id: obj.id, index: obj.index, name: obj.name }) })
                         }
                     case "subjectType":
                         {
-                            const tmparr = [] as subjectType[]
-                            const data = response.data as subjectType[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as subjectType[]).map((obj) => { return ({ id: obj.id, name: obj.name }) })
                         }
                     case "account":
                         {
-                            const tmparr = [] as account[]
-                            const data = response.data as account[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic, roleId:obj.roleId, groupId: obj.groupId }) })
-                            return (tmparr)
+                            return (response.data as account[]).map((obj) => { return ({ id: obj.id, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic, roleId: obj.roleId, groupId: obj.groupId }) })
                         }
                     case "group":
                         {
-                            const tmparr = [] as group[]
-                            const data = response.data as group[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, courseId: obj.courseId, departmentId: obj.departmentId, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as group[]).map((obj) => { return ({ id: obj.id, courseId: obj.courseId, departmentId: obj.departmentId, name: obj.name }) })
                         }
                     case "course":
                         {
-                            const tmparr = [] as course[]
-                            const data = response.data as course[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, grade: obj.grade, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as course[]).map((obj) => { return ({ id: obj.id, grade: obj.grade, name: obj.name }) })
                         }
                     case "department":
                         {
-                            const tmparr = [] as department[]
-                            const data = response.data as department[]
-                            data.map((obj) => { tmparr.push({ id: obj.id, name: obj.name }) })
-                            return (tmparr)
+                            return (response.data as department[]).map((obj) => { return ({ id: obj.id, name: obj.name }) })
                         }
                     case "role":
-                    {
-                        const tmparr = [] as role[]
-                        const data = response.data as role[]
-                        data.map((obj) => { tmparr.push({id: obj.id, name:obj.name, permission:obj.permission, tokenLifetimeSeconds:obj.tokenLifetimeSeconds, canRegister:obj.canRegister }) })
-                        return (tmparr)
-                    }
+                        {
+                            return (response.data as role[]).map((obj) => { return ({ id: obj.id, name: obj.name, permission: obj.permission, tokenLifetimeSeconds: obj.tokenLifetimeSeconds, canRegister: obj.canRegister }) })
+                        }
                     default:
                         {
                             return response.data
@@ -131,7 +101,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
     }
     catch (error) {
         console.error(error)
-        store.dispatch(updateAccountInfo({ token: "", accountId: 0 }))
+        store.dispatch(updateAccountData({ token: "", accountId: 0 }))
         return ([])
     }
 }

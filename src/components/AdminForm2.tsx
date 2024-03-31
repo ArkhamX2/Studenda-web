@@ -5,7 +5,7 @@ import '../styles/admin.module.css'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role,  } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security,  } from '../types/AdminType';
 import axios, { AxiosHeaders } from 'axios'
 import Modal from './UI/modal/Modal'
 import useModal from './UI/modal/useModal'
@@ -17,6 +17,7 @@ import { RootState } from '../store/index';
 import Select from 'react-select';
 import AdminInput from './UI/input/AdminInput'
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
+import { option } from '../types/OptionType'
 
 interface registerAccount extends account {
     email: string,
@@ -38,11 +39,15 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
     const Authorization: string = "Authorization: Bearer " + props.Token
 
-    const forbiddenKeys:string[]=["id","identityId"];
+    const forbiddenKeys: string[] = ["id", "identityId"];
 
     const [selectedButton, setSelectedButton] = useState(RequestValue.value[0].id)
     const [selectedObject, setSelectedObject] = useState<Object>()
     const [dataKey, setDataKey] = useState<ObjectKey>(RequestValue.value[0].name + "Array" as ObjectKey)
+    const [permissionOptions, setPermissionOptions] = useState<option[]>([{value: 1, label: "(response.data as security).defaultPermission"},
+        {value: 2, label: "(response.data as security).leaderPermission"},
+        {value: 3, label: "(response.data as security).teacherPermission"},
+        {value: 4, label: "(response.data as security).adminPermission"}])
     const { isOpen, toggle } = useModal()
     const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
 
@@ -87,153 +92,146 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         setSelectedButton(ButtonStateId)
     }
 
-    const onAddClick = (RequestValueId: number, obj: any | undefined = undefined) => {
+    const onAddClick = async (RequestValueId: number, obj: any | undefined = undefined) => {
+        var tmpobj: any;
         switch (RequestValue.value[RequestValueId].name) {
             case "discipline":
                 {
                     if (obj === undefined) {
-                        const tmpobj: discipline = { id: 0, accountId: 0, name: "", description: undefined }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as discipline) = { id: 0, accountId: 0, name: "", description: undefined }                        
                     }
                     else {
-                        const tmpobj: discipline = { id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as discipline) = { id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }
                     }
                     break;
                 }
             case "subjectPosition":
                 {
                     if (obj === undefined) {
-                        const tmpobj: subjectPosition = { id: 0, index: 0, startLabel: undefined, endLabel: undefined, name: undefined }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as subjectPosition) = { id: 0, index: 0, startLabel: undefined, endLabel: undefined, name: undefined }
                     }
                     else {
-                        const tmpobj: subjectPosition = { id: obj.id, index: obj.index, startLabel: obj.startLabel, endLabel: obj.endLabel, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as subjectPosition) = { id: obj.id, index: obj.index, startLabel: obj.startLabel, endLabel: obj.endLabel, name: obj.name }
                     }
                     break;
                 }
             case "dayPosition":
                 {
                     if (obj === undefined) {
-                        const tmpobj: dayPosition = { id: 0, index: 0, name: undefined }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as dayPosition) = { id: 0, index: 0, name: undefined }
                     }
                     else {
-                        const tmpobj: dayPosition = { id: obj.id, index: obj.index, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as dayPosition) = { id: obj.id, index: obj.index, name: obj.name }
                     }
                     break;
                 }
             case "weekType":
                 {
                     if (obj === undefined) {
-                        const tmpobj: weekType = { id: 0, index: 0, name: undefined }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as weekType) = { id: 0, index: 0, name: undefined }
                     }
                     else {
-                        const tmpobj: weekType = { id: obj.id, index: obj.index, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as weekType) = { id: obj.id, index: obj.index, name: obj.name }
                     }
                     break;
                 }
             case "subjectType":
                 {
                     if (obj === undefined) {
-                        const tmpobj: subjectType = { id: 0, name: "" }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as subjectType) = { id: 0, name: "" }
                     }
                     else {
-                        const tmpobj: subjectType = { id: obj.id, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as subjectType) = { id: obj.id, name: obj.name }
                     }
                     break;
                 }
             case "account":
                 {
                     if (obj === undefined) {
-                        const tmpobj: registerAccount = { id: 0, email: "", password: "", roleId: undefined, groupId: undefined, identityId:"", surname: undefined, name: undefined, patronymic: undefined}
-                        setSelectedObject(tmpobj)
+                        (tmpobj as registerAccount) = { id: 0, email: "", password: "", roleId: undefined, groupId: undefined, identityId: "", surname: undefined, name: undefined, patronymic: undefined }
                     }
                     else {
-                        const tmpobj: account = { id: obj.id, roleId: undefined, groupId: obj.groupId, identityId:obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as account) = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic }
                     }
                     break;
                 }
             case "group":
                 {
                     if (obj === undefined) {
-                        const tmpobj: group = { id: 0, courseId: 0, departmentId: 0, name: "" }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as group) = { id: 0, courseId: 0, departmentId: 0, name: "" }
                     }
                     else {
-                        const tmpobj: group = { id: obj.id, courseId: obj.courseId, departmentId: obj.departmentId, name: obj.name }
-                        setSelectedObject(tmpobj)
-                    }
+                        (tmpobj as group) = { id: obj.id, courseId: obj.courseId, departmentId: obj.departmentId, name: obj.name }
+                    }            
                     break;
                 }
             case "course":
                 {
                     if (obj === undefined) {
-                        const tmpobj: course = { id: 0, grade: 0, name: undefined }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as course) = { id: 0, grade: 0, name: undefined }
                     }
                     else {
-                        const tmpobj: course = { id: obj.id, grade: obj.grade, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as course) = { id: obj.id, grade: obj.grade, name: obj.name }
                     }
                     break;
                 }
             case "department":
                 {
                     if (obj === undefined) {
-                        const tmpobj: department = { id: 0, name: "" }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as department) = { id: 0, name: "" }
                     }
                     else {
-                        const tmpobj: department = { id: obj.id, name: obj.name }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as department) = { id: obj.id, name: obj.name }
                     }
                     break;
                 }
             case "role":
                 {
                     if (obj === undefined) {
-                        const tmpobj: role = { id: 0, name: "", permission: "", tokenLifetimeSeconds: 0, canRegister: false }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as role) = { id: 0, name: "", permission: "", tokenLifetimeSeconds: 0, canRegister: false }
                     }
                     else {
-                        const tmpobj: role = { id: 0, name: obj.name, permission: obj.permission, tokenLifetimeSeconds: obj.tokenLifetimeSeconds, canRegister: obj.canRegister }
-                        setSelectedObject(tmpobj)
+                        (tmpobj as role) = { id: obj.id, name: obj.name, permission: obj.permission, tokenLifetimeSeconds: obj.tokenLifetimeSeconds, canRegister: obj.canRegister }
                     }
+                    setPermissionOptions(await getSecurity())
                     break;
                 }
             default:
                 {
-                    setSelectedObject({})
+                    tmpobj = {}
                     break;
                 }
         }
+        setSelectedObject(tmpobj)
         toggle()
+    }
+
+    const getSecurity = async () => {
+        const response = await axios({
+            method: "get",
+            url: "http://88.210.3.137/api/security"
+        })
+        return ([{value: 1, label: (response.data as security).defaultPermission},
+            {value: 2, label: (response.data as security).leaderPermission},
+            {value: 3, label: (response.data as security).teacherPermission},
+            {value: 4, label: (response.data as security).adminPermission},
+        ])
     }
 
     const onSaveClick = async () => {
         toggle()
-        if (RequestValue.value[selectedButton].name==="account" && (selectedObject as registerAccount).email !== undefined)
-        {
+        if (RequestValue.value[selectedButton].name === "account" && (selectedObject as registerAccount).email !== undefined) {
             await axios({
                 method: "post",
-                url: "http://88.210.3.137/api/security/register",
-                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password },
+                url: "http://88.210.3.137/api/security/user",
+                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, account: {roleId: (selectedObject as account).roleId} },
                 headers: new AxiosHeaders(Authorization)
             }).then
-            (async (response)=>
-            await request(selectedButton, "post", { id: response.data.Account.Id, groupId: (selectedObject as registerAccount).groupId, identityId:response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
-            )
+                (async (response) =>
+                    await request(selectedButton, "post", { id: response.data.Account.Id, roleId:(selectedObject as account).roleId, groupId: (selectedObject as registerAccount).groupId, identityId: response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
+                )
         }
-        else
-        {
+        else {
             await request(selectedButton, "post", selectedObject, undefined, Authorization)
         }
         const requestValue = await request(selectedButton, "get")
@@ -266,30 +264,46 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         ?
                                         <>
                                             {key.includes("identityId")
-                                            ?
-                                            <></>
-                                            :
-                                            <>                                                                                                         
-                                            {key.replace("Id", "")}:  
-                                            <Select options={options}
-                                                onChange={value => (selectedObject as any)[key] = value?.value}
-                                                defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
-                                                isClearable={true}
-                                            ></Select>
-                                            </>
+                                                ?
+                                                <></>
+                                                :
+                                                <>
+                                                    {key.replace("Id", "")}:
+                                                    <Select options={options}
+                                                        onChange={value => (selectedObject as any)[key] = value?.value}
+                                                        defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
+                                                        isClearable={true}
+                                                    ></Select>
+                                                </>
                                             }
                                         </>
                                         :
                                         <>
                                             {key}:
-                                            <AdminInput onChange={e =>
-                                            (typeof (selectedObject as any)[key] === 'number'
+                                            {key.includes("permission")
                                                 ?
-                                                (selectedObject as any)[key] = Number(e.target.value)
+                                                <Select options={permissionOptions}                                                
+                                                        onChange={value => (selectedObject as any)[key] = value?.label}
+                                                        defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
+                                                        isClearable={true}
+                                                ></Select>
                                                 :
-                                                (selectedObject as any)[key] = String(e.target.value))}
-                                                defaultValue={(selectedObject as any)[key]}
-                                            />
+                                                <>
+                                                    {typeof (selectedObject as any)[key] === 'boolean'
+                                                        ?
+                                                        <input type="checkbox" defaultChecked={(selectedObject as any)[key]} onChange={e => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}></input>
+                                                        :
+                                                        <AdminInput onChange={e =>
+                                                        (typeof (selectedObject as any)[key] === 'number'
+                                                            ?
+                                                            (selectedObject as any)[key] = Number(e.target.value)
+                                                            :
+                                                            (selectedObject as any)[key] = String(e.target.value))}
+                                                            defaultValue={(selectedObject as any)[key]}
+                                                        />
+                                                    }
+                                                </>
+                                            }
                                         </>
                                     }
                                 </div>
@@ -316,7 +330,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
                     <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
-                    {[...Array(RequestValue.value.length - 2)].map((x, i) => {
+                    {[...Array(RequestValue.value.length - 3)].map((x, i) => {
                         const selectedButtonId = i + 1; return (
                             <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
                         )
@@ -336,17 +350,17 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid lightgray', padding: '5px' }}>
                         {(props.dataArray[dataKey] !== undefined && props.dataArray[dataKey]![0] !== undefined) ?
                             <table>
-                                <AdminSubject 
-                                itemList={(Object.keys(props.dataArray[dataKey]![0]))} 
-                                first={BorderType.firstElement} 
-                                forbiddenKeys={forbiddenKeys}
+                                <AdminSubject
+                                    itemList={(Object.keys(props.dataArray[dataKey]![0]))}
+                                    first={BorderType.firstElement}
+                                    forbiddenKeys={forbiddenKeys}
                                 />
                                 <tr>
                                     {props.dataArray[dataKey]!.map((obj) =>
-                                        <AdminObjectValue 
-                                        onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)} 
-                                        objectList={Object.entries(obj)}
-                                        forbiddenKeys={forbiddenKeys}
+                                        <AdminObjectValue
+                                            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)}
+                                            objectList={Object.entries(obj)}
+                                            forbiddenKeys={forbiddenKeys}
                                         />
                                     )}
                                 </tr>

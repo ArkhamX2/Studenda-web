@@ -4,7 +4,7 @@ import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import LoginLabel from './UI/label/LoginLabel'
 import axios from 'axios'
 import { useAppDispatch } from '../hook'
-import { updateAccountInfo } from '../store/adminSlice'
+import { updateAccountData } from '../store/adminSlice'
 
 const LoginForm: FC = () => {
     const dispatch = useAppDispatch()
@@ -19,7 +19,7 @@ const LoginForm: FC = () => {
                 url: url,
                 data: { email: loginInfo.login, password: loginInfo.password}
             })
-            dispatch(updateAccountInfo({token:response.data.Token,accountId:response.data.Account.Id}))
+            dispatch(updateAccountData({token:response.data.Token,accountId:response.data.Account.Id}))
         }
     }
     return (
