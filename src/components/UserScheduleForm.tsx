@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const AccountScheduleForm: FC = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    
+
     useEffect(() => {
         initialFunc()
     }, []);
@@ -34,7 +34,7 @@ const AccountScheduleForm: FC = () => {
 
     const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
         const tmparray: option[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj) => (tmparray.push({ value: obj.id!, label: ""+obj?.surname+" "+obj?.name+" "+obj?.patronymic})))
+        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj) => (tmparray.push({ value: obj.id!, label: "" + obj?.surname + " " + obj?.name + " " + obj?.patronymic })))
         return tmparray
     }
 
@@ -44,22 +44,21 @@ const AccountScheduleForm: FC = () => {
         setDayPositions((await request(RequestValue.value[3].id, "get")).sort((a: dayPosition, b: dayPosition) => a.index - b.index))
         setWeekTypes((await request(RequestValue.value[4].id, "get")).sort((a: weekType, b: weekType) => a.index - b.index))
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
-        setGroups(await request(RequestValue.value[7].id, "get"))        
+        setGroups(await request(RequestValue.value[7].id, "get"))
         setAccountsOptions(await GetArrayToOptions(6))
         setCurrentAccountId(store.getState().admin.accountId)
     }
 
     useEffect(() => {
         var accountOption = findAccountOption(currentAccountId)
-        if (accountOption!=undefined)
-        {
-            setDefaultAccountOption(accountOption) 
+        if (accountOption != undefined) {
+            setDefaultAccountOption(accountOption)
             accountOptionsOnChange(accountOption)
         }
     }, [accountOptions]);
 
     const accountOptionsOnChange = async (value: SingleValue<option>) => {
-        if (value !== null) {            
+        if (value !== null) {
             setDefaultAccountOption(value)
             setCurrentAccountId(value.value)
             var tmparrarr: subject[][] = []
@@ -144,16 +143,16 @@ const AccountScheduleForm: FC = () => {
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, subjects: subject[]) => {
         event.preventDefault()
-        dispatch(updateJournalData({disciplineName: findDiscipline(subjects[0].disciplineId)?.name!,groups: subjects.map((subject)=>findGroup(subject.groupId)!)}))
+        dispatch(updateJournalData({ disciplineName: findDiscipline(subjects[0].disciplineId)?.name!, groups: subjects.map((subject) => findGroup(subject.groupId)!) }))
         navigate("/journal")
     }
-    
+
     return (
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
-            <div style={{ width:'270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                <div style={{alignSelf:'start', fontSize:'22px', fontWeight:'600', margin:'5px'}}>Расписание</div>
-                <div style={{display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px' , borderLeft: '2px solid #8C2425', borderRadius:'5px', padding:'2px 5px', backgroundColor:'#F0EAE9', width:'100%'}}>
-                <div style={{width:'120px', alignSelf:'start', fontSize:'20px', fontWeight:'600', margin:'5px'}}>Пользователь:</div>
+            <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
+                <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Расписание</div>
+                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
+                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Пользователь:</div>
                     <Select options={accountOptions} value={defaultAccountOption} onChange={(value) => (accountOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
@@ -171,12 +170,20 @@ const AccountScheduleForm: FC = () => {
                         {subjectPositions?.map((subjectPosition) =>
                             <tr>
                                 <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {const subjects: subject[] | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subjects !== undefined && subjects[0] !== undefined)
-                                        {
+                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {
+                                        const subjects: subject[] | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subjects !== undefined && subjects[0] !== undefined) {
                                             return (<div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, subjects)}>
-                                                <tr onClick={()=>console.log(subjects.map((subject)=>findGroup(subject.groupId)?.name))}>{findDiscipline(subjects[0].disciplineId)?.name}<br/> {findSubjectType(subjects[0].subjectTypeId)?.name} {subjects[0].classroom} {subjects.map((subject)=><>{findGroup(subject.groupId)?.name}</>)}</tr>
-                                            </div> );
-                                        }                                                
+                                                <tr onClick={() => console.log(subjects.map((subject) => findGroup(subject.groupId)?.name))}>
+                                                    <div style={{ display: 'flex', flexDirection: 'row', width: '240px', justifyContent: 'space-between', padding: '1px' }}>
+                                                        <div style={{ fontSize: '16px' }}>{findDiscipline(subjects[0].disciplineId)?.name}</div>
+                                                        <div style={{ fontSize: '16px', color: 'rgba(27, 14, 23, 0.7)'}}>{findSubjectType(subjects[0].subjectTypeId)?.name}</div>
+                                                    </div>
+                                                    <div style={{ fontSize: '14px', width:'240px', color: 'rgba(27, 14, 23, 0.7)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding:'1px' }}>{subjects.map((subject) => <div style={{ justifyContent: 'space-between', color: 'rgba(27, 14, 23, 0.6)', display:'flex', flexDirection:'row' }}>
+                                                        <div style={{color: 'rgba(27, 14, 23, 0.7)'}}>{findGroup(subject.groupId)?.name}</div>
+                                                        <div style={{color: 'rgba(27, 14, 23, 0.7)'}}>{subjects[0].classroom}</div></div>)}</div>
+                                                </tr>
+                                            </div>);
+                                        }
                                         else return (<div className={classes.SubjectBox}>
                                             <tr></tr>
                                         </div>)
