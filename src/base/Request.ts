@@ -26,7 +26,11 @@ export const RequestValue: IRequestValue = {
         { id: 8, name: "role", route: "api/security/role" },
         { id: 9, name: "course", route: "api/course" },
         { id: 10, name: "department", route: "api/department" },
-        { id: 11, name: "schedule", route: "api/schedule/subject" }
+        { id: 11, name: "schedule", route: "api/schedule/subject" },
+        { id: 12, name: "task", route: "api/journal/task"},
+        { id: 13, name: "session", route: "api/journal/session"},
+        { id: 14, name: "mark", route: "api/journal/mark"},
+        { id: 15, name: "mark-type", route: "api/journal/mark-type"}
     ]
 }
 

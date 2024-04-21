@@ -7,8 +7,10 @@ import store from '../store'
 import { option } from '../types/OptionType';
 import { useAppDispatch } from '../hook';
 import { updateJournalData } from '../store/journalSlice';
+import { useNavigate } from 'react-router-dom';
 
 const AccountScheduleForm: FC = () => {
+    const navigate = useNavigate()
     const dispatch = useAppDispatch()
     
     useEffect(() => {
@@ -142,7 +144,8 @@ const AccountScheduleForm: FC = () => {
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, subjects: subject[]) => {
         event.preventDefault()
-        dispatch(updateJournalData({groupIds: subjects.map((subject)=>findGroup(subject.groupId)?.id!)}))
+        dispatch(updateJournalData({disciplineName: findDiscipline(subjects[0].disciplineId)?.name!,groups: subjects.map((subject)=>findGroup(subject.groupId)!)}))
+        navigate("/journal")
     }
     
     return (

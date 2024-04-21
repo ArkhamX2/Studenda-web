@@ -87,3 +87,26 @@ export type security = {
     adminPermission: string,
     coordinatedUniversalTime: Date
 }
+
+export type mark = {
+    markTypeId: number,
+    value: number
+}
+
+export type markType = {
+    name: string,
+    minValue: number,
+    maxValue: number
+}
+
+export type task = {
+    disciplineId: number,
+    subjectTypeId: number,
+    issuerAccountId: number,
+    assigneeAccountId: number,
+    markId: number,
+    name: string,
+    description?: string,
+    startedAt: Date,
+    endedAt: Date
+}
