@@ -30,7 +30,7 @@ export const RequestValue: IRequestValue = {
         { id: 12, name: "task", route: "api/journal/task"},
         { id: 13, name: "session", route: "api/journal/session"},
         { id: 14, name: "mark", route: "api/journal/mark"},
-        { id: 15, name: "mark-type", route: "api/journal/mark-type"}
+        { id: 15, name: "markType", route: "api/journal/mark-type"}
     ]
 }
 
