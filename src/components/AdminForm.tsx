@@ -120,7 +120,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             var tmparrarr: subject[][] = []
             await Promise.all(props.dataArray.weekTypeArray?.map(async (obj) => {
                 const param = { groupId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
-                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+                tmparrarr.push(await request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "get", undefined, param, undefined, "/group?"))
             }))
             var tmparr: subject[] = []
             tmparrarr.map((obj) => {
@@ -179,11 +179,11 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onSaveClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[11].id, "post", subject, undefined, Authorization))
+        await (request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "post", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
         await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
         tmparrarr.map((obj) => {
@@ -194,11 +194,11 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const onDeleteClick = async (subject: subject) => {
         toggle()
-        await (request(RequestValue.value[11].id, "delete", subject, undefined, Authorization))
+        await (request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "delete", subject, undefined, Authorization))
         var tmparrarr: subject[][] = []
         await Promise.all(props.dataArray.weekTypeArray!?.map(async (obj) => {
             const param = { groupId: currentGroupId, weekTypeId: obj.id, year: currentAcademicYear }
-            tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/group?"))
+            tmparrarr.push(await request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "get", undefined, param, undefined, "/group?"))
         }))
         var tmparr: subject[] = []
         tmparrarr.map((obj) => {

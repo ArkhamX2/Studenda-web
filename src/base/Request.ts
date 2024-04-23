@@ -1,5 +1,5 @@
 import axios from "axios"
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security, } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security, markType, task,  } from '../types/AdminType';
 import store from "../store";
 import { updateAccountData } from "../store/adminSlice";
 
@@ -26,11 +26,9 @@ export const RequestValue: IRequestValue = {
         { id: 8, name: "role", route: "api/security/role" },
         { id: 9, name: "course", route: "api/course" },
         { id: 10, name: "department", route: "api/department" },
-        { id: 11, name: "schedule", route: "api/schedule/subject" },
-        { id: 12, name: "task", route: "api/journal/task"},
-        { id: 13, name: "session", route: "api/journal/session"},
-        { id: 14, name: "mark", route: "api/journal/mark"},
-        { id: 15, name: "markType", route: "api/journal/mark-type"}
+        { id: 11, name: "markType", route: "api/journal/mark-type" },
+        { id: 12, name: "schedule", route: "api/schedule/subject" },
+        { id: 13, name: "task", route: "api/journal/task" },
     ]
 }
 
@@ -73,7 +71,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
                         }
                     case "account":
                         {
-                            return (response.data as account[]).map((obj) => { return ({ id: obj.id, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic, roleId: obj.roleId, groupId: obj.groupId }) })
+                            return (response.data as account[]).map((obj) => { return ({ id: obj.id, identityId: obj.identityId, email: obj.email, surname: obj.surname, name: obj.name, patronymic: obj.patronymic, roleId: obj.roleId, groupId: obj.groupId }) })
                         }
                     case "group":
                         {
@@ -90,6 +88,14 @@ export const request = async (RequestValueId: number, method: string, data: unde
                     case "role":
                         {
                             return (response.data as role[]).map((obj) => { return ({ id: obj.id, name: obj.name, permission: obj.permission, tokenLifetimeSeconds: obj.tokenLifetimeSeconds, canRegister: obj.canRegister }) })
+                        }
+                    case "markType":
+                        {
+                            return (response.data as markType[]).map((obj) => { return ({ id: obj.id, name: obj.name, minValue: obj.minValue, maxValue: obj.maxValue }) })
+                        }
+                    case "task":
+                        {
+                            return (response.data as task[]).map((obj) => { return ({ id: obj.id, disciplineId: obj.disciplineId, subjectTypeId: obj.subjectTypeId, issuerAccountId: obj.issuerAccountId, assigneeAccountId: obj.assigneeAccountId, markTypeId: obj.markTypeId, mark: obj.mark, name: obj.name, description: obj.description, startedAt: obj.startedAt, endedAt: obj.endedAt }) })
                         }
                     default:
                         {

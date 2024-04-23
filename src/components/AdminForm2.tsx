@@ -5,7 +5,7 @@ import '../styles/admin.module.css'
 import AdminSubject, { BorderType } from './UI/adminsubject/Subject'
 import MenuComponent from './UI/adminmenu/MenuComponent'
 import AdminButton from './UI/button/AdminButton'
-import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security,  } from '../types/AdminType';
+import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security, markType, } from '../types/AdminType';
 import axios, { AxiosHeaders } from 'axios'
 import Modal from './UI/modal/Modal'
 import useModal from './UI/modal/useModal'
@@ -21,7 +21,7 @@ import { option } from '../types/OptionType'
 
 interface registerAccount extends account {
     email: string,
-    password: string
+    password: string,
 }
 
 const mapState = (state: RootState) => (
@@ -39,15 +39,15 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
     const Authorization: string = "Authorization: Bearer " + props.Token
 
-    const forbiddenKeys: string[] = ["id", "identityId"];
+    const forbiddenKeys: string[] = ["id", "email", "identityId"];
 
     const [selectedButton, setSelectedButton] = useState(RequestValue.value[0].id)
     const [selectedObject, setSelectedObject] = useState<Object>()
     const [dataKey, setDataKey] = useState<ObjectKey>(RequestValue.value[0].name + "Array" as ObjectKey)
-    const [permissionOptions, setPermissionOptions] = useState<option[]>([{value: 1, label: "(response.data as security).defaultPermission"},
-        {value: 2, label: "(response.data as security).leaderPermission"},
-        {value: 3, label: "(response.data as security).teacherPermission"},
-        {value: 4, label: "(response.data as security).adminPermission"}])
+    const [permissionOptions, setPermissionOptions] = useState<option[]>([{ value: 1, label: "(response.data as security).defaultPermission" },
+    { value: 2, label: "(response.data as security).leaderPermission" },
+    { value: 3, label: "(response.data as security).teacherPermission" },
+    { value: 4, label: "(response.data as security).adminPermission" }])
     const { isOpen, toggle } = useModal()
     const hasPageBeenRendered = useRef({ effect1: false, effect2: false })
 
@@ -98,7 +98,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             case "discipline":
                 {
                     if (obj === undefined) {
-                        (tmpobj as discipline) = { id: 0, accountId: 0, name: "", description: undefined }                        
+                        (tmpobj as discipline) = { id: 0, accountId: 0, name: "", description: undefined }
                     }
                     else {
                         (tmpobj as discipline) = { id: obj.id, accountId: obj.accountId, name: obj.name, description: obj.description }
@@ -151,7 +151,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         (tmpobj as registerAccount) = { id: 0, email: "", password: "", roleId: undefined, groupId: undefined, identityId: "", surname: undefined, name: undefined, patronymic: undefined }
                     }
                     else {
-                        (tmpobj as account) = { id: obj.id, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic }
+                        (tmpobj as account) = { id: obj.id, email: obj.email, roleId: obj.roleId, groupId: obj.groupId, identityId: obj.identityId, surname: obj.surname, name: obj.name, patronymic: obj.patronymic }
                     }
                     break;
                 }
@@ -162,7 +162,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     }
                     else {
                         (tmpobj as group) = { id: obj.id, courseId: obj.courseId, departmentId: obj.departmentId, name: obj.name }
-                    }            
+                    }
                     break;
                 }
             case "course":
@@ -196,6 +196,16 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     setPermissionOptions(await getSecurity())
                     break;
                 }
+            case "markType":
+                {
+                    if (obj === undefined) {
+                        (tmpobj as markType) = { id: 0, name: "", minValue: 0, maxValue: 0 }
+                    }
+                    else {
+                        (tmpobj as markType) = { id: obj.id, name: obj.name, minValue: obj.minValue, maxValue: obj.maxValue }
+                    }
+                    break;
+                }
             default:
                 {
                     tmpobj = {}
@@ -211,24 +221,24 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             method: "get",
             url: "http://88.210.3.137/api/security"
         })
-        return ([{value: 1, label: (response.data as security).defaultPermission},
-            {value: 2, label: (response.data as security).leaderPermission},
-            {value: 3, label: (response.data as security).teacherPermission},
-            {value: 4, label: (response.data as security).adminPermission},
+        return ([{ value: 1, label: (response.data as security).defaultPermission },
+        { value: 2, label: (response.data as security).leaderPermission },
+        { value: 3, label: (response.data as security).teacherPermission },
+        { value: 4, label: (response.data as security).adminPermission },
         ])
     }
 
     const onSaveClick = async () => {
         toggle()
-        if (RequestValue.value[selectedButton].name === "account" && (selectedObject as registerAccount).email !== undefined) {
+        if (RequestValue.value[selectedButton].name === "account" && (selectedObject as registerAccount).password !== undefined) {
             await axios({
                 method: "post",
                 url: "http://88.210.3.137/api/security/user",
-                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, account: {roleId: (selectedObject as account).roleId} },
+                data: { email: (selectedObject as registerAccount).email, password: (selectedObject as registerAccount).password, account: { email: (selectedObject as registerAccount).email, roleId: (selectedObject as account).roleId } },
                 headers: new AxiosHeaders(Authorization)
             }).then
                 (async (response) =>
-                    await request(selectedButton, "post", { id: response.data.Account.Id, roleId:(selectedObject as account).roleId, groupId: (selectedObject as registerAccount).groupId, identityId: response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
+                    await request(selectedButton, "post", { id: response.data.Account.Id, email: (selectedObject as registerAccount).email, roleId: (selectedObject as account).roleId, groupId: (selectedObject as registerAccount).groupId, identityId: response.data.Account.IdentityId, name: (selectedObject as registerAccount).name, surname: (selectedObject as registerAccount).surname, patronymic: (selectedObject as registerAccount).patronymic }, undefined, Authorization)
                 )
         }
         else {
@@ -279,31 +289,33 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         </>
                                         :
                                         <>
-                                            {key}:
-                                            {key.includes("permission")
-                                                ?
-                                                <Select options={permissionOptions}                                                
+                                            <>
+                                                {key}:
+                                                {key.includes("permission")
+                                                    ?
+                                                    <Select options={permissionOptions}
                                                         onChange={value => (selectedObject as any)[key] = value?.label}
                                                         defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                ></Select>
-                                                :
-                                                <>
-                                                    {typeof (selectedObject as any)[key] === 'boolean'
-                                                        ?
-                                                        <input type="checkbox" defaultChecked={(selectedObject as any)[key]} onChange={e => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}></input>
-                                                        :
-                                                        <AdminInput onChange={e =>
-                                                        (typeof (selectedObject as any)[key] === 'number'
+                                                    ></Select>
+                                                    :
+                                                    <>
+                                                        {typeof (selectedObject as any)[key] === 'boolean'
                                                             ?
-                                                            (selectedObject as any)[key] = Number(e.target.value)
+                                                            <input type="checkbox" defaultChecked={(selectedObject as any)[key]} onChange={e => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}></input>
                                                             :
-                                                            (selectedObject as any)[key] = String(e.target.value))}
-                                                            defaultValue={(selectedObject as any)[key]}
-                                                        />
-                                                    }
-                                                </>
-                                            }
+                                                            <AdminInput onChange={e =>
+                                                            (typeof (selectedObject as any)[key] === 'number'
+                                                                ?
+                                                                (selectedObject as any)[key] = Number(e.target.value)
+                                                                :
+                                                                (selectedObject as any)[key] = String(e.target.value))}
+                                                                defaultValue={(selectedObject as any)[key]}
+                                                            />
+                                                        }
+                                                    </>
+                                                }
+                                            </>
                                         </>
                                     }
                                 </div>
@@ -330,7 +342,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
                     <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
-                    {[...Array(RequestValue.value.length - (RequestValue.value.length - (RequestValue.value.find((value)=>value.name=="schedule")?.id!))-1)].map((x, i) => {
+                    {[...Array(RequestValue.value.length - (RequestValue.value.length - (RequestValue.value.find((value) => value.name == "schedule")?.id!)) - 1)].map((x, i) => {
                         const selectedButtonId = i + 1; return (
                             <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
                         )

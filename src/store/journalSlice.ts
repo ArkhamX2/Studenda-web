@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { group, discipline } from '../types/AdminType';
+import { group, discipline, subject } from '../types/AdminType';
 
-const initialState:journalData = {disciplineName: "", groups: []}
+const initialState:journalData = {disciplineName: "", groups: [], subject: undefined}
 
 type journalData = {
-    disciplineName: string
-    groups: group[]
+    disciplineName?: string
+    groups?: group[]
+    subject?: subject
 }
 
 const journalSlice = createSlice({
@@ -16,6 +17,7 @@ const journalSlice = createSlice({
         {
             state.groups=action.payload.groups
             state.disciplineName=action.payload.disciplineName
+            state.subject=action.payload.subject
         }
     },    
     extraReducers: (builder) => {

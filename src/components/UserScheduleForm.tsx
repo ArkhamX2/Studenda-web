@@ -65,7 +65,7 @@ const AccountScheduleForm: FC = () => {
             await Promise.all(weekTypes?.map(async (obj) => {
                 const param = { accountId: value.value, weekTypeId: obj.id, year: currentAcademicYear }
                 console.log(param)
-                tmparrarr.push(await request(RequestValue.value[11].id, "get", undefined, param, undefined, "/account?"))
+                tmparrarr.push(await request(RequestValue.value.find((value) => value.name == "schedule")?.id!, "get", undefined, param, undefined, "/account?"))
             }))
             var tmparr: subject[] = []
             tmparrarr.map((obj) => {
@@ -143,7 +143,7 @@ const AccountScheduleForm: FC = () => {
 
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, subjects: subject[]) => {
         event.preventDefault()
-        dispatch(updateJournalData({ disciplineName: findDiscipline(subjects[0].disciplineId)?.name!, groups: subjects.map((subject) => findGroup(subject.groupId)!) }))
+        dispatch(updateJournalData({ disciplineName: findDiscipline(subjects[0].disciplineId)?.name!, groups: subjects.map((subject) => findGroup(subject.groupId)!), subject: subjects[0] }))
         navigate("/journal")
     }
 

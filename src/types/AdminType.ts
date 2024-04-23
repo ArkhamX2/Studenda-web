@@ -46,6 +46,7 @@ export type subjectType = {
 
 export type account = {
     id?: number, 
+    email: string,
     identityId: string,    
     surname?: string,
     name?: string,
@@ -88,25 +89,23 @@ export type security = {
     coordinatedUniversalTime: Date
 }
 
-export type mark = {
-    markTypeId: number,
-    value: number
-}
-
 export type markType = {
+    id?: number,
     name: string,
     minValue: number,
     maxValue: number
 }
 
 export type task = {
+    id?: number,
     disciplineId: number,
     subjectTypeId: number,
     issuerAccountId: number,
     assigneeAccountId: number,
-    markId: number,
+    markTypeId: number,
+    mark?: number,
     name: string,
     description?: string,
-    startedAt: Date,
-    endedAt: Date
+    startedAt: string,
+    endedAt: string
 }
