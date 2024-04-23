@@ -7,10 +7,10 @@ import AccountSchedule from "../pages/userSchedulePage"
 export const privateRoutes = [    
     {path: '/admin', element: Admin},
     {path: '/admin2', element: Admin2}, 
+    {path: '/userSchedule', element: AccountSchedule},
+    {path: '/journal', element: Journal}
 ]
 
 export const publicRoutes = [
     {path: '/login', element: Login},      
-    {path: '/userSchedule', element: AccountSchedule},
-    {path: '/journal', element: Journal}
 ]
