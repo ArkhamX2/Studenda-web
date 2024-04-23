@@ -13,6 +13,7 @@ import Modal from './UI/modal/Modal';
 import useModal from './UI/modal/useModal';
 import axios, { AxiosHeaders } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import classes from '../styles/admin.module.css'
 
 const mapState = (state: RootState) => (
     {
@@ -317,9 +318,9 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 }}>
                     {currentGroupAccounts != undefined && currentGroupAccounts[0] != undefined
                         ?
-                        <table>
-                            <td>
-                                <tr>
+                        <table className={classes.AdminTable}>
+                            <td className={classes.TableColumn}>
+                                <tr >
                                     №
                                 </tr>
                                 {currentGroupAccounts.map((obj, i) =>
@@ -328,18 +329,18 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         </div>
                                     </tr>)}
                             </td>
-                            <td>
+                            <td className={classes.TableColumn}>
                                 <tr>
                                     ФИО
                                 </tr>
                                 {currentGroupAccounts.map((obj) =>
-                                    <tr>
+                                    <tr >
                                         <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.surname} {obj.name} {obj.patronymic}
                                         </div>
                                     </tr>)}
                             </td>
                             {tasks?.map((task) =>
-                                <td>
+                                <td className={classes.TableColumn}>
                                     <button onClick={() => deleteTasks(task)}>Удалить</button>
                                     <tr>
                                         {task[0].startedAt} {task[0].name}
@@ -361,7 +362,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     })}
                                 </td>
                             )}
-                            <td>
+                            <td className={classes.TableColumn}>
                                 <button onClick={() => addTaskClick()}>Добавить</button>
                             </td>
                         </table>
