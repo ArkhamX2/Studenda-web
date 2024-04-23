@@ -341,7 +341,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px',
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
-                    <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
+                    <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Администрирование</div>
                     {[...Array(RequestValue.value.length - (RequestValue.value.length - (RequestValue.value.find((value) => value.name == "schedule")?.id!)) - 1)].map((x, i) => {
                         const selectedButtonId = i + 1; return (
                             <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
