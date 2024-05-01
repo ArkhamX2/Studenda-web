@@ -6,6 +6,7 @@ import { updateAccountData } from "../store/adminSlice";
 type info = {
     id: number,
     name: string,
+    altName?: string,
     route: string
 }
 
@@ -16,19 +17,19 @@ interface IRequestValue {
 export const RequestValue: IRequestValue = {
     value: [
         { id: 0, name: "default", route: "" },
-        { id: 1, name: "discipline", route: "api/schedule/discipline" },
-        { id: 2, name: "subjectPosition", route: "api/schedule/subject-position" },
-        { id: 3, name: "dayPosition", route: "api/schedule/day-position" },
-        { id: 4, name: "weekType", route: "api/schedule/week-type" },
-        { id: 5, name: "subjectType", route: "api/schedule/subject-type" },
-        { id: 6, name: "account", route: "api/security/account" },
-        { id: 7, name: "group", route: "api/group" },
-        { id: 8, name: "role", route: "api/security/role" },
-        { id: 9, name: "course", route: "api/course" },
-        { id: 10, name: "department", route: "api/department" },
-        { id: 11, name: "markType", route: "api/journal/mark-type" },
-        { id: 12, name: "schedule", route: "api/schedule/subject" },
-        { id: 13, name: "task", route: "api/journal/task" },
+        { id: 1, name: "discipline", altName: "дисциплины", route: "api/schedule/discipline" },
+        { id: 2, name: "subjectPosition", altName: "дни недели", route: "api/schedule/subject-position" },
+        { id: 3, name: "dayPosition", altName: "номера пар", route: "api/schedule/day-position" },
+        { id: 4, name: "weekType", altName: "типы недель", route: "api/schedule/week-type" },
+        { id: 5, name: "subjectType", altName: "типы занятий", route: "api/schedule/subject-type" },
+        { id: 6, name: "account", altName: "пользователи", route: "api/security/account" },
+        { id: 7, name: "group", altName: "группы", route: "api/group" },
+        { id: 8, name: "role", altName: "роли", route: "api/security/role" },
+        { id: 9, name: "course", altName: "курсы", route: "api/course" },
+        { id: 10, name: "department", altName: "факультеты", route: "api/department" },
+        { id: 11, name: "markType", altName: "типы оценок", route: "api/journal/mark-type" },
+        { id: 12, name: "schedule", altName: "расписание", route: "api/schedule/subject" },
+        { id: 13, name: "task", altName: "задания", route: "api/journal/task" },
     ]
 }
 
@@ -38,7 +39,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
             if (method === "delete" && data !== undefined) {
                 data = data.id
             }
-            const url = "http://127.0.0.1:80/" + RequestValue.value[RequestValueId].route + additionalInfo
+            const url = "http://localhost:5255/" + RequestValue.value[RequestValueId].route + additionalInfo
             const response = await axios({
                 method: method,
                 url: url,

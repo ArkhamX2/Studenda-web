@@ -18,6 +18,7 @@ import Select from 'react-select';
 import AdminInput from './UI/input/AdminInput'
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
 import { option } from '../types/OptionType'
+import { translation } from '../base/translation'
 
 interface registerAccount extends account {
     email: string,
@@ -278,7 +279,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 <></>
                                                 :
                                                 <>
-                                                    {key.replace("Id", "")}:
+                                                    {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
                                                     <Select options={options}
                                                         onChange={value => (selectedObject as any)[key] = value?.value}
                                                         defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
@@ -290,7 +291,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         :
                                         <>
                                             <>
-                                                {key}:
+                                                {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
                                                 {key.includes("permission")
                                                     ?
                                                     <Select options={permissionOptions}
@@ -338,34 +339,46 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
             <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
                 <div style={{
-                    display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px',
+                    display: 'flex', flexDirection: 'column', border: '3px solid #490514', margin: '5px',
                     backgroundColor: '#F7F3F3', borderRadius: '5px'
                 }}>
-                    <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Администрирование</div>
-                    {[...Array(RequestValue.value.length - (RequestValue.value.length - (RequestValue.value.find((value) => value.name == "schedule")?.id!)) - 1)].map((x, i) => {
-                        const selectedButtonId = i + 1; return (
-                            <MenuComponent text={RequestValue.value[selectedButtonId].name} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
-                        )
-                    }
-                    )}
+                    <div>Кнопочки тут будут</div>
+                    <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '10px' }}>Режим администратора</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', margin: '10px', overflowY: 'auto', whiteSpace: 'nowrap', flexGrow: '1', scrollbarColor: COLORS.red3, }}>
+                        {[...Array(RequestValue.value.length - (RequestValue.value.length - (RequestValue.value.find((value) => value.name == "schedule")?.id!)) - 1)].map((x, i) => {
+                            const selectedButtonId = i + 1; return (
+                                <MenuComponent text={RequestValue.value[selectedButtonId].altName?.toUpperCase()} onClick={() => onMenuComponentClick(RequestValue.value[selectedButtonId].id)}></MenuComponent>
+                            )
+                        }
+                        )}
+                    </div>
                 </div>
                 <div style={{
-                    width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
-                    backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3, flexDirection: 'row'
+                    width: '80%', border: '3px solid #490514', margin: '5px', display: 'flex',
+                    backgroundColor: '#F7F3F3', borderRadius: '5px', flexDirection: 'column'
                 }}>
-                    <div style={{ display: 'flex' }}>
-                        <div style={{ display: 'flex', width: '20%', alignSelf: 'center', justifySelf: 'flex-end' }}>
-                            <label>{RequestValue.value[selectedButton].name}</label>
-                            <button onClick={() => onAddClick(selectedButton)}>Добавить</button>
+                    <div style={{ display: 'flex', height: '80px', margin: '0px 13px', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', border: '2px solid #490514', borderRadius: '5px', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '200px' }}>
+                            <div>
+                                <label>Фильтр</label>
+                                <label>Найти...</label>
+                            </div>
+                            <div>
+                                <label>Лупа</label>
+                            </div>
+                        </div>
+                        <div >
+                            <button style={{ border: '1px solid #490514', borderBottom: '2px solid #490514', padding: '20px', borderRadius: '4px', width: '150px' }} onClick={() => onAddClick(selectedButton)}><label style={{ fontWeight: '600' }}>ДОБАВИТЬ</label></button>
                         </div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', border: '1px solid lightgray', padding: '5px' }}>
-                        {(props.dataArray[dataKey] !== undefined && props.dataArray[dataKey]![0] !== undefined) ?
-                            <table>
+                    <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap', flexGrow: '1', scrollbarColor: COLORS.red3, flexDirection: 'column', border: '1px solid lightgray' }}>
+                        {(props.dataArray[dataKey] !== undefined && props.dataArray[dataKey]![0] !== undefined && translation.get(RequestValue.value[selectedButton].name) !== undefined) ?
+                            <table style={{ borderCollapse: 'collapse' }}>
                                 <AdminSubject
                                     itemList={(Object.keys(props.dataArray[dataKey]![0]))}
                                     first={BorderType.firstElement}
                                     forbiddenKeys={forbiddenKeys}
+                                    translationDTO={translation.get(RequestValue.value[selectedButton].name)!}
                                 />
                                 <tr>
                                     {props.dataArray[dataKey]!.map((obj) =>
@@ -378,8 +391,9 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 </tr>
                             </table>
                             :
-                            <>
-                            </>
+                            <p>
+                                Этот список пуст
+                            </p>
                         }
                     </div>
 

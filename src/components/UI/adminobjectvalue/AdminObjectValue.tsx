@@ -25,14 +25,18 @@ const AdminObjectValue: FC<subjectProps> = ({
                 <>
                     {objectList.filter((val) => !forbiddenKeys.find((forbiddenKeyName) => forbiddenKeyName === val[0])).map((value: any) =>
                         <>
-                            <div className={classes.Subject} style={{ border: first === BorderType.firstElement ? '1px solid #8C2425' : '1px solid #B5999F', fontSize: first === BorderType.firstElement ? '20px' : '16px', fontWeight: first === BorderType.firstElement ? '600' : '500' }}>{value[1]}</div>
+                            <td className={classes.tableDefContainer} style={{
+                                border: first === BorderType.firstElement ? '1px solid #8C2425' : '1px solid #B5999F', fontSize: first === BorderType.firstElement ? '20px' : '16px', fontWeight: first === BorderType.firstElement ? '600' : '500'
+                            }}>
+                                {value[1]}
+                            </td >
                         </>
                     )}
                 </>
                 :
                 <>
                 </>}
-        </tr>
+        </tr >
     )
 }
 

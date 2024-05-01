@@ -11,10 +11,11 @@ interface subjectProps{
     itemList?: any[];
     first?: BorderType;
     forbiddenKeys: string[];
+    translationDTO: Map<string, string>;
 }
 
 const AdminSubject: FC<subjectProps> = ({
-        itemList, first, forbiddenKeys
+        itemList, first, forbiddenKeys, translationDTO
 }) => {
 
     return (
@@ -24,7 +25,7 @@ const AdminSubject: FC<subjectProps> = ({
             <>          
                 {itemList.filter((keyName) => !forbiddenKeys.find((forbiddenKeyName)=>forbiddenKeyName===keyName)).map((item)=>
                 <>
-                    <div className={classes.Subject} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '20px' : '16px', fontWeight: first===BorderType.firstElement ? '600' : '500'}}>{item}</div>
+                    <td className={classes.tableDefContainer} style={{border: first===BorderType.firstElement ? '1px solid #8C2425': '1px solid #B5999F',  fontSize: first===BorderType.firstElement ? '20px' : '16px', fontWeight: first===BorderType.firstElement ? '600' : '500'}}>{translationDTO!.get(item)}</td>
                 </>
                 )}
             </>

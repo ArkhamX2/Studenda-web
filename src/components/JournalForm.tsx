@@ -63,8 +63,8 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const initialFunc = async () => {
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
         setAccounts((await request(RequestValue.value[6].id, "get") as account[]).sort((a, b) => {
-            const nameA = a.patronymic!.toUpperCase();
-            const nameB = b.patronymic!.toUpperCase();
+            const nameA = a.surname!.toUpperCase();
+            const nameB = b.surname!.toUpperCase();
             if (nameA < nameB) {
                 return -1;
             }
@@ -150,8 +150,8 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
         tmpTasks.map((task) => {
             task.sort((a, b) => {
-                const nameA = accounts?.find((account) => account.id == a.assigneeAccountId)?.patronymic!
-                const nameB = accounts?.find((account) => account.id == b.assigneeAccountId)?.patronymic!
+                const nameA = accounts?.find((account) => account.id == a.assigneeAccountId)?.surname!
+                const nameB = accounts?.find((account) => account.id == b.assigneeAccountId)?.surname!
                 if (nameA < nameB) {
                     return -1;
                 }

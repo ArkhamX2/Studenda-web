@@ -38,3 +38,9 @@
         .Font{
                 font-size: 32px;
         }
+        .tableDefContainer{border: 1px solid var(--ad-border);
+                padding: 12px;
+                width: 100%;
+                word-break: break-word;
+                white-space: break-spaces;
+        }
