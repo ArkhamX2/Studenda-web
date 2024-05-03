@@ -13,7 +13,7 @@ const LoginForm: FC = () => {
     const LoginClick = async () => {
         if (loginInfo.login != "" && loginInfo.password != "")
         {
-            const url = "http://localhost:5255/api/security/login"
+            const url = "http://88.210.3.137/api/security/login"
             const response = await axios({
                 method: "post",
                 url: url,

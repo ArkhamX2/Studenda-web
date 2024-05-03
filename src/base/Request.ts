@@ -39,7 +39,7 @@ export const request = async (RequestValueId: number, method: string, data: unde
             if (method === "delete" && data !== undefined) {
                 data = data.id
             }
-            const url = "http://localhost:5255/" + RequestValue.value[RequestValueId].route + additionalInfo
+            const url = "http://88.210.3.137/" + RequestValue.value[RequestValueId].route + additionalInfo
             const response = await axios({
                 method: method,
                 url: url,
