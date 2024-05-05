@@ -1,5 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react'
-import Select, { SingleValue } from 'react-select'
+import { FC, SetStateAction, useEffect, useState } from 'react'
 import { COLORS } from '../styles/colors'
 import classes from '../styles/admin.module.css'
 import { weekType, subjectPosition, dayPosition, subject } from '../types/AdminType';
@@ -14,6 +13,8 @@ import { ConnectedProps, connect } from 'react-redux';
 import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter';
 import { option } from '../types/OptionType';
+import { SingleValue } from 'react-select';
+import StudendaSelect from './UI/select/StudendaSelect';
 
 const mapState = (state: RootState) => (
     {
@@ -108,10 +109,10 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     }, [props.dataArray.disciplineArray])
 
     useEffect(() => {
-        setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group) => 
-        (currentCourseId === undefined ? true : group.courseId === currentCourseId)
-        &&
-        (currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId))))
+        setGroupOptions(ArrayToOptions(props.dataArray.groupArray?.filter((group) =>
+            (currentCourseId === undefined ? true : group.courseId === currentCourseId)
+            &&
+            (currentDepartmentId === undefined ? true : group.departmentId === currentDepartmentId))))
     }, [currentDepartmentId, currentCourseId])
 
     const groupOptionsOnChange = async (value: SingleValue<option>) => {
@@ -216,19 +217,27 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <div>
                             <p>DisciplineId:</p>
                             <div>
-                                <Select className={classes.Select} options={disciplinesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></Select>
+                                <StudendaSelect options={disciplinesOptions} onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></StudendaSelect>
                             </div>
                         </div>
                         <div>
                             <p>SubjectTypeId:</p>
                             <div>
-                                <Select className={classes.Select} options={subjectTypesOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })} defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })} isClearable={true}></Select>
+                                <StudendaSelect
+                                    options={subjectTypesOptions}
+                                    onChange={(value: { value: number | undefined; }) => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })}
+                                    defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })}
+                                    isClearable={true}></StudendaSelect>
                             </div>
                         </div>
                         <div>
                             <p>AccountId:</p>
                             <div>
-                                <Select className={classes.Select} options={accountsOptions} onChange={value => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })} defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })} isClearable={true}></Select>
+                                <StudendaSelect
+                                    options={accountsOptions}
+                                    onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })}
+                                    defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })}
+                                    isClearable={true}></StudendaSelect>
                             </div>
                         </div>
                         <div>
@@ -257,15 +266,21 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Факультет</div>
-                    <Select options={departmentOptions} onChange={(value) => (setCurrentDepartmentId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    
+                    <StudendaSelect
+                        options={departmentOptions}
+                        onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentDepartmentId(value?.value))}
+                        isClearable={true}
+                        noOptionsMessage={() => noOptionsText}
+                    />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Курс</div>
-                    <Select options={courseOptions} onChange={(value) => (setCurrentCourseId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <StudendaSelect options={courseOptions} onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentCourseId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа</div>
-                    <Select options={groupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <StudendaSelect options={groupOptions} onChange={(value: any) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
                 </div>
             </div>
             <div style={{

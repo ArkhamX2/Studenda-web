@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import classes from './Subject.module.css'
-import { Style } from 'util';
 
 export enum BorderType {
     firstElement = 'outlined',
