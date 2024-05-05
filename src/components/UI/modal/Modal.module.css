@@ -14,11 +14,10 @@
   }
   
   .modalbox {
-    display: block;
+    display: flex;
+    flex-direction: column;
     background: #F8F5F5;
-    width: 500px;
     min-height: 320px;
-    max-height: 580px;
     padding: 12px;
     border-radius: 1rem;
     border: 2px solid #490514;

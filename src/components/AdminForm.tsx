@@ -214,48 +214,33 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 {selectedSubject !== undefined
                     ?
                     <>
-                        <div>
-                            <p>DisciplineId:</p>
-                            <div>
-                                <StudendaSelect options={disciplinesOptions} onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></StudendaSelect>
+                        <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
+                            <p style={{ textAlign: 'center', fontSize: '20px', fontWeight: '600' }}>РЕДАКТИРОВАНИЕ</p>
+                            <StudendaSelect title="Дисциплина" options={disciplinesOptions} onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></StudendaSelect>
+                            <StudendaSelect title="Тип занятия"
+                                options={subjectTypesOptions}
+                                onChange={(value: { value: number | undefined; }) => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })}
+                                defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })}
+                                isClearable={true}></StudendaSelect>
+                            <StudendaSelect
+                                title="Преподаватель"
+                                options={accountsOptions}
+                                onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })}
+                                defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })}
+                                isClearable={true}></StudendaSelect>
+                            <AdminInput title="Аудитория" onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
+                            <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
+                                <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить' />
+                                {(selectedSubject as any).id !== 0
+                                    ?
+                                    <AdminButton text="Удалить" onClick={() => onDeleteClick(selectedSubject)} />
+                                    :
+                                    <>
+                                    </>}
                             </div>
-                        </div>
-                        <div>
-                            <p>SubjectTypeId:</p>
-                            <div>
-                                <StudendaSelect
-                                    options={subjectTypesOptions}
-                                    onChange={(value: { value: number | undefined; }) => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })}
-                                    defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })}
-                                    isClearable={true}></StudendaSelect>
-                            </div>
-                        </div>
-                        <div>
-                            <p>AccountId:</p>
-                            <div>
-                                <StudendaSelect
-                                    options={accountsOptions}
-                                    onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })}
-                                    defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })}
-                                    isClearable={true}></StudendaSelect>
-                            </div>
-                        </div>
-                        <div>
-                            <p>Classroom:</p>
-                            <div>
-                                <AdminInput onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
-                            </div>
-                        </div>
-                        <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
-                            <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить'></AdminButton>
-                        </div>
 
-                        {(selectedSubject as any).id !== 0
-                            ?
-                            <button onClick={() => onDeleteClick(selectedSubject)}>Удалить</button>
-                            :
-                            <>
-                            </>}
+
+                        </div>
                     </>
                     :
                     <>
@@ -264,24 +249,27 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             </Modal>
             <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Редактор расписания</div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '10px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Факультет</div>
-                    
-                    <StudendaSelect
-                        options={departmentOptions}
-                        onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentDepartmentId(value?.value))}
-                        isClearable={true}
-                        noOptionsMessage={() => noOptionsText}
-                    />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 5px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Курс</div>
-                    <StudendaSelect options={courseOptions} onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentCourseId(value?.value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа</div>
-                    <StudendaSelect options={groupOptions} onChange={(value: any) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
-                </div>
+                <StudendaSelect
+                    title="Факультет"
+                    options={departmentOptions}
+                    onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentDepartmentId(value?.value))}
+                    isClearable={true}
+                    noOptionsMessage={() => noOptionsText}
+                />
+                <StudendaSelect
+                    title="Курс"
+                    options={courseOptions}
+                    onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentCourseId(value?.value))}
+                    isClearable={true}
+                    noOptionsMessage={() => noOptionsText}
+                />
+                <StudendaSelect
+                    title="Группа"
+                    options={groupOptions}
+                    onChange={(value: { value: SetStateAction<number | undefined>; }) => (groupOptionsOnChange(value as any))}
+                    isClearable={true}
+                    noOptionsMessage={() => noOptionsText}
+                />
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',

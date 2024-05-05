@@ -19,6 +19,8 @@ import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
 import { option } from '../types/OptionType'
 import { translation } from '../base/translation'
 import StudendaSelect from './UI/select/StudendaSelect'
+import InputWrapper from './UI/inputwrapper/InputWrapper'
+import AdminCheckbox from './UI/input/AdminCheckbox'
 
 interface registerAccount extends account {
     email: string,
@@ -279,8 +281,8 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 <></>
                                                 :
                                                 <>
-                                                    {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
                                                     <StudendaSelect options={options}
+                                                        title={translation.get(RequestValue.value[selectedButton].name)!.get(key)}
                                                         onChange={value => (selectedObject as any)[key] = value?.value}
                                                         defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
                                                         isClearable={true}
@@ -291,10 +293,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         :
                                         <>
                                             <>
-                                                {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
+
                                                 {key.includes("permission")
                                                     ?
                                                     <StudendaSelect options={permissionOptions}
+                                                        title={translation.get(RequestValue.value[selectedButton].name)!.get(key)}
                                                         onChange={value => (selectedObject as any)[key] = value?.label}
                                                         defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
                                                         isClearable={true}
@@ -303,9 +306,9 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                     <>
                                                         {typeof (selectedObject as any)[key] === 'boolean'
                                                             ?
-                                                            <input type="checkbox" defaultChecked={(selectedObject as any)[key]} onChange={e => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}></input>
+                                                            <AdminCheckbox title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} default={(selectedObject as any)[key]} onChanged = {(e:any) => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}/>
                                                             :
-                                                            <AdminInput onChange={e =>
+                                                            <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} onChange={e =>
                                                             (typeof (selectedObject as any)[key] === 'number'
                                                                 ?
                                                                 (selectedObject as any)[key] = Number(e.target.value)
@@ -322,14 +325,17 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 </div>
                             )
                         }
-                        )}
-                        <AdminButton text='Сохранить' onClick={() => onSaveClick()}></AdminButton>
-                        {(selectedObject as any).id !== 0
-                            ?
-                            <AdminButton text='Удалить' onClick={() => onDeleteClick()}></AdminButton>
-                            :
-                            <>
-                            </>}
+                        )}<div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
+                            <AdminButton text='Сохранить' onClick={() => onSaveClick()}></AdminButton>
+                            {(selectedObject as any).id !== 0
+                                ?
+                                <AdminButton text='Удалить' onClick={() => onDeleteClick()}></AdminButton>
+                                :
+                                <>
+                                </>}
+                        </div>
+
+
                     </>
                 </Modal>
                 :

@@ -1,32 +1,29 @@
 import { ChangeEventHandler, FC, HTMLInputTypeAttribute } from 'react'
 import classes from './LoginInput.module.css'
+import InputWrapper from '../inputwrapper/InputWrapper';
 export enum TextAlignEnum {
-  left='left',
-  center='center'
+  left = 'left',
+  center = 'center'
 }
 
 interface inputProps {
-        text?: string;
-        align?: TextAlignEnum;
-        autoComplete?: string | undefined;
-        onChange?: ChangeEventHandler<any> | undefined;
-        type?: HTMLInputTypeAttribute | undefined;
-        defaultValue?: string | number | readonly string[] | undefined;
+  text?: string;
+  align?: TextAlignEnum;
+  autoComplete?: string | undefined;
+  onChange?: ChangeEventHandler<any> | undefined;
+  type?: HTMLInputTypeAttribute | undefined;
+  title?: string;
+  defaultValue?: string | number | readonly string[] | undefined;
 }
 const AdminInput: FC<inputProps> =
-  ({
-    text, 
-    align,
-    autoComplete,
-    onChange,
-    type,
-    defaultValue,
-  }) => {
+  (props) => {
 
-  return (
-       <input placeholder={text} className={classes.AdminInput}  style={{display: 'flex', textAlign: align===TextAlignEnum.center  ? 'center' : 'left'}}
-       autoComplete={autoComplete} onChange={onChange} type={type} defaultValue={defaultValue}></input>
-  )
-}
+    return (
+      <InputWrapper title={props.title}>
+        <input placeholder={props.text} className={classes.AdminInput} style={{ fontSize:'18px', display: 'flex', textAlign: props.align === TextAlignEnum.center ? 'center' : 'left' }}
+          autoComplete={props.autoComplete} onChange={props.onChange} type={props.type} defaultValue={props.defaultValue}></input>
+      </InputWrapper>
+    )
+  }
 
 export default AdminInput;

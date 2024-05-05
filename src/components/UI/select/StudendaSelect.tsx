@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import Select, { OptionProps, SelectInstance } from 'react-select';
+import Select, { OptionProps, SelectInstance, StylesConfig } from 'react-select';
 import { option } from '../../../types/OptionType';
 import { FC, ForwardedRef, forwardRef } from 'react';
 import classes from '../../../styles/admin.module.css';
+import InputWrapper from '../inputwrapper/InputWrapper';
 
 const Option = (props: OptionProps<option>) => {
     const {
@@ -42,33 +43,66 @@ interface SelectProps {
     isClearable?: boolean;
     defaultValue?: option;
     value?: option;
-    onChange: (selectedItem : option) => void; 
+    title?: string;
+    placeholder?: string;
+    styles?: StylesConfig<option, false>;
+    onChange: (selectedItem: option) => void;
     noOptionsMessage?: () => string;
 }
 
+const customStyles: StylesConfig<option, false> = {
+    option: (defaultStyles, state) => ({
+        ...defaultStyles,
+        borderBottom: '2px solid #e9262c',
+        borderRadius: '3px',
+        fontWeight: 600, color: state.isSelected ? "#FFFFFF" : "#1B0E17",
+        backgroundColor: state.isSelected ? "#B99999" : "#FFFFFF",
+        height: '80%',
+    }),
+
+    menuList: (defaultStyles, state) => ({
+        ...defaultStyles,
+        padding: '0px',
+        marginTop: '-1px',
+    }),
+
+
+    container: (defaultStyles, state) => ({
+        ...defaultStyles,
+        margin: '4px 4px 4px 4px',
+    }),
+
+    control: (defaultStyles) => ({
+        ...defaultStyles,
+        backgroundColor: "#FFFFFF",
+        border: "none",
+        fontSize: '18px',
+        boxShadow: "none",
+    }),
+    singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#212529" }),
+};
+
+
 const StudendaSelect: FC<SelectProps> = forwardRef<
-SelectInstance,
-SelectProps
+    SelectInstance,
+    SelectProps
 >(({ options, onChange, ...props }, ref) => {
     return (
-        <Select
-            className={classes.Select}
-            closeMenuOnSelect={true}
-            components={{ Option }}
-            styles={{
-                option: (base) => ({
-                    ...base,
-                    border: `1px dotted`,
-                    height: '100%',
-                }),
-            }}
-            options={options}
-            onChange={(newValue: unknown) => onChange(newValue as option)}
-            defaultValue={props.defaultValue} 
-            isClearable={props.isClearable}
-            noOptionsMessage={props.noOptionsMessage}
-            value={props.value}
-        />
+        <InputWrapper title={props.title}>
+            <Select
+                className={classes.Select}
+                closeMenuOnSelect={true}
+                components={{ Option }}
+                placeholder={props.placeholder}
+                styles={customStyles}
+                options={options}
+                onChange={(newValue: unknown) => onChange(newValue as option)}
+                defaultValue={props.defaultValue}
+                isClearable={props.isClearable}
+                noOptionsMessage={props.noOptionsMessage}
+                value={props.value}
+            />
+        </InputWrapper>
     );
 });
 
