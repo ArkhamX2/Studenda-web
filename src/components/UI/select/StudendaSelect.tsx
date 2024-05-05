@@ -2,7 +2,7 @@
 import Select, { OptionProps, SelectInstance } from 'react-select';
 import { option } from '../../../types/OptionType';
 import { FC, ForwardedRef, forwardRef } from 'react';
-import classes from '../styles/admin.module.css'
+import classes from '../../../styles/admin.module.css';
 
 const Option = (props: OptionProps<option>) => {
     const {
@@ -39,8 +39,9 @@ const Option = (props: OptionProps<option>) => {
 interface SelectProps {
     options: option[];
     ref?: ForwardedRef<SelectInstance>;
-    isClearable: boolean;
+    isClearable?: boolean;
     defaultValue?: option;
+    value?: option;
     onChange: (selectedItem : option) => void; 
     noOptionsMessage?: () => string;
 }
@@ -52,7 +53,7 @@ SelectProps
     return (
         <Select
             className={classes.Select}
-            closeMenuOnSelect={false}
+            closeMenuOnSelect={true}
             components={{ Option }}
             styles={{
                 option: (base) => ({
@@ -66,7 +67,7 @@ SelectProps
             defaultValue={props.defaultValue} 
             isClearable={props.isClearable}
             noOptionsMessage={props.noOptionsMessage}
-
+            value={props.value}
         />
     );
 });

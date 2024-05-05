@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react'
 import { COLORS } from '../styles/colors'
-import Select, { SingleValue } from 'react-select'
 import { account, subjectType, task, markType, role } from '../types/AdminType';
 import { option } from '../types/OptionType';
 import { useAppDispatch } from '../hook';
@@ -14,6 +13,8 @@ import useModal from './UI/modal/useModal';
 import axios, { AxiosHeaders } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import classes from '../styles/admin.module.css'
+import { SingleValue } from 'react-select';
+import StudendaSelect from './UI/select/StudendaSelect';
 
 const mapState = (state: RootState) => (
     {
@@ -34,7 +35,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const noOptionsText = "Пусто"
     const { isOpen, toggle } = useModal()
 
-    const [groupOptions, setGroupOptions] = useState<option[]>()
+    const [groupOptions, setGroupOptions] = useState<option[]>([])
 
     const [currentGroupId, setCurrentGroupId] = useState<number>()
 
@@ -50,7 +51,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
     const [tasks, setTasks] = useState<task[][]>()
 
-    const [markTypeOptions, setMarkTypeOptions] = useState<option[]>()
+    const [markTypeOptions, setMarkTypeOptions] = useState<option[]>([])
 
     const [markTypes, setMarkTypes] = useState<markType[]>()
 
@@ -95,7 +96,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     }, [markTypes])
 
     useEffect(() => {
-        if (groupOptions != undefined && groupOptions[0].value != undefined) {
+        if (groupOptions != undefined && groupOptions[0]!= undefined && groupOptions[0].value != undefined) {
             setDefaultGroupOptions(groupOptions[0])
             setCurrentGroupId(groupOptions[0].value)
         }
@@ -290,10 +291,10 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 </div>
                 <div>
                     <label>Тип оценивания</label>
-                    <Select options={markTypeOptions}
+                    <StudendaSelect options={markTypeOptions}
                         onChange={value => setCurrentMarkTypeName(value?.label)}
                         isClearable={false}>
-                    </Select>
+                    </StudendaSelect>
                 </div>
                 <div>
                     <button onClick={() => saveTaskClick()}>Добваить</button>
@@ -309,7 +310,7 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                         <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа:</div>
-                        <Select options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} />
+                        <StudendaSelect options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} />
                     </div>
                 </div>
                 <div style={{
@@ -352,9 +353,9 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
                                                     {accountTask.mark == null
                                                         ?
-                                                        <Select options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, accountTask)}></Select>
+                                                        <StudendaSelect options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, accountTask)}></StudendaSelect>
                                                         :
-                                                        <Select options={markOptions} value={markOptions.find((option) => option.value == accountTask.mark)} defaultValue={markOptions.find((option) => option.value == accountTask.mark)} onChange={(value) => updateTaskMark(value?.value, accountTask)}></Select>
+                                                        <StudendaSelect options={markOptions} value={markOptions.find((option) => option.value == accountTask.mark)} defaultValue={markOptions.find((option) => option.value == accountTask.mark)} onChange={(value) => updateTaskMark(value?.value, accountTask)}></StudendaSelect>
                                                     }
                                                 </div>
                                             </tr>

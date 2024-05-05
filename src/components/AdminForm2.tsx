@@ -14,11 +14,11 @@ import { RequestValue, request } from '../base/Request'
 import { ObjectKey, updateDataArray } from '../store/dataArraySlice'
 import { ConnectedProps, connect } from 'react-redux'
 import { RootState } from '../store/index';
-import Select from 'react-select';
 import AdminInput from './UI/input/AdminInput'
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
 import { option } from '../types/OptionType'
 import { translation } from '../base/translation'
+import StudendaSelect from './UI/select/StudendaSelect'
 
 interface registerAccount extends account {
     email: string,
@@ -280,11 +280,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 :
                                                 <>
                                                     {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
-                                                    <Select options={options}
+                                                    <StudendaSelect options={options}
                                                         onChange={value => (selectedObject as any)[key] = value?.value}
                                                         defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                    ></Select>
+                                                    ></StudendaSelect>
                                                 </>
                                             }
                                         </>
@@ -294,11 +294,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 {translation.get(RequestValue.value[selectedButton].name)!.get(key)}:
                                                 {key.includes("permission")
                                                     ?
-                                                    <Select options={permissionOptions}
+                                                    <StudendaSelect options={permissionOptions}
                                                         onChange={value => (selectedObject as any)[key] = value?.label}
                                                         defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                    ></Select>
+                                                    ></StudendaSelect>
                                                     :
                                                     <>
                                                         {typeof (selectedObject as any)[key] === 'boolean'
