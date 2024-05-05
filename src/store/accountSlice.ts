@@ -7,8 +7,8 @@ type accountInfo = {
     accountId: number
 }
 
-const adminSlice = createSlice({
-    name: 'adminSlice',
+const accountSlice = createSlice({
+    name: 'accountSlice',
     initialState,
     reducers: {
         updateAccountData(state, action: PayloadAction<accountInfo>)
@@ -22,6 +22,6 @@ const adminSlice = createSlice({
     }
 })
 
-export const {updateAccountData} = adminSlice.actions
+export const {updateAccountData} = accountSlice.actions
 
-export default adminSlice.reducer
+export default accountSlice.reducer

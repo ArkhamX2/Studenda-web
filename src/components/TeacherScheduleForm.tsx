@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
 
-const AccountScheduleForm: FC = () => {
+const TeacherScheduleForm: FC = () => {
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
 
@@ -47,7 +47,7 @@ const AccountScheduleForm: FC = () => {
         setSubjectTypes(await request(RequestValue.value[5].id, "get"))
         setGroups(await request(RequestValue.value[7].id, "get"))
         setAccountsOptions(await GetArrayToOptions(6))
-        setCurrentAccountId(store.getState().admin.accountId)
+        setCurrentAccountId(store.getState().account.accountId)
     }
 
     useEffect(() => {
@@ -145,7 +145,7 @@ const AccountScheduleForm: FC = () => {
     const onItemClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>, subjects: subject[]) => {
         event.preventDefault()
         dispatch(updateJournalData({ disciplineName: findDiscipline(subjects[0].disciplineId)?.name!, groups: subjects.map((subject) => findGroup(subject.groupId)!), subject: subjects[0] }))
-        navigate("/journal")
+        navigate("/teacherJournal")
     }
 
     return (
@@ -199,4 +199,4 @@ const AccountScheduleForm: FC = () => {
     )
 }
 
-export default AccountScheduleForm
+export default TeacherScheduleForm

@@ -5,7 +5,7 @@ import { ConnectedProps, connect } from 'react-redux'
 
 const mapState=(state:RootState)=>(
     {
-        Token:state.admin.Token
+        Token:state.account.Token
     }
 )
 

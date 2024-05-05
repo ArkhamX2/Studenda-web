@@ -18,7 +18,7 @@ import StudendaSelect from './UI/select/StudendaSelect';
 
 const mapState = (state: RootState) => (
     {
-        Token: state.admin.Token,
+        Token: state.account.Token,
         dataArray: state.dataArray,
         journal: state.journal
     }
@@ -28,7 +28,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 const connector = connect(mapState)
 
-const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
+const StudentJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const Authorization: string = "Authorization: Bearer " + props.Token
@@ -374,4 +374,4 @@ const JournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     )
 }
 
-export default connector(JournalForm)
+export default connector(StudentJournalForm)

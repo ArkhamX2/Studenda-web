@@ -27,7 +27,7 @@ interface registerAccount extends account {
 
 const mapState = (state: RootState) => (
     {
-        Token: state.admin.Token,
+        Token: state.account.Token,
         dataArray: state.dataArray
     }
 )

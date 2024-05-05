@@ -18,7 +18,7 @@ import StudendaSelect from './UI/select/StudendaSelect';
 
 const mapState = (state: RootState) => (
     {
-        Token: state.admin.Token,
+        Token: state.account.Token,
         dataArray: state.dataArray
     }
 )

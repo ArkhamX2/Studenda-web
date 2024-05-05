@@ -1,7 +1,7 @@
 import axios from "axios"
 import { dayPosition, discipline, subjectPosition, weekType, subjectType, account, group, course, department, role, security, markType, task,  } from '../types/AdminType';
 import store from "../store";
-import { updateAccountData } from "../store/adminSlice";
+import { updateAccountData } from "../store/accountSlice";
 
 type info = {
     id: number,

@@ -4,7 +4,7 @@ import LoginButton, { ButtonVariant } from './UI/button/LoginButton'
 import LoginLabel from './UI/label/LoginLabel'
 import axios from 'axios'
 import { useAppDispatch } from '../hook'
-import { updateAccountData } from '../store/adminSlice'
+import { updateAccountData } from '../store/accountSlice'
 
 const LoginForm: FC = () => {
     const dispatch = useAppDispatch()
