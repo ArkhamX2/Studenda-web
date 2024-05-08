@@ -278,36 +278,44 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
                 {currentGroupId !== undefined ?
                     <table className={classes.AdminTable}>
+
                         <tr>
                             <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
                             </td>
                             {props.dataArray.dayPositionArray?.map((obj) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
                             </div></td>)}
                         </tr>
+
                         {props.dataArray.subjectPositionArray?.map((subjectPosition) =>
-                            <tr>
-                                <td className={classes.TableColumn}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td>
-                                {props.dataArray.dayPositionArray?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}>
-                                        {props.dataArray.weekTypeArray?.map((weekType, index) => {
-                                            const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
-                                            if (subject !== undefined)
-                                                return (<div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                                    <tr>{findDiscipline(subject.disciplineId)?.name}<br /> {findSubjectType(subject.subjectTypeId)?.name} {subject.classroom} </tr>
-                                                </div>);
-
-                                            else return (<div>
-                                                <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} style={{}}>
-                                                    <tr></tr>
+                            props.dataArray.weekTypeArray?.map((weekType, index) =>
+                                <tr style={(index % 2 != 0) ? { borderTop: '2x solid #B5999F' } : { borderTop: '4px solid #B5999F' }}>
+                                    {(index % 2 == 0) ?
+                                        <td className={classes.TableColumn} rowSpan={2}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td> :
+                                        <></>}
+                                    {props.dataArray.dayPositionArray?.map((dayPosition) => {
+                                        const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
+                                        return (
+                                            <td className={classes.TableColumn} style={{ minWidth: '278px', minHeight: '70px' }}>
+                                                <div>
+                                                    {(subject !== undefined) ?
+                                                        <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                                            <span>{findDiscipline(subject!.disciplineId)?.name}</span>
+                                                            <span>{findSubjectType(subject!.subjectTypeId)?.name} {subject!.classroom}</span>
+                                                        </div>
+                                                        :
+                                                        <div style={{ minWidth: '278px', minHeight: '70px' }} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} />
+                                                    }
                                                 </div>
-                                                {index % 2 == 0 ?
-                                                    <hr style={{ color: '#B5999F', backgroundColor: '#B5999F', border: '2px solid #B5999F' }}></hr>
-                                                    : <></>}
+                                            </td>
+                                        )
 
-                                            </div>)
-                                        })}
-                                    </td>)}
-                            </tr>)}
+                                    }
+                                    )
+                                    }
+                                </tr>
+                            )
+                        )
+                        }
                     </table>
                     : <></>}
 
