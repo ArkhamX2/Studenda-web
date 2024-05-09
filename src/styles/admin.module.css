@@ -4,10 +4,8 @@
 }
 
 .AdminTable {
-        border: 2px solid #490514;
         border-collapse: collapse;
         border-radius: 5px;
-        margin: 5px;
         padding: 5px;
 }
 
@@ -17,7 +15,7 @@
 }
 
 .TableColumn {
-        border: 3px solid #B5999F;
+        border: 2px solid #B5999F;
         border-right: 4px solid #B5999F;
         font-weight: 600;
         min-height: 70px;

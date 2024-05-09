@@ -278,44 +278,61 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
                 {currentGroupId !== undefined ?
                     <table className={classes.AdminTable}>
+                        <tbody style={{
+                            display: 'block',
+                        }}>
+                            <tr>
+                                <td style={{
+                                    fontWeight: '600',
+                                    minHeight: '70px',
+                                    borderRight: '4px solid #B5999F',
+                                    width: '75px',
+                                    height: '42px',
+                                }}>
+                                </td>
+                                {props.dataArray.dayPositionArray?.map((obj) => <td style={{
+                                    fontWeight: '600',
+                                    minHeight: '70px',
+                                    borderRight: '4px solid #B5999F'
+                                }}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
+                                    </div></td>)}
+                            </tr>
 
-                        <tr>
-                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
-                            </td>
-                            {props.dataArray.dayPositionArray?.map((obj) => <td className={classes.TableColumn}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
-                            </div></td>)}
-                        </tr>
+                            {props.dataArray.subjectPositionArray?.map((subjectPosition) =>
+                                props.dataArray.weekTypeArray?.map((weekType, index) =>
+                                    <tr style={(index % 2 != 0) ? { borderBottom: '4px solid #B5999F', borderTop: '2px solid #B5999F' } : { borderBottom: '2px solid #B5999F', borderTop: '4px solid #B5999F' }}>
+                                        {(index % 2 == 0) ?
+                                            <td style={{
+                                                fontWeight: '600',
+                                                minHeight: '70px',
+                                                borderRight: '4px solid #B5999F'
+                                            }} rowSpan={2}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td> :
+                                            <></>}
+                                        {props.dataArray.dayPositionArray?.map((dayPosition) => {
+                                            const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
+                                            return (
+                                                <td className={classes.TableColumn} style={{ minWidth: '278px', minHeight: '70px', borderRight: '4px solid #B5999F' }}>
+                                                    <div>
+                                                        {(subject !== undefined) ?
+                                                            <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
+                                                                <span>{findDiscipline(subject!.disciplineId)?.name}</span>
+                                                                <span>{findSubjectType(subject!.subjectTypeId)?.name} {subject!.classroom}</span>
+                                                            </div>
+                                                            :
+                                                            <div style={{ minWidth: '278px', minHeight: '70px' }} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} />
+                                                        }
+                                                    </div>
+                                                </td>
+                                            )
 
-                        {props.dataArray.subjectPositionArray?.map((subjectPosition) =>
-                            props.dataArray.weekTypeArray?.map((weekType, index) =>
-                                <tr style={(index % 2 != 0) ? { borderTop: '2x solid #B5999F' } : { borderTop: '4px solid #B5999F' }}>
-                                    {(index % 2 == 0) ?
-                                        <td className={classes.TableColumn} rowSpan={2}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td> :
-                                        <></>}
-                                    {props.dataArray.dayPositionArray?.map((dayPosition) => {
-                                        const subject: subject | undefined = findSubject(subjectPosition, dayPosition, weekType);
-                                        return (
-                                            <td className={classes.TableColumn} style={{ minWidth: '278px', minHeight: '70px' }}>
-                                                <div>
-                                                    {(subject !== undefined) ?
-                                                        <div className={classes.SubjectBox} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)}>
-                                                            <span>{findDiscipline(subject!.disciplineId)?.name}</span>
-                                                            <span>{findSubjectType(subject!.subjectTypeId)?.name} {subject!.classroom}</span>
-                                                        </div>
-                                                        :
-                                                        <div style={{ minWidth: '278px', minHeight: '70px' }} onContextMenu={(e) => subjectClick(e, subjectPosition, dayPosition, weekType)} />
-                                                    }
-                                                </div>
-                                            </td>
+                                        }
                                         )
-
-                                    }
-                                    )
-                                    }
-                                </tr>
+                                        }
+                                    </tr>
+                                )
                             )
-                        )
-                        }
+                            }
+                        </tbody>
                     </table>
                     : <></>}
 

@@ -9,6 +9,7 @@ import { updateJournalData } from '../store/journalSlice';
 import { useNavigate } from 'react-router-dom';
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
+import { COLORS } from '../styles/colors';
 
 const TeacherScheduleForm: FC = () => {
     const navigate = useNavigate()
@@ -159,36 +160,79 @@ const TeacherScheduleForm: FC = () => {
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
-                backgroundColor: '#F7F3F3', borderRadius: '5px'
+                backgroundColor: '#F7F3F3', borderRadius: '5px', scrollbarColor: COLORS.red3
             }}>
                 {toggleVisibility ?
+
                     <table className={classes.AdminTable}>
-                        <tr >
-                            <td className={classes.TableColumn} style={{ width: '75px', height: '42px' }}>
-                            </td>
-                            {dayPositions?.map((obj) => <td className={classes.TableColumn}>{obj.name}</td>)}
-                        </tr>
-                        {subjectPositions?.map((subjectPosition) =>
+                        <tbody style={{
+                            display: 'block',
+                        }}>
                             <tr>
-                                <td className={classes.TableColumn}>{subjectPosition.startLabel}-{subjectPosition.endLabel} </td>{dayPositions?.map((dayPosition) =>
-                                    <td className={classes.TableColumn}> {weekTypes?.map((weekType) => {
-                                        const subjects: subject[] | undefined = findSubject(subjectPosition, dayPosition, weekType); if (subjects !== undefined && subjects[0] !== undefined) {
-                                            return (<div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, subjects)}>
-                                                <tr onClick={() => console.log(subjects.map((subject) => findGroup(subject.groupId)?.name))}>
-                                                    <div style={{ display: 'flex', flexDirection: 'row', width: '240px', justifyContent: 'space-between', padding: '1px' }}>
-                                                        <div style={{ fontSize: '16px' }}>{findDiscipline(subjects[0].disciplineId)?.name}</div>
-                                                        <div style={{ fontSize: '16px', color: 'rgba(27, 14, 23, 0.7)'}}>{findSubjectType(subjects[0].subjectTypeId)?.name}</div>
+                                <td style={{
+                                    fontWeight: '600',
+                                    minHeight: '70px',
+                                    borderRight: '4px solid #B5999F',
+                                    width: '75px',
+                                    height: '42px',
+                                }}>
+                                </td>
+                                {dayPositions.map((obj) => <td style={{
+                                    fontWeight: '600',
+                                    minHeight: '70px',
+                                    borderRight: '4px solid #B5999F'
+                                }}><div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.name}
+                                    </div></td>)}
+                            </tr>
+
+                            {subjectPositions?.map((subjectPosition) =>
+                                weekTypes?.map((weekType, index) =>
+                                    <tr style={(index % 2 != 0) ? { borderBottom: '4px solid #B5999F', borderTop: '2px solid #B5999F' } : { borderBottom: '2px solid #B5999F', borderTop: '4px solid #B5999F' }}>
+                                        {(index % 2 == 0) ?
+                                            <td style={{
+                                                fontWeight: '600',
+                                                minHeight: '70px',
+                                                borderRight: '4px solid #B5999F'
+                                            }} rowSpan={2}><div style={{ margin: '0px 10px 0px 10px', fontSize: '18px' }}>{subjectPosition.startLabel}-{subjectPosition.endLabel}</div> </td> :
+                                            <></>}
+                                        {dayPositions?.map((dayPosition) => {
+                                            const subjects: subject[] | undefined = findSubject(subjectPosition, dayPosition, weekType);
+                                            return (
+                                                <td className={classes.TableColumn} style={{ minWidth: '278px', minHeight: '70px', borderRight: '4px solid #B5999F' }}>
+                                                    <div>
+                                                        {(subjects !== undefined && subjects[0] !== undefined) ?
+
+                                                            <div className={classes.SubjectBox} onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, subjects)}>
+                                                                <span>{findDiscipline(subjects[0].disciplineId)?.name} {findSubjectType(subjects[0].subjectTypeId)?.name}</span>
+                                                                <div style={{
+                                                                    fontSize: '14px',
+                                                                    width: '240px',
+                                                                    color: 'rgba(27, 14, 23, 0.7)',
+                                                                    display: 'flex',
+                                                                    flexDirection: 'column',
+                                                                    justifyContent: 'space-between',
+                                                                    padding: '1px'
+                                                                }}>
+                                                                    {subjects.map((subject) => <div style={{ justifyContent: 'space-between', color: 'rgba(27, 14, 23, 0.6)', display: 'flex', flexDirection: 'row' }}>
+                                                                        <div style={{ color: 'rgba(27, 14, 23, 0.7)' }}>{findGroup(subject.groupId)?.name}</div>
+                                                                        <div style={{ color: 'rgba(27, 14, 23, 0.7)' }}>{subjects[0].classroom}</div></div>)}</div>
+
+                                                            </div>
+                                                            :
+                                                            <div style={{ minWidth: '278px', minHeight: '70px' }} />
+                                                        }
                                                     </div>
-                                                    <div style={{ fontSize: '14px', width:'240px', color: 'rgba(27, 14, 23, 0.7)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding:'1px' }}>{subjects.map((subject) => <div style={{ justifyContent: 'space-between', color: 'rgba(27, 14, 23, 0.6)', display:'flex', flexDirection:'row' }}>
-                                                        <div style={{color: 'rgba(27, 14, 23, 0.7)'}}>{findGroup(subject.groupId)?.name}</div>
-                                                        <div style={{color: 'rgba(27, 14, 23, 0.7)'}}>{subjects[0].classroom}</div></div>)}</div>
-                                                </tr>
-                                            </div>);
+                                                </td>
+                                            )
+
                                         }
-                                        else return (<div className={classes.SubjectBox}>
-                                            <tr></tr>
-                                        </div>)
-                                    })}</td>)}</tr>)}
+                                        )
+                                        }
+                                    </tr>
+                                )
+                            )
+                            }
+                        </tbody>
                     </table>
                     : <></>}
 

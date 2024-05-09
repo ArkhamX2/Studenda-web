@@ -18,8 +18,8 @@ export const RequestValue: IRequestValue = {
     value: [
         { id: 0, name: "default", route: "" },
         { id: 1, name: "discipline", altName: "дисциплины", route: "api/schedule/discipline" },
-        { id: 2, name: "subjectPosition", altName: "дни недели", route: "api/schedule/subject-position" },
-        { id: 3, name: "dayPosition", altName: "номера пар", route: "api/schedule/day-position" },
+        { id: 2, name: "subjectPosition", altName: "номера пар", route: "api/schedule/subject-position" },
+        { id: 3, name: "dayPosition", altName: "дни недели", route: "api/schedule/day-position" },
         { id: 4, name: "weekType", altName: "типы недель", route: "api/schedule/week-type" },
         { id: 5, name: "subjectType", altName: "типы занятий", route: "api/schedule/subject-type" },
         { id: 6, name: "account", altName: "пользователи", route: "api/security/account" },
