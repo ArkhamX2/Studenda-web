@@ -96,7 +96,7 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     }, [markTypes])
 
     useEffect(() => {
-        if (groupOptions != undefined && groupOptions[0]!= undefined && groupOptions[0].value != undefined) {
+        if (groupOptions != undefined && groupOptions[0] != undefined && groupOptions[0].value != undefined) {
             setDefaultGroupOptions(groupOptions[0])
             setCurrentGroupId(groupOptions[0].value)
         }
@@ -319,37 +319,47 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 }}>
                     {currentGroupAccounts != undefined && currentGroupAccounts[0] != undefined
                         ?
-                        <table className={classes.AdminTable}>
-                            <td className={classes.TableColumn}>
-                                <tr >
-                                    №
+                        <table className={classes.AdminTable} style={{border:'2px solid #490514'}}>
+                            <td >
+                                <tr className={classes.TableColumn}>
+                                    <div>
+                                        №
+                                    </div>
+
                                 </tr>
                                 {currentGroupAccounts.map((obj, i) =>
-                                    <tr>
-                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{i + 1}
+                                    <tr className={classes.TableColumn}>
+                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                            {i + 1}
                                         </div>
                                     </tr>)}
                             </td>
-                            <td className={classes.TableColumn}>
-                                <tr>
-                                    ФИО
+                            <td >
+                                <tr className={classes.TableColumn}>
+                                    <div>
+                                        ФИО
+                                    </div>
+
                                 </tr>
                                 {currentGroupAccounts.map((obj) =>
-                                    <tr >
+                                    <tr className={classes.TableColumn} >
                                         <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.surname} {obj.name} {obj.patronymic}
                                         </div>
                                     </tr>)}
                             </td>
                             {tasks?.map((task) =>
-                                <td className={classes.TableColumn}>
+                                <td >
                                     <button onClick={() => deleteTasks(task)}>Удалить</button>
-                                    <tr>
-                                        {task[0].startedAt} {task[0].name}
+                                    <tr className={classes.TableColumn}>
+                                        <div>
+                                            {task[0].startedAt} {task[0].name}
+                                        </div>
+
                                     </tr>
                                     {task.map((accountTask) => {
                                         var markOptions = createMarkOptions(accountTask.markTypeId)
                                         return (
-                                            <tr>
+                                            <tr className={classes.TableColumn}>
                                                 <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
                                                     {accountTask.mark == null
                                                         ?
@@ -363,7 +373,7 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     })}
                                 </td>
                             )}
-                            <td className={classes.TableColumn}>
+                            <td >
                                 <button onClick={() => addTaskClick()}>Добавить</button>
                             </td>
                         </table>

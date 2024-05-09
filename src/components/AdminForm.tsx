@@ -216,19 +216,21 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     <>
                         <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', flexDirection: 'column', width: '100%' }}>
                             <p style={{ textAlign: 'center', fontSize: '20px', fontWeight: '600' }}>РЕДАКТИРОВАНИЕ</p>
-                            <StudendaSelect title="Дисциплина" options={disciplinesOptions} onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true}></StudendaSelect>
+                            <StudendaSelect title="Дисциплина" options={disciplinesOptions} onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, disciplineId: findDiscipline(value?.value!)?.id! })} defaultValue={disciplinesOptions.find((obj) => { return obj.value === selectedSubject.disciplineId })} isClearable={true} placeholder='Дисциплина'></StudendaSelect>
                             <StudendaSelect title="Тип занятия"
                                 options={subjectTypesOptions}
                                 onChange={(value: { value: number | undefined; }) => setSelectedSubject({ ...selectedSubject!, subjectTypeId: findSubjectType(value?.value!)?.id! })}
                                 defaultValue={subjectTypesOptions.find((obj) => { return obj.value === selectedSubject.subjectTypeId })}
-                                isClearable={true}></StudendaSelect>
+                                isClearable={true}
+                                placeholder='Тип занятия'></StudendaSelect>
                             <StudendaSelect
                                 title="Преподаватель"
                                 options={accountsOptions}
                                 onChange={(value: { value: number; }) => setSelectedSubject({ ...selectedSubject!, accountId: findAccount(value?.value!)?.id! })}
                                 defaultValue={accountsOptions.find((obj) => { return obj.value === selectedSubject.accountId })}
-                                isClearable={true}></StudendaSelect>
-                            <AdminInput title="Аудитория" onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom}></AdminInput>
+                                isClearable={true}
+                                placeholder='Преподаватель'></StudendaSelect>
+                            <AdminInput title="Аудитория" onChange={e => setSelectedSubject({ ...selectedSubject!, classroom: e.target.value })} defaultValue={selectedSubject?.classroom} text='Аудитория'></AdminInput>
                             <div style={{ display: 'flex', alignContent: 'center', justifyContent: 'center' }}>
                                 <AdminButton onClick={() => onSaveClick(selectedSubject)} text='Сохранить' />
                                 {(selectedSubject as any).id !== 0
@@ -255,6 +257,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentDepartmentId(value?.value))}
                     isClearable={true}
                     noOptionsMessage={() => noOptionsText}
+                    placeholder=' Факультет'
                 />
                 <StudendaSelect
                     title="Курс"
@@ -262,6 +265,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     onChange={(value: { value: SetStateAction<number | undefined>; }) => (setCurrentCourseId(value?.value))}
                     isClearable={true}
                     noOptionsMessage={() => noOptionsText}
+                    placeholder=' Курс'
                 />
                 <StudendaSelect
                     title="Группа"
@@ -269,6 +273,7 @@ const AdminForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                     onChange={(value: { value: SetStateAction<number | undefined>; }) => (groupOptionsOnChange(value as any))}
                     isClearable={true}
                     noOptionsMessage={() => noOptionsText}
+                    placeholder=' Группа'
                 />
             </div>
             <div style={{

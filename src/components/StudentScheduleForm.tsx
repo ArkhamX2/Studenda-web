@@ -153,7 +153,8 @@ const StudentScheduleForm: FC = () => {
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Расписание</div>
                 <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                     <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Пользователь:</div>
-                    <StudendaSelect options={groupOptions} value={defaultGroupOption} onChange={(value) => (groupOptionsOnChange(value))} isClearable={true} noOptionsMessage={() => noOptionsText} />
+                    <StudendaSelect options={groupOptions} value={defaultGroupOption} onChange={(value) => (groupOptionsOnChange(value))} 
+                    isClearable={true} noOptionsMessage={() => noOptionsText} placeholder='Пользователь' />
                 </div>
             </div>
             <div style={{
