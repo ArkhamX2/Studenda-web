@@ -1,6 +1,4 @@
-import { ChangeEventHandler, FC, HTMLInputTypeAttribute } from 'react'
-import classes from './LoginInput.module.css'
-import InputWrapper from '../inputwrapper/InputWrapper';
+import { ChangeEventHandler, FC} from 'react'
 export enum TextAlignEnum {
   left = 'left',
   center = 'center'

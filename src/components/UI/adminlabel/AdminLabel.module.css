@@ -1,0 +1,9 @@
+.AdminLabel{
+	width: 98%;
+	height: 38px;
+	margin: 10px 5px;
+	padding: 5px 5px 5px 10px;
+	border-radius:  4px;
+    background-color: white;
+	border: 1px solid lightgray 
+}

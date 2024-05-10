@@ -308,10 +308,9 @@ const StudentJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Дисциплина:</div>
                         <label>{props.journal.disciplineName}</label>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                        <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа:</div>
-                        <StudendaSelect options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} />
-                    </div>
+                    
+                        <StudendaSelect title="Группа" options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} placeholder="Выберите группу" />
+                    
                 </div>
                 <div style={{
                     width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',

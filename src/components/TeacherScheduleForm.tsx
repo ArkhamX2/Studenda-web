@@ -153,11 +153,10 @@ const TeacherScheduleForm: FC = () => {
         <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
             <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                 <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Расписание</div>
-                <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                    <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Пользователь:</div>
-                    <StudendaSelect options={accountOptions} value={defaultAccountOption} onChange={(value) => (accountOptionsOnChange(value))} 
-                    isClearable={true} noOptionsMessage={() => noOptionsText} placeholder=' Преподаватель'/>
-                </div>
+                
+                    <StudendaSelect title="Преподаватель" options={accountOptions} value={defaultAccountOption} onChange={(value) => (accountOptionsOnChange(value))} 
+                    isClearable={true} noOptionsMessage={() => noOptionsText} placeholder=' Выберите преподавателя'/>
+                
             </div>
             <div style={{
                 width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',

@@ -19,7 +19,6 @@ import { ArrayToOptions } from '../base/ArrayToOptionsConverter'
 import { option } from '../types/OptionType'
 import { translation } from '../base/translation'
 import StudendaSelect from './UI/select/StudendaSelect'
-import InputWrapper from './UI/inputwrapper/InputWrapper'
 import AdminCheckbox from './UI/input/AdminCheckbox'
 
 interface registerAccount extends account {
@@ -286,7 +285,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                         onChange={value => (selectedObject as any)[key] = value?.value}
                                                         defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                        placeholder={translation.get(RequestValue.value[selectedButton].name)!.get(key)}
+                                                        placeholder={"Выберите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase().slice(0,-1)+"я"}
                                                     ></StudendaSelect>
                                                 </>
                                             }
@@ -302,7 +301,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                         onChange={value => (selectedObject as any)[key] = value?.label}
                                                         defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                        placeholder={translation.get(RequestValue.value[selectedButton].name)!.get(key)}
+                                                        placeholder={"Выберите "+translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()}
                                                     ></StudendaSelect>
                                                     :
                                                     <>
@@ -310,7 +309,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                             ?
                                                             <AdminCheckbox title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} default={(selectedObject as any)[key]} onChanged = {(e:any) => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}/>
                                                             :
-                                                            <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} text={translation.get(RequestValue.value[selectedButton].name)!.get(key)} onChange={e =>
+                                                            <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} text={"Укажите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()} onChange={e =>
                                                             (typeof (selectedObject as any)[key] === 'number'
                                                                 ?
                                                                 (selectedObject as any)[key] = Number(e.target.value)

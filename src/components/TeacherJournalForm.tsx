@@ -15,6 +15,9 @@ import { useNavigate } from 'react-router-dom';
 import classes from '../styles/admin.module.css'
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
+import AdminInput from './UI/input/AdminInput';
+import AdminButton from './UI/button/AdminButton';
+import AdminLabel from './UI/adminlabel/AdminLabel';
 
 const mapState = (state: RootState) => (
     {
@@ -281,37 +284,23 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     return (
         <>
             <Modal isOpen={isOpen} toggle={toggle}>
-                <div>
-                    <label>Name</label>
-                    <input value={currentTaskInfo.name} onChange={(e) => setCurrentTaskInfo({ ...currentTaskInfo, name: e.target.value })}></input>
-                </div>
-                <div>
-                    <label>Description</label>
-                    <input value={currentTaskInfo.description} onChange={(e) => setCurrentTaskInfo({ ...currentTaskInfo, description: e.target.value })}></input>
-                </div>
-                <div>
-                    <label>Тип оценивания</label>
-                    <StudendaSelect options={markTypeOptions}
-                        onChange={value => setCurrentMarkTypeName(value?.label)}
-                        isClearable={false}>
-                    </StudendaSelect>
-                </div>
-                <div>
-                    <button onClick={() => saveTaskClick()}>Добваить</button>
-                </div>
+                <AdminInput title="Название" onChange={(e) => setCurrentTaskInfo({ ...currentTaskInfo, name: e.target.value })} defaultValue={currentTaskInfo.name} text='Укажите название' />
+                <AdminInput title="Описание" onChange={(e) => setCurrentTaskInfo({ ...currentTaskInfo, description: e.target.value })} defaultValue={currentTaskInfo.description} text='Укажите описание' />
+                <StudendaSelect title="Тип оценивания" options={markTypeOptions} placeholder="Укажите тип оценивания"
+                    onChange={value => setCurrentMarkTypeName(value?.label)}
+                    isClearable={false}>
+                </StudendaSelect>
+                <AdminButton text="Добавить" onClick={() => saveTaskClick()} />
             </Modal>
+
             <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
                 <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                    <button onClick={() => navigate("/userSchedule")}>Назад</button>
+                    <AdminButton text="Назад" onClick={() => navigate("/userSchedule")} />
                     <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Журнал</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                        <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Дисциплина:</div>
-                        <label>{props.journal.disciplineName}</label>
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
-                        <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Группа:</div>
-                        <StudendaSelect options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} />
-                    </div>
+                    <AdminLabel title="Дисциплина" text={props.journal.disciplineName} />
+
+                    <StudendaSelect title="Группа" options={groupOptions} value={defaultGroupOptions} onChange={(value) => (groupOptionsOnChange(value))} isClearable={false} noOptionsMessage={() => noOptionsText} placeholder="Выберите группу" />
+
                 </div>
                 <div style={{
                     width: '80%', border: '2px solid #490514', margin: '5px', overflowX: 'auto', overflowY: 'auto', whiteSpace: 'nowrap',
@@ -319,63 +308,76 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 }}>
                     {currentGroupAccounts != undefined && currentGroupAccounts[0] != undefined
                         ?
-                        <table className={classes.AdminTable} style={{border:'2px solid #490514'}}>
-                            <td >
-                                <tr className={classes.TableColumn}>
-                                    <div>
-                                        №
-                                    </div>
 
+                        <table className={classes.AdminTable}>
+                            <tbody style={{
+                                display: 'block',
+                            }}>
+                                <tr>
+                                    <td style={{
+                                        fontWeight: '600',
+                                        minHeight: '70px',
+                                        borderRight: '4px solid #B5999F',
+                                        width: '75px',
+                                        height: '42px',
+                                    }}>№</td>
+                                    <td style={{
+                                        fontWeight: '600',
+                                        minHeight: '70px',
+                                        borderRight: '4px solid #B5999F',
+                                        width: '75px',
+                                        height: '42px',
+                                    }}>ФИО</td>
+                                    {tasks?.map((task) =>
+                                        <td style={{
+                                            fontWeight: '600',
+                                            minHeight: '70px',
+                                            borderRight: '4px solid #B5999F'
+                                        }}>
+                                            <div style={{ fontSize: '20px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                {task[0].startedAt} {task[0].name}
+                                            </div>
+                                        </td>)}
+                                    <td >
+                                        <button onClick={() => addTaskClick()}>Добавить</button>
+                                    </td>
                                 </tr>
-                                {currentGroupAccounts.map((obj, i) =>
-                                    <tr className={classes.TableColumn}>
-                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
-                                            {i + 1}
-                                        </div>
-                                    </tr>)}
-                            </td>
-                            <td >
-                                <tr className={classes.TableColumn}>
-                                    <div>
-                                        ФИО
-                                    </div>
-
-                                </tr>
-                                {currentGroupAccounts.map((obj) =>
-                                    <tr className={classes.TableColumn} >
-                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>{obj.surname} {obj.name} {obj.patronymic}
-                                        </div>
-                                    </tr>)}
-                            </td>
-                            {tasks?.map((task) =>
-                                <td >
-                                    <button onClick={() => deleteTasks(task)}>Удалить</button>
-                                    <tr className={classes.TableColumn}>
-                                        <div>
-                                            {task[0].startedAt} {task[0].name}
-                                        </div>
-
-                                    </tr>
-                                    {task.map((accountTask) => {
-                                        var markOptions = createMarkOptions(accountTask.markTypeId)
+                                {
+                                    currentGroupAccounts?.map((account, i) => {
                                         return (
                                             <tr className={classes.TableColumn}>
-                                                <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
-                                                    {accountTask.mark == null
-                                                        ?
-                                                        <StudendaSelect options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, accountTask)}></StudendaSelect>
-                                                        :
-                                                        <StudendaSelect options={markOptions} value={markOptions.find((option) => option.value == accountTask.mark)} defaultValue={markOptions.find((option) => option.value == accountTask.mark)} onChange={(value) => updateTaskMark(value?.value, accountTask)}></StudendaSelect>
-                                                    }
-                                                </div>
-                                            </tr>
-                                        )
-                                    })}
-                                </td>
-                            )}
-                            <td >
-                                <button onClick={() => addTaskClick()}>Добавить</button>
-                            </td>
+
+                                                <td>
+                                                    <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                        {i + 1}
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                        {account.surname} {account.name} {account.patronymic}
+                                                    </div>
+                                                </td>
+                                                {tasks?.map((task) => {
+                                                    var markOptions = createMarkOptions(task[i].markTypeId)
+                                                    return (<td>
+                                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                            {task[i].mark == null
+                                                                ?
+                                                                <StudendaSelect options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, task[i])}></StudendaSelect>
+                                                                :
+                                                                <StudendaSelect options={markOptions} value={markOptions.find((option) => option.value == task[i].mark)} defaultValue={markOptions.find((option) => option.value == task[i].mark)} onChange={(value) => updateTaskMark(value?.value, task[i])}></StudendaSelect>
+                                                            }
+                                                        </div>
+                                                    </td>)
+                                                }
+                                                )}
+                                            </tr>)
+                                    }
+                                    )
+                                }
+
+
+                            </tbody>
                         </table>
                         : <></>}
                 </div>
