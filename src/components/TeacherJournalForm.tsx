@@ -338,28 +338,28 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                 {task[0].startedAt} {task[0].name}
                                             </div>
                                         </td>)}
-                                    <td >
+                                    <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', fontWeight: '600' }}>
                                         <button onClick={() => addTaskClick()}>Добавить</button>
                                     </td>
                                 </tr>
                                 {
                                     currentGroupAccounts?.map((account, i) => {
                                         return (
-                                            <tr className={classes.TableColumn}>
+                                            <tr >
 
-                                                <td>
-                                                    <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600' }}>
+                                                    <div style={{ fontSize: '20px', textAlign: 'center' }}>
                                                         {i + 1}
                                                     </div>
                                                 </td>
-                                                <td>
-                                                    <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600' }}>
+                                                    <div style={{ fontSize: '20px', margin: '14px 17px', textAlign: 'center' }}>
                                                         {account.surname} {account.name} {account.patronymic}
                                                     </div>
                                                 </td>
                                                 {tasks?.map((task) => {
                                                     var markOptions = createMarkOptions(task[i].markTypeId)
-                                                    return (<td>
+                                                    return (<td className={classes.TableColumn}>
                                                         <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
                                                             {task[i].mark == null
                                                                 ?
@@ -371,6 +371,8 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                     </td>)
                                                 }
                                                 )}
+                                                <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600' }}>
+                                                </td>
                                             </tr>)
                                     }
                                     )
