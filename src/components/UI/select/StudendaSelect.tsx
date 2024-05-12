@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import Select, { OptionProps, SelectInstance, StylesConfig } from 'react-select';
 import { option } from '../../../types/OptionType';
-import { FC, ForwardedRef, forwardRef } from 'react';
+import { FC, ForwardedRef, forwardRef, useState } from 'react';
 import classes from '../../../styles/admin.module.css';
 import InputWrapper from '../inputwrapper/InputWrapper';
 
@@ -50,7 +50,7 @@ interface SelectProps {
     noOptionsMessage?: () => string;
 }
 
-const customStyles: StylesConfig<option, false> = {
+const customStyles: (open: boolean) => StylesConfig<option, false> = (open) => ({
     option: (defaultStyles, state) => ({
         ...defaultStyles,
         borderBottom: '2px solid #e9262c',
@@ -64,6 +64,18 @@ const customStyles: StylesConfig<option, false> = {
         ...defaultStyles,
         padding: '0px',
         marginTop: '-1px',
+    }),
+
+    menu: (provided) => ({
+        ...provided,
+        marginTop: 0,
+        borderwidth: 10,
+        fontSize: 12,
+        height: open ? "100px" : "0px",
+        overflow: "hidden",
+        opacity: open ? 1 : 0,
+        transition: "all 1s ease-in-out",
+        visibility: open ? "visible" : "hidden"
     }),
 
 
@@ -80,28 +92,33 @@ const customStyles: StylesConfig<option, false> = {
         boxShadow: "none",
     }),
     singleValue: (defaultStyles) => ({ ...defaultStyles, color: "#212529" }),
-};
+});
 
 
 const StudendaSelect: FC<SelectProps> = forwardRef<
     SelectInstance,
     SelectProps
 >(({ options, onChange, ...props }) => {
+    const [open, setOpen] = useState(false);
     return (
         <InputWrapper title={props.title}>
-            <Select
-                className={classes.Select}
-                closeMenuOnSelect={true}
-                components={{ Option }}
-                placeholder={props.placeholder}
-                styles={customStyles}
-                options={options}
-                onChange={(newValue: unknown) => onChange(newValue as option)}
-                defaultValue={props.defaultValue}
-                isClearable={props.isClearable}
-                noOptionsMessage={props.noOptionsMessage}
-                value={props.value}
-            />
+            <div onClick={() => setOpen(!open)}>
+                <Select
+                    className={classes.Select}
+                    closeMenuOnSelect={true}
+                    components={{ Option }}
+                    placeholder={props.placeholder}
+                    onBlur={() => setOpen(false)}
+                    menuIsOpen
+                    styles={customStyles(open)}
+                    options={options}
+                    onChange={(newValue: unknown) => onChange(newValue as option)}
+                    defaultValue={props.defaultValue}
+                    isClearable={props.isClearable}
+                    noOptionsMessage={props.noOptionsMessage}
+                    value={props.value}
+                />
+            </div>
         </InputWrapper>
     );
 });
