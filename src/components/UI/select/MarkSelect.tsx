@@ -90,7 +90,7 @@ const customStyles: StylesConfig<option, false> = {
 const MarkSelect: FC<SelectProps> = forwardRef<
     SelectInstance,
     SelectProps
->(({ options, onChange, ...props }, ref) => {
+>(({ options, onChange, ...props }) => {
     return (
         <Select
             className={classes.Select}

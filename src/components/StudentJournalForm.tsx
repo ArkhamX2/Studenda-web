@@ -2,11 +2,9 @@ import { FC, useEffect, useState } from 'react'
 import { COLORS } from '../styles/colors'
 import { account, subjectType, task, markType, role } from '../types/AdminType';
 import { option } from '../types/OptionType';
-import { useAppDispatch } from '../hook';
 import { RootState } from '../store';
 import { ConnectedProps, connect } from 'react-redux';
 import { RequestValue, request } from '../base/Request';
-import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter';
 import Modal from './UI/modal/Modal';
 import useModal from './UI/modal/useModal';
@@ -30,7 +28,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 const connector = connect(mapState)
 
 const StudentJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const Authorization: string = "Authorization: Bearer " + props.Token
     const noOptionsText = "Пусто"
@@ -57,8 +54,6 @@ const StudentJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const [markTypes, setMarkTypes] = useState<markType[]>()
 
     const [currentMarkTypeName, setCurrentMarkTypeName] = useState<string>()
-
-    const [onInitial, setOnInitial] = useState<boolean>(false)
 
     const [roles, setRoles] = useState<role[]>()
 

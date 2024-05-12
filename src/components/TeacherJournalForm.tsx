@@ -6,14 +6,12 @@ import { useAppDispatch } from '../hook';
 import { RootState } from '../store';
 import { ConnectedProps, connect } from 'react-redux';
 import { RequestValue, request } from '../base/Request';
-import { ObjectKey, updateDataArray } from '../store/dataArraySlice';
 import { ArrayToOptions } from '../base/ArrayToOptionsConverter';
 import Modal from './UI/modal/Modal';
 import useModal from './UI/modal/useModal';
 import axios, { AxiosHeaders } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import classes from '../styles/admin.module.css'
-import buttonclasses from './UI/button/AdminButton.module.css';
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
 import AdminInput from './UI/input/AdminInput';
@@ -34,7 +32,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 const connector = connect(mapState)
 
 const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
-    const dispatch = useAppDispatch()
     const navigate = useNavigate()
     const Authorization: string = "Authorization: Bearer " + props.Token
     const noOptionsText = "Пусто"
@@ -61,8 +58,6 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     const [markTypes, setMarkTypes] = useState<markType[]>()
 
     const [currentMarkTypeName, setCurrentMarkTypeName] = useState<string>()
-
-    const [onInitial, setOnInitial] = useState<boolean>(false)
 
     const [roles, setRoles] = useState<role[]>()
 
@@ -297,7 +292,7 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
 
             <main style={{ display: 'flex', backgroundColor: 'white', maxHeight: '90svh', color: '#1B0E17', boxSizing: 'border-box' }}>
                 <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
-                    <AdminButton text="Назад" onClick={() => navigate("/userSchedule")} />
+                    <AdminButton text="Назад" onClick={() => navigate("/teacherSchedule")} />
                     <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Журнал</div>
                     <AdminLabel title="Дисциплина" text={props.journal.disciplineName} />
 
@@ -317,8 +312,8 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     <td style={{
                                         fontWeight: '600',
                                         borderRight: '4px solid #B5999F',
-                                        minWidth: '40px',
-                                        width: '100%',
+                                        minWidth: '40px', 
+                                        maxWidth: '40px',
                                         height: '42px',
                                         left: 0,
                                         zIndex: 3,
@@ -362,8 +357,9 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                     
                                                     left: 0,
                                                     zIndex: 3, fontSize: '20px', textAlign: 'center',
-                                                    minWidth: '40px',
-                                                    width: '100%',
+                                                    
+                                                    minWidth: '40px', 
+                                                    maxWidth: '40px',
                                                 }}>
                                                     {i + 1}
                                                 </th>

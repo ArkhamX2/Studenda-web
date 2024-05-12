@@ -60,14 +60,14 @@ const customStyles: StylesConfig<option, false> = {
         height: '80%',
     }),
 
-    menuList: (defaultStyles, state) => ({
+    menuList: (defaultStyles) => ({
         ...defaultStyles,
         padding: '0px',
         marginTop: '-1px',
     }),
 
 
-    container: (defaultStyles, state) => ({
+    container: (defaultStyles) => ({
         ...defaultStyles,
         margin: '4px 4px 4px 4px',
     }),
@@ -86,7 +86,7 @@ const customStyles: StylesConfig<option, false> = {
 const StudendaSelect: FC<SelectProps> = forwardRef<
     SelectInstance,
     SelectProps
->(({ options, onChange, ...props }, ref) => {
+>(({ options, onChange, ...props }) => {
     return (
         <InputWrapper title={props.title}>
             <Select

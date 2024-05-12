@@ -1,8 +1,5 @@
-import React from 'react';
 import './styles/app.css';
-import { BrowserRouter, Navigate, Route } from 'react-router-dom';
-import Login from './pages/loginpage';
-import Form1 from './pages/formpage';
+import { BrowserRouter } from 'react-router-dom';
 import AppRouter from "./components/AppRouter"
 import Navbar from './components/Navbar';
 
