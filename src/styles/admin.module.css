@@ -5,6 +5,7 @@
 
 .AdminTable {
         border-collapse: collapse;
+        border-spacing: 0;
         border-radius: 5px;
         padding: 5px;
 }
@@ -96,8 +97,4 @@
         padding: 10px;
         background-color: #F7F3F3;
         border-radius: 5px;
-}
-
-.JournalRow{
-        border: 0px solid #B5999F;
 }
