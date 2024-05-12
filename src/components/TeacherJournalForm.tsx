@@ -13,11 +13,13 @@ import useModal from './UI/modal/useModal';
 import axios, { AxiosHeaders } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import classes from '../styles/admin.module.css'
+import buttonclasses from './UI/button/AdminButton.module.css';
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
 import AdminInput from './UI/input/AdminInput';
 import AdminButton from './UI/button/AdminButton';
 import AdminLabel from './UI/adminlabel/AdminLabel';
+import MarkSelect from './UI/select/MarkSelect';
 
 const mapState = (state: RootState) => (
     {
@@ -245,8 +247,8 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         var tmpMarkType = markTypes?.find((markType) => markType.id == markTypeId)
         if (tmpMarkType != undefined) {
             if (tmpMarkType.maxValue == 1 && tmpMarkType.minValue == 0) {
-                tmparray.push({ value: 0, label: "не зачет" })
-                tmparray.push({ value: 1, label: "зачет" })
+                tmparray.push({ value: 0, label: "незач" })
+                tmparray.push({ value: 1, label: "зач" })
             }
             else {
                 for (var i = tmpMarkType.minValue; i <= tmpMarkType.maxValue; i++) {
@@ -310,16 +312,17 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         ?
 
                         <table className={classes.AdminTable}>
-                            <tbody style={{
-                                display: 'block',
-                            }}>
+                            <tbody>
                                 <tr>
                                     <td style={{
                                         fontWeight: '600',
-                                        minHeight: '70px',
                                         borderRight: '4px solid #B5999F',
-                                        width: '75px',
+                                        minWidth: '40px',
+                                        width: '100%',
                                         height: '42px',
+                                        left: 0,
+                                        zIndex: 3,
+                                        top: 0, textAlign: 'center'
                                     }}>№</td>
                                     <td style={{
                                         fontWeight: '600',
@@ -327,19 +330,26 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         borderRight: '4px solid #B5999F',
                                         width: '75px',
                                         height: '42px',
+                                        left: 1,
+                                        zIndex: 3, textAlign: 'center'
                                     }}>ФИО</td>
                                     {tasks?.map((task) =>
                                         <td style={{
                                             fontWeight: '600',
                                             minHeight: '70px',
-                                            borderRight: '4px solid #B5999F'
+                                            borderRight: '4px solid #B5999F', fontSize: '20px', margin: '16px 0px 10px 0px', textAlign: 'center', minWidth: '90px'
                                         }}>
-                                            <div style={{ fontSize: '20px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
-                                                {task[0].startedAt} {task[0].name}
-                                            </div>
+                                            {task[0].name}
                                         </td>)}
                                     <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', fontWeight: '600' }}>
-                                        <button onClick={() => addTaskClick()}>Добавить</button>
+                                        <button style={{
+                                            border: 'none',
+                                            width: '50px',
+                                            fontSize: '30px',
+                                            fontWeight: '300',
+                                            padding: '0px 5px',
+                                            justifySelf: 'center',
+                                        }} onClick={() => addTaskClick()}>+</button>
                                     </td>
                                 </tr>
                                 {
@@ -347,25 +357,31 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                         return (
                                             <tr >
 
-                                                <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600' }}>
-                                                    <div style={{ fontSize: '20px', textAlign: 'center' }}>
-                                                        {i + 1}
-                                                    </div>
-                                                </td>
-                                                <td style={{ borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600' }}>
-                                                    <div style={{ fontSize: '20px', margin: '14px 17px', textAlign: 'center' }}>
-                                                        {account.surname} {account.name} {account.patronymic}
-                                                    </div>
-                                                </td>
+                                                <th style={{
+                                                    borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600',
+                                                    
+                                                    left: 0,
+                                                    zIndex: 3, fontSize: '20px', textAlign: 'center',
+                                                    minWidth: '40px',
+                                                    width: '100%',
+                                                }}>
+                                                    {i + 1}
+                                                </th>
+                                                <th style={{
+                                                    left: 1, fontSize: '20px', margin: '14px 17px', textAlign: 'center',
+                                                    zIndex: 3, borderRight: '4px solid #B5999F', borderBottom: '2px solid #B5999F', borderTop: '2px solid #B5999F', fontWeight: '600'
+                                                }}>
+                                                    {account.surname} {account.name} {account.patronymic}
+                                                </th>
                                                 {tasks?.map((task) => {
                                                     var markOptions = createMarkOptions(task[i].markTypeId)
                                                     return (<td className={classes.TableColumn}>
-                                                        <div style={{ fontSize: '24px', margin: '16px 0px 10px 0px', textAlign: 'center' }}>
+                                                        <div style={{ fontSize: '24px', margin: '5px', textAlign: 'center' }}>
                                                             {task[i].mark == null
                                                                 ?
-                                                                <StudendaSelect options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, task[i])}></StudendaSelect>
+                                                                <MarkSelect options={markOptions} value={undefined} defaultValue={undefined} onChange={(value) => updateTaskMark(value?.value, task[i])} />
                                                                 :
-                                                                <StudendaSelect options={markOptions} value={markOptions.find((option) => option.value == task[i].mark)} defaultValue={markOptions.find((option) => option.value == task[i].mark)} onChange={(value) => updateTaskMark(value?.value, task[i])}></StudendaSelect>
+                                                                <MarkSelect options={markOptions} value={markOptions.find((option) => option.value == task[i].mark)} defaultValue={markOptions.find((option) => option.value == task[i].mark)} onChange={(value) => updateTaskMark(value?.value, task[i])} />
                                                             }
                                                         </div>
                                                     </td>)
@@ -383,7 +399,7 @@ const TeacherJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                         </table>
                         : <></>}
                 </div>
-            </main>
+            </main >
         </>
     )
 }

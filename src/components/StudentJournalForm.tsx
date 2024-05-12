@@ -12,9 +12,10 @@ import Modal from './UI/modal/Modal';
 import useModal from './UI/modal/useModal';
 import axios, { AxiosHeaders } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import classes from '../styles/admin.module.css'
+import classes from './UI/button/AdminButton.module.css';
 import { SingleValue } from 'react-select';
 import StudendaSelect from './UI/select/StudendaSelect';
+import AdminLabel from './UI/adminlabel/AdminLabel';
 
 const mapState = (state: RootState) => (
     {
@@ -304,6 +305,9 @@ const StudentJournalForm: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                 <div style={{ width: '270px', display: 'flex', flexDirection: 'column', border: '2px solid #490514', margin: '5px', padding: '10px', backgroundColor: '#F7F3F3', borderRadius: '5px' }}>
                     <button onClick={() => navigate("/userSchedule")}>Назад</button>
                     <div style={{ alignSelf: 'start', fontSize: '22px', fontWeight: '600', margin: '5px' }}>Журнал</div>
+                    
+                    <AdminLabel />
+                    
                     <div style={{ display: 'flex', flexDirection: 'column', margin: '5px 0px 10px 0px', borderLeft: '2px solid #8C2425', borderRadius: '5px', padding: '2px 5px', backgroundColor: '#F0EAE9', width: '100%' }}>
                         <div style={{ width: '120px', alignSelf: 'start', fontSize: '20px', fontWeight: '600', margin: '5px' }}>Дисциплина:</div>
                         <label>{props.journal.disciplineName}</label>
