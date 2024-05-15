@@ -35,7 +35,7 @@ const StudentScheduleForm: FC = () => {
 
     const GetArrayToOptions = async (RequestValueId: number, data: undefined | any = undefined, params: undefined | any = undefined, headers: undefined | any = undefined) => {
         const tmparray: option[] = [];
-        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj) => (tmparray.push({ value: obj.id!, label: "" + obj?.surname + " " + obj?.name + " " + obj?.patronymic })))
+        (await request(RequestValue.value[RequestValueId].id, "get", data, params, headers) as account[]).map((obj) => (tmparray.push({ value: obj.id!, label: "" + obj?.name })))
         return tmparray
     }
 

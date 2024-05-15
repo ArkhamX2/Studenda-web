@@ -285,7 +285,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                         onChange={value => (selectedObject as any)[key] = value?.value}
                                                         defaultValue={options.find((obj) => { return obj.value === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                        placeholder={"Выберите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase().slice(0,-1)+"я"}
+                                                        placeholder={"Выберите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase().slice(0, -1) + "я"}
                                                     ></StudendaSelect>
                                                 </>
                                             }
@@ -301,13 +301,13 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                         onChange={value => (selectedObject as any)[key] = value?.label}
                                                         defaultValue={permissionOptions?.find((obj) => { return obj.label === (selectedObject as any)[key] })}
                                                         isClearable={true}
-                                                        placeholder={"Выберите "+translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()}
+                                                        placeholder={"Выберите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()}
                                                     ></StudendaSelect>
                                                     :
                                                     <>
                                                         {typeof (selectedObject as any)[key] === 'boolean'
                                                             ?
-                                                            <AdminCheckbox title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} default={(selectedObject as any)[key]} onChanged = {(e:any) => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])}/>
+                                                            <AdminCheckbox title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} default={(selectedObject as any)[key]} onChanged={(e: any) => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])} />
                                                             :
                                                             <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} text={"Укажите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()} onChange={e =>
                                                             (typeof (selectedObject as any)[key] === 'number'
@@ -388,13 +388,23 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     translationDTO={translation.get(RequestValue.value[selectedButton].name)!}
                                 />
                                 <tr>
-                                    {props.dataArray[dataKey]!.map((obj) =>
-                                        <AdminObjectValue
-                                            onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)}
-                                            objectList={Object.entries(obj)}
-                                            forbiddenKeys={forbiddenKeys}
-                                        />
-                                    )}
+                                    {props.dataArray[dataKey]!.map((obj) => {
+                                        var details: Map<string, any[]> = new Map;
+                                        (Object.keys(props.dataArray[dataKey]![0]).map(key=>{
+                                            if (key.includes("Id") && forbiddenKeys.find((forbiddenKeyName) => forbiddenKeyName === key)==undefined)
+                                                {
+                                                    details.set(key.replace("Id", "") + "Array", props.dataArray[key.replace("Id", "") + "Array" as ObjectKey]!)
+                                                }
+                                        }))                                        
+                                        return (
+                                            <AdminObjectValue
+                                                onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)}
+                                                objectList={Object.entries(obj)}
+                                                forbiddenKeys={forbiddenKeys}
+                                                neededDataArrays={details}
+                                            />
+                                        )
+                                    })}
                                 </tr>
                             </table>
                             :
