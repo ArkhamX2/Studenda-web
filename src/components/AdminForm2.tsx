@@ -20,6 +20,7 @@ import { option } from '../types/OptionType'
 import { translation } from '../base/translation'
 import StudendaSelect from './UI/select/StudendaSelect'
 import AdminCheckbox from './UI/input/AdminCheckbox'
+import { updateAdminFormData } from '../store/adminFormSlice'
 
 interface registerAccount extends account {
     email: string,
@@ -29,7 +30,8 @@ interface registerAccount extends account {
 const mapState = (state: RootState) => (
     {
         Token: state.account.Token,
-        dataArray: state.dataArray
+        dataArray: state.dataArray,
+        selectedButton: state.adminForm.selectedButton
     }
 )
 
@@ -60,6 +62,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
             const requestValue = await request(value.id, "get")
             dispatch(updateDataArray({ dataArray: requestValue, objectKey: value.name + "Array" as ObjectKey }))
         })
+        setSelectedButton(props.selectedButton)
     }
 
     useEffect(() => {
@@ -91,6 +94,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
     }, [dataKey]);
 
     const onMenuComponentClick = async (ButtonStateId: number) => {
+        dispatch(updateAdminFormData({ selectedButton: ButtonStateId }))
         setSelectedButton(ButtonStateId)
     }
 
@@ -309,7 +313,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                                             ?
                                                             <AdminCheckbox title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} default={(selectedObject as any)[key]} onChanged={(e: any) => (selectedObject as any)[key] = Boolean(!(selectedObject as any)[key])} />
                                                             :
-                                                            <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} text={"Укажите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)!.toLowerCase()} onChange={e =>
+                                                            <AdminInput title={translation.get(RequestValue.value[selectedButton].name)!.get(key)} text={"Укажите " + translation.get(RequestValue.value[selectedButton].name)!.get(key)?.toLowerCase()} onChange={e =>
                                                             (typeof (selectedObject as any)[key] === 'number'
                                                                 ?
                                                                 (selectedObject as any)[key] = Number(e.target.value)
@@ -335,8 +339,6 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 <>
                                 </>}
                         </div>
-
-
                     </>
                 </Modal>
                 :
@@ -390,12 +392,11 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                 <tr>
                                     {props.dataArray[dataKey]!.map((obj) => {
                                         var details: Map<string, any[]> = new Map;
-                                        (Object.keys(props.dataArray[dataKey]![0]).map(key=>{
-                                            if (key.includes("Id") && forbiddenKeys.find((forbiddenKeyName) => forbiddenKeyName === key)==undefined)
-                                                {
-                                                    details.set(key.replace("Id", "") + "Array", props.dataArray[key.replace("Id", "") + "Array" as ObjectKey]!)
-                                                }
-                                        }))                                        
+                                        (Object.keys(props.dataArray[dataKey]![0]).map(key => {
+                                            if (key.includes("Id") && forbiddenKeys.find((forbiddenKeyName) => forbiddenKeyName === key) == undefined) {
+                                                details.set(key.replace("Id", "") + "Array", props.dataArray[key.replace("Id", "") + "Array" as ObjectKey]!)
+                                            }
+                                        }))
                                         return (
                                             <AdminObjectValue
                                                 onContextMenu={(e: React.MouseEvent<HTMLDivElement>) => onItemClick(e, obj)}
@@ -413,13 +414,9 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                             </p>
                         }
                     </div>
-
-
                 </div>
-
             </main>
         </>
-
     )
 }
 

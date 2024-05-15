@@ -35,8 +35,6 @@ const AdminObjectValue: FC<subjectProps> = ({
                         var tmpString = ""
                         if ((value[0] as string).includes("Id")) {
                             const tmpArr = findById(neededDataArrays?.get((value[0] as string).replace("Id", "") + "Array")!, value[1])
-                            console.log("tmpArr")
-                            console.log(tmpArr)
                             if ((value[0] as string) == "accountId") {
                                 tmpString=((tmpArr as account).surname + " " + (tmpArr as account).name + " " + (tmpArr as account).patronymic)
                             }
