@@ -266,6 +266,30 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         onAddClick(selectedButton, obj)
     }
 
+    const onAdminSubjectClick = (e: React.MouseEvent<HTMLTableDataCellElement, MouseEvent>, key: string, reverse:boolean, updateReverse: ()=>void) => {
+        console.log(reverse)
+        const tmparr = Object.assign([], props.dataArray[dataKey])
+        tmparr?.sort((a, b) => {
+            const nameA: any = Object.entries(a).find((entry) => entry[0] == key)![1]
+            const nameB: any = Object.entries(b).find((entry) => entry[0] == key)![1]
+            if (nameA < nameB) {
+                if (reverse)
+                    return 1;
+                else
+                    return -1;
+            }
+            if (nameA > nameB) {
+                if (reverse)
+                    return -1;
+                else
+                    return 1;
+            }
+            return 0;
+        })
+        dispatch(updateDataArray({ dataArray: tmparr, objectKey: dataKey }))
+        updateReverse()
+    }
+
     return (
         <>
             {selectedObject !== undefined && isOpen
@@ -388,6 +412,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
                                     first={BorderType.firstElement}
                                     forbiddenKeys={forbiddenKeys}
                                     translationDTO={translation.get(RequestValue.value[selectedButton].name)!}
+                                    onClick={onAdminSubjectClick}
                                 />
                                 <tr>
                                     {props.dataArray[dataKey]!.map((obj) => {

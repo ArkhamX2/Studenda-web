@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { course, dayPosition, department, discipline, group, subject, subjectPosition, subjectType, account, weekType, role } from '../types/AdminType';
 
-type dataArrays = {
+export type dataArrays = {
     subjectArray?: subject[],
     disciplineArray?:  discipline[],
     subjectPositionArray?: subjectPosition[],
