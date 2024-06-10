@@ -24,6 +24,7 @@ const AdminSubject: FC<subjectProps> = ({
         else
             setReverse(true)
     }
+    
     return (
         <tr style={{ display: 'flex', flexDirection: 'row', border: first === BorderType.firstElement ? '1px solid #8C2425' : '1px solid #B5999F' }}>
             {(itemList !== undefined)

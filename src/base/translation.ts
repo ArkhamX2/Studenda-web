@@ -28,7 +28,7 @@ export const translation: Map<string, Map<string, string>> = new Map([
     ['roleId', 'Роль'],
     ['groupId', 'Группа']])],
 
-    ['markType', new Map([['name', 'Факультет'], ['minValue', 'Минимальное значение'], ['maxValue', 'Максимальное значение']])],
+    ['markType', new Map([['name', 'Тип оценки'], ['minValue', 'Минимальное значение'], ['maxValue', 'Максимальное значение']])],
 
     ['task', new Map
         ([['disciplineId', 'Дисциплина'],

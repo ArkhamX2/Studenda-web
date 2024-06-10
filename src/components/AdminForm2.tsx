@@ -289,7 +289,7 @@ const AdminForm2: FC<PropsFromRedux> = (props: PropsFromRedux) => {
         dispatch(updateDataArray({ dataArray: tmparr, objectKey: dataKey }))
         updateReverse()
     }
-
+    
     return (
         <>
             {selectedObject !== undefined && isOpen
